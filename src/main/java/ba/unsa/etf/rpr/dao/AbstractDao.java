@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -24,10 +25,35 @@ public abstract class AbstractDao<T> implements Dao<T> {
         Properties prop = new Properties();
         try {
             prop.load(ClassLoader.getSystemResource("config.properties").openStream());
-            conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"))
+            conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch(IOException | SQLException e) {
             System.out.println("Greska prilikom povezivanja na bazu podataka:");
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public T getById(int id) {
+
+    }
+
+    @Override
+    public void save(T item) {
+
+    }
+
+    @Override
+    public T update(T item) {
+
+    }
+
+    @Override
+    public void delete(int id) {
+
+    }
+
+    @Override
+    public List<T> getAll() {
+
     }
 }

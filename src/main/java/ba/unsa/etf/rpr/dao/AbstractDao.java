@@ -1,6 +1,10 @@
 package ba.unsa.etf.rpr.dao;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Abstract class that contains all base sql operations (create, read, update and delete)
@@ -10,4 +14,20 @@ import java.sql.Connection;
 public abstract class AbstractDao<T> implements Dao<T> {
     private Connection conn;
     private String table;
+
+    /**
+     * Constructor used for connecting to the database
+     * @param table Table name
+     */
+    public AbstractDao(String table) {
+        this.table = table;
+        Properties prop = new Properties();
+        try {
+            prop.load(ClassLoader.getSystemResource("config.properties").openStream());
+            conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"))
+        } catch(IOException | SQLException e) {
+            System.out.println("Greska prilikom povezivanja na bazu podataka:");
+            System.out.println(e.getMessage());
+        }
+    }
 }

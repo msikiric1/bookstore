@@ -2,14 +2,24 @@ package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Author;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
+import java.util.Properties;
 
 public class AuthorDaoSQLImpl implements AuthorDao {
     private Connection conn;
+
+    /**
+     * Constructor used for connecting to the database
+     */
+    public AuthorDaoSQLImpl() {
+        Properties prop = new Properties();
+        try {
+            this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public Author getById(int id) {

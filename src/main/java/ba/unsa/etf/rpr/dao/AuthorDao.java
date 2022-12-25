@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Author;
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface AuthorDao extends Dao<Author> {
      * @param name name to search authors by (not case-sensitive)
      * @return list of authors
      */
-    List<Author> searchByName(String name);
+    List<Author> searchByName(String name) throws BookstoreException;
 }

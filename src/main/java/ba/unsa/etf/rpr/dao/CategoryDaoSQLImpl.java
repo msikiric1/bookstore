@@ -24,6 +24,21 @@ public class CategoryDaoSQLImpl implements CategoryDao {
 
     @Override
     public Category getById(int id) {
+        String query = "SELECT * FROM categories WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                Category category = new Category();
+                category.setId(id);
+                category.setName(rs.getString("name"));
+                rs.close();
+                return category;
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

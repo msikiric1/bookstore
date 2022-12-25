@@ -59,7 +59,7 @@ public class BookDaoSQLImpl implements BookDao {
             stmt.setDate(3, item.getPublished());
             stmt.setDouble(4, item.getPrice());
             stmt.setInt(5, item.getCategory().getId());
-            stmt.executeQuery();
+            stmt.executeUpdate();
         } catch(SQLException e) {
             e.printStackTrace();
         }

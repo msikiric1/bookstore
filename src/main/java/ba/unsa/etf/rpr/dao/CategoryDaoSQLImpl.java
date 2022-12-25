@@ -44,7 +44,14 @@ public class CategoryDaoSQLImpl implements CategoryDao {
 
     @Override
     public void save(Category item) {
-
+        String insert = "INSERT INTO categories (name) VALUES (?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(insert);
+            stmt.setString(1, item.getName());
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

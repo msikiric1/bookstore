@@ -29,7 +29,7 @@ public class CategoryDaoSQLImpl extends AbstractDao<Category> implements Categor
 
     @Override
     public Map<String, Object> objectToRow(Category object) throws BookstoreException {
-        Map<String, Object> row =  new TreeMap<>(); // Tree map automatically sorts its elements
+        Map<String, Object> row = new TreeMap<>(); // Tree map automatically sorts its elements
         row.put("id", object.getId());
         row.put("name", object.getName());
         return row;

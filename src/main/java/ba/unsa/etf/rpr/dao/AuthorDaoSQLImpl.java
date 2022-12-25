@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     /**
@@ -119,7 +120,12 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
 
     @Override
     public Map<String, Object> objectToRow(Author object) throws BookstoreException {
-        return null;
+        Map<String, Object> row = new TreeMap<>();
+        row.put("id", object.getId());
+        row.put("name", object.getName());
+        row.put("address", object.getAddress());
+        row.put("phone", object.getPhone());
+        return row;
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Bean class for books
+ * Bean class for representing books
  * @author Muaz Sikiric
  */
 public class Book {

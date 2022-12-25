@@ -68,16 +68,13 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         Map<String, Object> row = objectToRow(item);
         Map.Entry<String, String> insertStrings = toPreparedInsertParts(row);
         StringBuilder insert = new StringBuilder()
-                .append("INSERT INTO ? (")
-                .append(insertStrings.getKey())
-                .append(") VALUES (")
-                .append(insertStrings.getValue())
-                .append(")");
+                .append("INSERT INTO ").append(getTable()).append(" (")
+                .append(insertStrings.getKey()).append(") VALUES (")
+                .append(insertStrings.getValue()).append(")");
 
         try {
             PreparedStatement stmt = getConnection().prepareStatement(insert.toString(), Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, getTable());
-            int i = 2;
+            int i = 1;
             for(Map.Entry<String, Object> entry : row.entrySet()) {
                 if(entry.getKey().equals("id")) continue;
                 stmt.setObject(i, entry.getValue());
@@ -98,14 +95,12 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         Map<String, Object> row = objectToRow(item);
         String updateString = toPreparedUpdateParts(row);
         StringBuilder update = new StringBuilder()
-                .append("UPDATE ? SET ")
-                .append(updateString)
-                .append(" WHERE id = ?");
+                .append("UPDATE ").append(getTable()).append(" SET ")
+                .append(updateString).append(" WHERE id = ?");
 
         try {
             PreparedStatement stmt = getConnection().prepareStatement(update.toString());
-            stmt.setString(1, getTable());
-            int i = 2;
+            int i = 1;
             for(Map.Entry<String, Object> entry : row.entrySet()) {
                 if(entry.getKey().equals("id")) continue;
                 stmt.setObject(i, entry.getValue());

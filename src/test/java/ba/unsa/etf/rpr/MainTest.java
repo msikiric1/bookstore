@@ -1,12 +1,11 @@
 package ba.unsa.etf.rpr;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
-public class MainTest
-{
+public class MainTest {
     @Test
     public void shouldAnswerWithTrue()
     {

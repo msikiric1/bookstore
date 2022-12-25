@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     /**
@@ -106,7 +105,16 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
 
     @Override
     public Author rowToObject(ResultSet rs) throws BookstoreException {
-        return null;
+        Author author = new Author();
+        try {
+            author.setId(rs.getInt("id"));
+            author.setName(rs.getString("name"));
+            author.setAddress(rs.getString("address"));
+            author.setPhone(rs.getString("phone"));
+            return author;
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     @Override

@@ -1,9 +1,12 @@
 package ba.unsa.etf.rpr.dao;
 
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -70,4 +73,20 @@ public abstract class AbstractDao<T> implements Dao<T> {
     public List<T> getAll() {
 
     }
+
+    /**
+     * Converts rows to objects
+     * @param rs result of a query (row/s)
+     * @return object
+     * @throws BookstoreException
+     */
+    public abstract T rowToObject(ResultSet rs) throws BookstoreException;
+
+    /**
+     * Converts objects to rows
+     * @param object object that needs to be transformed into row
+     * @return map that has string and objects as key-value pairs
+     * @throws BookstoreException
+     */
+    public abstract Map<String, T> ObjectToRow(T object) throws BookstoreException;
 }

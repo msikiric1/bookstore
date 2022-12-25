@@ -135,5 +135,5 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
      * @return map that has string and objects as key-value pairs
      * @throws BookstoreException
      */
-    public abstract Map<String, T> objectToRow(T object) throws BookstoreException;
+    public abstract Map<String, Object> objectToRow(T object) throws BookstoreException;
 }

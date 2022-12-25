@@ -61,12 +61,13 @@ public class AuthorDaoSQLImpl implements AuthorDao {
 
     @Override
     public Author update(Author item) {
-        String update = "UPDATE authors SET name = ?, address = ?, phone = ?";
+        String update = "UPDATE authors SET name = ?, address = ?, phone = ? WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, item.getName());
             stmt.setString(2, item.getAddress());
             stmt.setString(3, item.getPhone());
+            stmt.setInt(4, item.getId());
             stmt.executeUpdate();
             return item;
         } catch(SQLException e) {

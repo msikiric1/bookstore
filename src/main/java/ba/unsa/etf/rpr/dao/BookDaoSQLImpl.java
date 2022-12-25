@@ -69,7 +69,7 @@ public class BookDaoSQLImpl implements BookDao {
 
     @Override
     public Book update(Book item) {
-        String update = "UPDATE books SET title = ?, author_id = ?, published = ?, price = ?, category_id = ?";
+        String update = "UPDATE books SET title = ?, author_id = ?, published = ?, price = ?, category_id = ? WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, item.getTitle());
@@ -77,6 +77,7 @@ public class BookDaoSQLImpl implements BookDao {
             stmt.setDate(3, item.getPublished());
             stmt.setDouble(4, item.getPrice());
             stmt.setInt(5, item.getCategory().getId());
+            stmt.setInt(6, item.getId());
             stmt.executeUpdate();
             return item;
         } catch(SQLException e) {

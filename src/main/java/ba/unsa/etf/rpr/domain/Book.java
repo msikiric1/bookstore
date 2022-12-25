@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr.domain;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Bean class for books
@@ -71,5 +72,28 @@ public class Book {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author=" + author +
+                ", published=" + published +
+                ", price=" + price +
+                ", category=" + category +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(published, book.published) && Objects.equals(price, book.price) && Objects.equals(category, book.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, published, price, category);
+    }
 }

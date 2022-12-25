@@ -121,11 +121,10 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
     @Override
     public void delete(int id) throws BookstoreException {
-        String delete = "DELETE FROM ? WHERE id = ?";
+        String delete = "DELETE FROM " + getTable() + " WHERE id = ?";
         try {
             PreparedStatement stmt = getConnection().prepareStatement(delete);
-            stmt.setString(1, getTable());
-            stmt.setInt(2, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);

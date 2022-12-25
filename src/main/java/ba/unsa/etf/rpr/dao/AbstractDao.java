@@ -65,8 +65,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
     @Override
     public void save(T item) throws BookstoreException {
-        Map<String, T> row = objectToRow(item);
-
+        Map<String, Object> row = objectToRow(item);
         StringBuilder insert = new StringBuilder()
                 .append("INSERT INTO ? (")
                 .append()
@@ -76,17 +75,23 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
         try {
             PreparedStatement stmt = getConnection().prepareStatement(insert.toString());
-            // TODO:
 
+            stmt.executeUpdate();
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);
         }
-        throw new BookstoreException();
+        throw new BookstoreException("");
     }
 
     @Override
     public T update(T item) throws BookstoreException {
-
+        Map<String, Object> row = objectToRow(item);
+        StringBuilder update = new StringBuilder()
+                .append("UPDATE ? SET ")
+                .append()
+                .append(") VALUES (")
+                .append()
+                .append(")");
     }
 
     @Override
@@ -132,8 +137,26 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     /**
      * Converts an object to a row
      * @param object object that needs to be transformed into row
-     * @return map that has string and objects as key-value pairs
+     * @return map that has string and objects as key-value pairs (represents a row)
      * @throws BookstoreException
      */
     public abstract Map<String, Object> objectToRow(T object) throws BookstoreException;
+
+    /**
+     * Utility method that returns string with all columns that will be inserted
+     * @param row Map that represents a row
+     * @return prepared string with all columns except id
+     */
+    private String insertColumnsString(Map<String, Object> row) {
+
+    }
+
+    /**
+     *  Utility method that returns string with all columns that will be updated
+     * @param row Map that represents a row
+     * @return preapred string with all columns except id
+     */
+    private String updateColumnsString(Map<String, Object> row) {
+
+    }
 }

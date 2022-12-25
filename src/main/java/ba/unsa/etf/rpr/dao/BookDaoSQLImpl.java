@@ -26,7 +26,7 @@ public class BookDaoSQLImpl implements BookDao {
 
     @Override
     public Book getById(int id) {
-        String query = "SELECT * from books WHERE id = ?";
+        String query = "SELECT * FROM books WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
@@ -85,7 +85,14 @@ public class BookDaoSQLImpl implements BookDao {
 
     @Override
     public void delete(int id) {
-
+        String delete = "DELETE * FROM books WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

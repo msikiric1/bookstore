@@ -2,7 +2,7 @@ package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Book;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 /**

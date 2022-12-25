@@ -78,27 +78,20 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
     }
 
     @Override
-    public List<Book> searchByCategory(Category category) {
+    public List<Book> searchByCategory(Category category) throws BookstoreException {
         String query = "SELECT * FROM books WHERE category_id = ?";
-        List<Book> books = new ArrayList<>();
+        ArrayList<Book> books = new ArrayList<>();
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = getConnection().prepareStatement(query);
             stmt.setInt(1, category.getId());
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
-                Book book = new Book();
-                book.setId(rs.getInt("id"));
-                book.setTitle(rs.getString("title"));
-                book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
-                book.setPublished(rs.getDate("published"));
-                book.setPrice(rs.getDouble("price"));
-                book.setCategory(category);
-                books.add(book);
+                books.add(rowToObject(rs));
             }
             rs.close();
+            return books;
         } catch(SQLException e) {
-            e.printStackTrace();
+            throw new BookstoreException(e.getMessage(), e);
         }
-        return books;
     }
 }

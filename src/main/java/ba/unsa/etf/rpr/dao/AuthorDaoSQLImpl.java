@@ -46,26 +46,20 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     }
 
     @Override
-    public List<Author> searchByName(String name) {
-        String query = "SELECT * FROM authors WHERE name = ?";
+    public List<Author> searchByName(String name) throws BookstoreException {
+        String query = "SELECT * FROM authors WHERE name LIKE concat('%', ?, '%')";
         List<Author> authors = new ArrayList<>();
-        String preparedName = name.trim().substring(0, 1).toUpperCase() + name.trim().substring(1).toLowerCase();
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, preparedName);
+            PreparedStatement stmt = getConnection().prepareStatement(query);
+            stmt.setString(1, name.trim());
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
-                Author author = new Author();
-                author.setId(rs.getInt("id"));
-                author.setName(rs.getString("name"));
-                author.setAddress(rs.getString("address"));
-                author.setPhone(rs.getString("phone"));
-                authors.add(author);
+                authors.add(rowToObject(rs));
             }
             rs.close();
+            return authors;
         } catch(SQLException e) {
-            e.printStackTrace();
+            throw new BookstoreException(e.getMessage(), e);
         }
-        return authors;
     }
 }

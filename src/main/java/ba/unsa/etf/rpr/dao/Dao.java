@@ -25,7 +25,7 @@ public interface Dao<T> {
      * @param id primary key of an entity
      * @return updated entity from database
      */
-    T update(int id);
+    T update(T item);
 
     /**
      * Deletes and entity from database base on it's ID

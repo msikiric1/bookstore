@@ -66,17 +66,17 @@ public class BookDaoSQLImpl implements BookDao {
     }
 
     @Override
-    public Book update(Book book) {
+    public Book update(Book item) {
         String update = "UPDATE books SET title = ?, author_id = ?, published = ?, price = ?, category_id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(update);
-            stmt.setString(1, book.getTitle());
-            stmt.setInt(2, book.getAuthor().getId());
-            stmt.setDate(3, book.getPublished());
-            stmt.setDouble(4, book.getPrice());
-            stmt.setInt(5, book.getCategory().getId());
+            stmt.setString(1, item.getTitle());
+            stmt.setInt(2, item.getAuthor().getId());
+            stmt.setDate(3, item.getPublished());
+            stmt.setDouble(4, item.getPrice());
+            stmt.setInt(5, item.getCategory().getId());
             stmt.executeUpdate();
-            return book;
+            return item;
         } catch(SQLException e) {
             e.printStackTrace();
         }

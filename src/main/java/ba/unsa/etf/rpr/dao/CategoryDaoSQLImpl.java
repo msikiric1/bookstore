@@ -3,6 +3,7 @@ package ba.unsa.etf.rpr.dao;
 import ba.unsa.etf.rpr.domain.Category;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
@@ -82,6 +83,21 @@ public class CategoryDaoSQLImpl implements CategoryDao {
 
     @Override
     public List<Category> getAll() {
-        return null;
+        String query = "SELECT * FROM categories";
+        List<Category> categories = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Category category = new Category();
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
+                categories.add(category);
+            }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
     }
 }

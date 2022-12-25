@@ -141,7 +141,8 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
     /**
      * Utility method that returns map entry with two strings as key-value pair that
-     * represent columns (e.g. "(id,name,address)") and question marks (e.g. "?,?,?") based on number of columns
+     * represent columns (e.g. "(id,name,address)") and question marks (e.g. "?,?,?").
+     * Strings are prepared for SQL insertion
      * @param row Map that represents a row
      * @return Map<String, String>
      */
@@ -160,16 +161,26 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
             }
             i++;
         }
-
         return new AbstractMap.SimpleEntry<String, String>(columns.toString(), questions.toString());
     }
 
     /**
-     *  Utility method that returns string with all columns that will be updated
-     * @param row Map that represents a row
-     * @return preapred string with all columns except id
+     *  Utility method that returns a prepared string for SQL update operation
+     *  (e.g. "id = ?,name = ?,address = ?")
+     *  @param row Map that represents a row
+     *  @return Prepared string
      */
-    private String updateColumnsString(Map<String, Object> row) {
+    private String toPreparedUpdateParts(Map<String, Object> row) {
+        StringBuilder columns = new StringBuilder();
 
+        int i = 1;
+        for(Map.Entry<String, Object> entry : row.entrySet()) {
+            if(entry.getKey().equals("id")) continue;
+            columns.append(entry.getKey()).append(" = ?");
+            if(i != row.size())
+                columns.append(",");
+            i++;
+        }
+        return columns.toString();
     }
 }

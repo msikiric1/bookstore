@@ -16,5 +16,5 @@ public interface BookDao extends Dao<Book> {
      * @param upperBound second publish date
      * @return list of books that match the date criteria
      */
-    List<Book> getBetweenPublishedDate(Date lowerBound, Date upperBound);
+    List<Book> getBetweenPublishedDates(Date lowerBound, Date upperBound);
 }

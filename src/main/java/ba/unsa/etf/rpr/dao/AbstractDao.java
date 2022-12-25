@@ -168,8 +168,9 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         StringBuilder columns = new StringBuilder();
         StringBuilder questions = new StringBuilder();
 
-        int i = 1;
+        int i = 0;
         for(Map.Entry<String, Object> entry : row.entrySet()) {
+            i++;
             if(entry.getKey().equals("id")) continue;
             columns.append(entry.getKey());
             questions.append("?");
@@ -177,7 +178,6 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
                 columns.append(",");
                 questions.append(",");
             }
-            i++;
         }
         return new AbstractMap.SimpleEntry<String, String>(columns.toString(), questions.toString());
     }
@@ -191,13 +191,13 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     private String toPreparedUpdateParts(Map<String, Object> row) {
         StringBuilder columns = new StringBuilder();
 
-        int i = 1;
+        int i = 0;
         for(Map.Entry<String, Object> entry : row.entrySet()) {
+            i++;
             if(entry.getKey().equals("id")) continue;
             columns.append(entry.getKey()).append(" = ?");
             if(i != row.size())
                 columns.append(",");
-            i++;
         }
         return columns.toString();
     }

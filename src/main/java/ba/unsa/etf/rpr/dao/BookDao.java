@@ -2,6 +2,7 @@ package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.sql.Date;
 import java.util.List;
@@ -17,12 +18,12 @@ public interface BookDao extends Dao<Book> {
      * @param upperBound second publish date
      * @return list of books that match the date criteria
      */
-    List<Book> getBetweenPublishedDates(Date lowerBound, Date upperBound);
+    List<Book> getBetweenPublishedDates(Date lowerBound, Date upperBound) throws BookstoreException;
 
     /**
      * Returns all books from certain category
      * @param category category to search by
      * @return list of books
      */
-    List<Book> getByCategory(Category category);
+    List<Book> searchByCategory(Category category) throws BookstoreException;
 }

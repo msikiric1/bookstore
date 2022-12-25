@@ -38,12 +38,16 @@ public abstract class AbstractDao<T> implements Dao<T> {
         return connection;
     }
 
+    public String getTable() {
+        return table;
+    }
+
     @Override
     public T getById(int id) throws BookstoreException {
         String query = "SELECT * FROM ? WHERE id = ?";
         try {
             PreparedStatement stmt = getConnection().prepareStatement(query);
-            stmt.setString(1, table);
+            stmt.setString(1, getTable());
             stmt.setInt(2, id);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
@@ -88,7 +92,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
         String delete = "DELETE FROM ? WHERE id = ?";
         try {
             PreparedStatement stmt = getConnection().prepareStatement(delete);
-            stmt.setString(1, table);
+            stmt.setString(1, getTable());
             stmt.setInt(2, id);
             stmt.executeUpdate();
         } catch(SQLException e) {

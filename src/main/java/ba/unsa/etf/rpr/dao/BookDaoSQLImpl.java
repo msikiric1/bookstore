@@ -1,6 +1,5 @@
 package ba.unsa.etf.rpr.dao;
 
-import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 
@@ -21,7 +20,7 @@ public class BookDaoSQLImpl implements BookDao {
         try {
             this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch (Exception e) {
-            System.out.println("Greska pri radu sa bazom podataka:");
+            System.out.println("Greska prilikom povezivanja na bazu podataka:");
             System.out.println(e.getMessage());
         }
     }
@@ -51,7 +50,7 @@ public class BookDaoSQLImpl implements BookDao {
     }
 
     @Override
-    public void save(Book item) {
+    public Book save(Book item) {
         String insert = "INSERT INTO books (title, author_id, published, price, category_id)" +
                 "VALUES (?, ?, ?, ?, ?)";
         try {
@@ -149,7 +148,7 @@ public class BookDaoSQLImpl implements BookDao {
     }
 
     @Override
-    public List<Book> getByCategory(Category category) {
+    public List<Book> searchByCategory(Category category) {
         String query = "SELECT * FROM books WHERE category_id = ?";
         List<Book> books = new ArrayList<>();
         try {

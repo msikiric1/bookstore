@@ -20,7 +20,7 @@ public interface Dao<T> {
      * Adds an entity to database
      * @param item item to add
      */
-    void save(T item) throws BookstoreException;
+    T save(T item) throws BookstoreException;
 
     /**
      * Updates an entity in database based on it's ID

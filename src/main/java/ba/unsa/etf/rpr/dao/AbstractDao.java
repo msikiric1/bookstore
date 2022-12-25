@@ -61,19 +61,28 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     }
 
     @Override
-    public void save(T item) throws BookstoreException {
+    public T save(T item) throws BookstoreException {
         Map<String, Object> row = objectToRow(item);
+        Map.Entry<String, String> insertStrings = toPreparedInsertParts(row);
         StringBuilder insert = new StringBuilder()
                 .append("INSERT INTO ? (")
-                .append()
+                .append(insertStrings.getKey())
                 .append(") VALUES (")
-                .append()
+                .append(insertStrings.getValue())
                 .append(")");
 
         try {
             PreparedStatement stmt = getConnection().prepareStatement(insert.toString());
-
+            stmt.setString(1, getTable());
+            int i = 2;
+            for(Map.Entry<String, Object> entry : row.entrySet()) {
+                if(entry.getKey().equals("id")) continue;
+                stmt.setObject(i, entry.getValue());
+                i++;
+            }
             stmt.executeUpdate();
+
+
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);
         }
@@ -85,9 +94,9 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         Map<String, Object> row = objectToRow(item);
         StringBuilder update = new StringBuilder()
                 .append("UPDATE ? SET ")
-                .append()
+                .append(insertStrings.getKey())
                 .append(") VALUES (")
-                .append()
+                .append(insertStrings.getValue())
                 .append(")");
     }
 

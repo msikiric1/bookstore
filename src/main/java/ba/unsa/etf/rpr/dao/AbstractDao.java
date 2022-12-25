@@ -72,7 +72,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
                 .append(")");
 
         try {
-            PreparedStatement stmt = getConnection().prepareStatement(insert.toString());
+            PreparedStatement stmt = getConnection().prepareStatement(insert.toString(), Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, getTable());
             int i = 2;
             for(Map.Entry<String, Object> entry : row.entrySet()) {
@@ -81,12 +81,13 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
                 i++;
             }
             stmt.executeUpdate();
-
-
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.next();
+            item.setId(rs.getInt(1)); // 1st column contains generated key (id) for the inserted id
+            return item;
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);
         }
-        throw new BookstoreException("");
     }
 
     @Override

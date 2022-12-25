@@ -1,26 +1,20 @@
 package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Author;
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
-public class AuthorDaoSQLImpl implements AuthorDao {
-    private Connection conn;
-
+public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     /**
      * Constructor used for connecting to the database
      */
     public AuthorDaoSQLImpl() {
-        Properties prop = new Properties();
-        try {
-            this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
-        } catch (Exception e) {
-            System.out.println("Greska pri radu sa bazom podataka:");
-            System.out.println(e.getMessage());
-        }
+        super("authors");
     }
 
     @Override
@@ -108,6 +102,16 @@ public class AuthorDaoSQLImpl implements AuthorDao {
             e.printStackTrace();
         }
         return authors;
+    }
+
+    @Override
+    public Author rowToObject(ResultSet rs) throws BookstoreException {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> objectToRow(Author object) throws BookstoreException {
+        return null;
     }
 
     @Override

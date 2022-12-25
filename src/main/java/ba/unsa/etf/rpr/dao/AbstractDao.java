@@ -1,9 +1,8 @@
 package ba.unsa.etf.rpr.dao;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -24,7 +23,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
         this.table = table;
         Properties prop = new Properties();
         try {
-            prop.load(ClassLoader.getSystemResource("config.properties").openStream());
+            prop.load(new FileInputStream("config.properties"));
             conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch(IOException | SQLException e) {
             System.out.println("Greska prilikom povezivanja na bazu podataka:");
@@ -34,7 +33,22 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
     @Override
     public T getById(int id) {
+        String query = "SELECT * FROM ? WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, table);
+            stmt.setInt(2, id);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                // TODO:
 
+                rs.close();
+                return item;
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

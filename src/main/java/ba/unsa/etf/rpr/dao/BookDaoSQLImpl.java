@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -39,8 +40,15 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
     }
 
     @Override
-    public Map<String, Object> objectToRow(Book object) throws BookstoreException {
-        return null;
+    public Map<String, Object> objectToRow(Book object) {
+        Map<String, Object> row = new TreeMap<>();
+        row.put("id", object.getId());
+        row.put("title", object.getTitle());
+        row.put("author_id", object.getAuthor().getId());
+        row.put("published", object.getPublished());
+        row.put("price", object.getPrice());
+        row.put("category_id", object.getCategory().getId());
+        return row;
     }
 
     @Override

@@ -18,7 +18,8 @@ public class AuthorDaoSQLImpl implements AuthorDao {
         try {
             this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Greska pri radu sa bazom podataka:");
+            System.out.println(e.getMessage());
         }
     }
 

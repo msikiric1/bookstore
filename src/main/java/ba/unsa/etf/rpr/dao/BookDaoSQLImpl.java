@@ -43,7 +43,6 @@ public class BookDaoSQLImpl implements BookDao {
                 rs.close();
                 return book;
             }
-            return null;
         } catch(SQLException e) {
             e.printStackTrace();
         }
@@ -138,6 +137,31 @@ public class BookDaoSQLImpl implements BookDao {
                 book.setPublished(rs.getDate("published"));
                 book.setPrice(rs.getDouble("price"));
                 book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
+                books.add(book);
+            }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> getByCategory(Category category) {
+        String query = "SELECT * FROM books WHERE category_id = ?";
+        List<Book> books = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, category.getId());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Book book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
+                book.setPublished(rs.getDate("published"));
+                book.setPrice(rs.getDouble("price"));
+                book.setCategory(category);
                 books.add(book);
             }
             rs.close();

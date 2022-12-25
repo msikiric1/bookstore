@@ -3,6 +3,7 @@ package ba.unsa.etf.rpr.dao;
 import ba.unsa.etf.rpr.domain.Author;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -87,7 +88,23 @@ public class AuthorDaoSQLImpl implements AuthorDao {
 
     @Override
     public List<Author> getAll() {
-        return null;
+        String query = "SELECT * FROM authors";
+        List<Author> authors = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Author author = new Author();
+                author.setName(rs.getString("name"));
+                author.setAddress(rs.getString("address"));
+                author.setPhone(rs.getString("phone"));
+                authors.add(author);
+            }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return authors;
     }
 
     @Override

@@ -11,8 +11,8 @@ import java.util.List;
 public interface AuthorDao extends Dao<Author> {
 
     /**
-     * Returns list of all authors with the same name as the search parameter
-     * @param name name to search authors by
+     * Returns list of all authors with the same name as the search parameter (not case-sensitive)
+     * @param name name to search authors by (not case-sensitive)
      * @return list of authors
      */
     List<Author> searchByName(String name);

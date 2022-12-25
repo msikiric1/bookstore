@@ -95,6 +95,7 @@ public class AuthorDaoSQLImpl implements AuthorDao {
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 Author author = new Author();
+                author.setId(rs.getInt("id"));
                 author.setName(rs.getString("name"));
                 author.setAddress(rs.getString("address"));
                 author.setPhone(rs.getString("phone"));
@@ -109,6 +110,25 @@ public class AuthorDaoSQLImpl implements AuthorDao {
 
     @Override
     public List<Author> searchByName(String name) {
-        return null;
+        String query = "SELECT * FROM authors WHERE name = ?";
+        List<Author> authors = new ArrayList<>();
+        String preparedName = name.trim().substring(0, 1).toUpperCase() + name.trim().substring(1).toLowerCase();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, preparedName);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Author author = new Author();
+                author.setId(rs.getInt("id"));
+                author.setName(rs.getString("name"));
+                author.setAddress(rs.getString("address"));
+                author.setPhone(rs.getString("phone"));
+                authors.add(author);
+            }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return authors;
     }
 }

@@ -5,6 +5,7 @@ import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -97,7 +98,26 @@ public class BookDaoSQLImpl implements BookDao {
 
     @Override
     public List<Book> getAll() {
-        return null;
+        String query = "SELECT * FROM books";
+        List<Book> books = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                Book book = new Book();
+                book.setId(rs.getInt("id"));
+                book.setTitle(rs.getString("title"));
+                book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
+                book.setPublished(rs.getDate("published"));
+                book.setPrice(rs.getDouble("price"));
+                book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
+                books.add(book);
+            }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
     }
 
     @Override

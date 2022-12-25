@@ -15,15 +15,6 @@ public class Book {
     private Double price;
     private Category category;
 
-    public Book(int id, String title, Author author, Date published, Double price, Category category) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.published = published;
-        this.price = price;
-        this.category = category;
-    }
-
     public int getId() {
         return id;
     }

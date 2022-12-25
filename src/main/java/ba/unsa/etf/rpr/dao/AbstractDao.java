@@ -55,7 +55,23 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
     @Override
     public void save(T item) throws BookstoreException {
+        Map<String, T> row = objectToRow(item);
 
+        StringBuilder insert = new StringBuilder()
+                .append("INSERT INTO ? (")
+                .append()
+                .append(") VALUES (")
+                .append()
+                .append(")");
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(insert.toString());
+            // TODO:
+
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
+        throw new BookstoreException();
     }
 
     @Override
@@ -87,5 +103,5 @@ public abstract class AbstractDao<T> implements Dao<T> {
      * @return map that has string and objects as key-value pairs
      * @throws BookstoreException
      */
-    public abstract Map<String, T> ObjectToRow(T object) throws BookstoreException;
+    public abstract Map<String, T> objectToRow(T object) throws BookstoreException;
 }

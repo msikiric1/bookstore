@@ -70,7 +70,14 @@ public class CategoryDaoSQLImpl implements CategoryDao {
 
     @Override
     public void delete(int id) {
-
+        String delete = "DELETE FROM categories WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(delete);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

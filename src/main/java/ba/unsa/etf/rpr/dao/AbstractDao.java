@@ -35,7 +35,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
     }
 
     @Override
-    public T getById(int id) {
+    public T getById(int id) throws BookstoreException {
         String query = "SELECT * FROM ? WHERE id = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(query);
@@ -43,34 +43,33 @@ public abstract class AbstractDao<T> implements Dao<T> {
             stmt.setInt(2, id);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
-                // TODO:
-
+                T item = rowToObject(rs);
                 rs.close();
                 return item;
             }
         } catch(SQLException e) {
-            e.printStackTrace();
+            throw new BookstoreException(e.getMessage(), e);
         }
-        return null;
+        throw new BookstoreException("Object not found.");
     }
 
     @Override
-    public void save(T item) {
-
-    }
-
-    @Override
-    public T update(T item) {
+    public void save(T item) throws BookstoreException {
 
     }
 
     @Override
-    public void delete(int id) {
+    public T update(T item) throws BookstoreException {
 
     }
 
     @Override
-    public List<T> getAll() {
+    public void delete(int id) throws BookstoreException {
+
+    }
+
+    @Override
+    public List<T> getAll() throws BookstoreException {
 
     }
 

@@ -3,7 +3,6 @@ package ba.unsa.etf.rpr.dao;
 import ba.unsa.etf.rpr.domain.Identifiable;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
@@ -25,11 +24,15 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         this.table = table;
         Properties prop = new Properties();
         try {
-            prop.load(new FileInputStream("config.properties"));
-            connection = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
+            prop.load(ClassLoader.getSystemResource("config.properties").openStream());
+            String url = prop.getProperty("db.url");
+            String username = prop.getProperty("db.username");
+            String password = prop.getProperty("db.password");
+            connection = DriverManager.getConnection(url, username, password);
         } catch(IOException | SQLException e) {
             System.out.println("Greska prilikom povezivanja na bazu podataka:");
             System.out.println(e.getMessage());
+            System.exit(0);
         }
     }
 
@@ -131,11 +134,10 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
     @Override
     public List<T> getAll() throws BookstoreException {
-        String query = "SELECT * FROM ?";
+        String query = "SELECT * FROM " + getTable();
         List<T> items = new ArrayList<>();
         try {
             PreparedStatement stmt = getConnection().prepareStatement(query);
-            stmt.setString(1, getTable());
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
                 items.add(rowToObject(rs));

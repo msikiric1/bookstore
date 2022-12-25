@@ -56,6 +56,15 @@ public class CategoryDaoSQLImpl implements CategoryDao {
 
     @Override
     public Category update(Category item) {
+        String update = "UPDATE categories SET name = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(update);
+            stmt.setString(1, item.getName());
+            stmt.executeUpdate();
+            return item;
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

@@ -4,6 +4,7 @@ import ba.unsa.etf.rpr.domain.Book;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -11,11 +12,13 @@ import java.util.Properties;
 public class BookDaoSQLImpl implements BookDao {
     private Connection conn;
 
+    /**
+     * Constructor that is used for connection to the database
+     */
     public BookDaoSQLImpl() {
         Properties prop = new Properties();
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + prop.getProperty("db.host") + "/" + prop.getProperty("db.scheme") + "/" + prop.getProperty("db.port"),
-                    prop.getProperty("db.username"), prop.getProperty("db.password"));
+            this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -23,7 +26,12 @@ public class BookDaoSQLImpl implements BookDao {
 
     @Override
     public Book getById(int id) {
-        return null;
+        String query = "SELECT * from books WHERE id = ?";
+        try {
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

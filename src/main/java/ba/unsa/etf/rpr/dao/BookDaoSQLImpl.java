@@ -39,7 +39,7 @@ public class BookDaoSQLImpl implements BookDao {
                 book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
                 book.setPublished(rs.getDate("published"));
                 book.setPrice(rs.getDouble("price"));
-                book.setCategory(new CategoryDaoSQLImpl().getByID(rs.getDate("category_id")));
+                book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
                 rs.close();
                 return book;
             }

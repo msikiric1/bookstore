@@ -6,6 +6,10 @@ import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import java.sql.*;
 import java.util.*;
 
+/**
+ *
+ * @author Muaz Sikiric
+ */
 public class CategoryDaoSQLImpl extends AbstractDao<Category> implements CategoryDao {
 
     /**
@@ -28,7 +32,7 @@ public class CategoryDaoSQLImpl extends AbstractDao<Category> implements Categor
     }
 
     @Override
-    public Map<String, Object> objectToRow(Category object) throws BookstoreException {
+    public Map<String, Object> objectToRow(Category object) {
         Map<String, Object> row = new TreeMap<>(); // Tree map automatically sorts its elements
         row.put("id", object.getId());
         row.put("name", object.getName());

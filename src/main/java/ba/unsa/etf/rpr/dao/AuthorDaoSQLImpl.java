@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ *
+ * @author Muaz Sikiric
+ */
 public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     /**
      * Constructor used for connecting to the database
@@ -32,7 +36,7 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     }
 
     @Override
-    public Map<String, Object> objectToRow(Author object) throws BookstoreException {
+    public Map<String, Object> objectToRow(Author object) {
         Map<String, Object> row = new TreeMap<>();
         row.put("id", object.getId());
         row.put("name", object.getName());

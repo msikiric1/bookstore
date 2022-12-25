@@ -159,9 +159,8 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
      * Converts an object to a row
      * @param object object that needs to be transformed into row
      * @return map that has string and objects as key-value pairs (represents a row)
-     * @throws BookstoreException
      */
-    public abstract Map<String, Object> objectToRow(T object) throws BookstoreException;
+    public abstract Map<String, Object> objectToRow(T object);
 
     /**
      * Utility method that returns map entry with two strings as key-value pair that

@@ -6,7 +6,7 @@ import java.util.Objects;
  * Bean class for representing book authors
  * @author Muaz Sikiric
  */
-public class Author {
+public class Author implements Identifiable {
     private int id;
     private String name;
     private String address;

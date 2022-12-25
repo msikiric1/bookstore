@@ -6,7 +6,7 @@ package ba.unsa.etf.rpr.domain;
  * @author Muaz Sikiric
  */
 public interface Identifiable {
-    void getId();
-    
+    int getId();
+
     void setId(int id);
 }

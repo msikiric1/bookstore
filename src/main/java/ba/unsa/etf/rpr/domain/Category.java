@@ -6,7 +6,7 @@ import java.util.Objects;
  * Bean class for representing book categories
  * @author Muaz Sikiric
  */
-public class Category {
+public class Category implements Identifiable {
     private int id;
     private String name;
 

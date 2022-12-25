@@ -7,7 +7,7 @@ import java.util.Objects;
  * Bean class for representing books
  * @author Muaz Sikiric
  */
-public class Book {
+public class Book implements Identifiable {
     private int id;
     private String title;
     private Author author;

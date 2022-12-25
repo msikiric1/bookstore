@@ -28,8 +28,10 @@ CREATE TABLE `authors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
   `address` varchar(256) NOT NULL,
-  `phone` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
+  `phone` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_UNIQUE` (`phone`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -58,6 +60,7 @@ CREATE TABLE `books` (
   `price` double NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_category_id_idx` (`category_id`),
   KEY `fk_author_id_idx` (`author_id`),
   CONSTRAINT `fk_author_id` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -85,7 +88,9 @@ DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -95,7 +100,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Fantasy'),(2,'Novel'),(3,'Productivity'),(4,'Fiction'),(5,'Science'),(6,'Adventure'),(7,'Horror'),(8,'Humour');
+INSERT INTO `categories` VALUES (6,'Adventure'),(1,'Fantasy'),(4,'Fiction'),(7,'Horror'),(8,'Humour'),(2,'Novel'),(3,'Productivity'),(5,'Science');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -108,4 +113,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-25 22:27:03
+-- Dump completed on 2022-12-25 22:56:23

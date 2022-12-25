@@ -45,7 +45,16 @@ public class AuthorDaoSQLImpl implements AuthorDao {
 
     @Override
     public void save(Author item) {
-
+        String insert = "INSERT INTO authors (name, address, phone) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(insert);
+            stmt.setString(1, item.getName());
+            stmt.setString(2, item.getAddress());
+            stmt.setString(3, item.getPhone());
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

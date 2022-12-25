@@ -1,10 +1,12 @@
 package ba.unsa.etf.rpr.dao;
 
+import ba.unsa.etf.rpr.domain.Identifiable;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +16,7 @@ import java.util.Properties;
  * @param <T> parametrized type
  * @author Muaz Sikiric
  */
-public abstract class AbstractDao<T> implements Dao<T> {
+public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     private Connection connection;
     private String table;
 
@@ -103,19 +105,32 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
     @Override
     public List<T> getAll() throws BookstoreException {
-
+        String query = "SELECT * FROM ?";
+        List<T> items = new ArrayList<>();
+        try {
+            PreparedStatement stmt = getConnection().prepareStatement(query);
+            stmt.setString(1, getTable());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                items.add(rowToObject(rs));
+            }
+            rs.close();
+            return items;
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     /**
-     * Converts rows to objects
-     * @param rs result of a query (row/s)
+     * Converts a row to an object
+     * @param rs result of a query (row)
      * @return object
      * @throws BookstoreException
      */
     public abstract T rowToObject(ResultSet rs) throws BookstoreException;
 
     /**
-     * Converts objects to rows
+     * Converts an object to a row
      * @param object object that needs to be transformed into row
      * @return map that has string and objects as key-value pairs
      * @throws BookstoreException

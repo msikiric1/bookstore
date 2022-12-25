@@ -24,7 +24,18 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
 
     @Override
     public Book rowToObject(ResultSet rs) throws BookstoreException {
-        return null;
+        Book book = new Book();
+        try {
+            book.setId(rs.getInt("id"));
+            book.setTitle(rs.getString("title"));
+            book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
+            book.setPublished(rs.getDate("published"));
+            book.setPrice(rs.getDouble("price"));
+            book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
+            return book;
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     @Override

@@ -1,27 +1,18 @@
 package ba.unsa.etf.rpr.dao;
 
 import ba.unsa.etf.rpr.domain.Category;
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.PropertyResourceBundle;
+import java.util.*;
 
-public class CategoryDaoSQLImpl implements CategoryDao {
-    private Connection conn;
+public class CategoryDaoSQLImpl extends AbstractDao<Category> implements CategoryDao {
 
     /**
      * Constructor used for connecting to the database
      */
     public CategoryDaoSQLImpl() {
-        Properties prop = new Properties();
-        try {
-            this.conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
-        } catch (Exception e) {
-            System.out.println("Greska pri radu sa bazom podataka:");
-            System.out.println(e.getMessage());
-        }
+        super("categories");
     }
 
     @Override
@@ -101,5 +92,25 @@ public class CategoryDaoSQLImpl implements CategoryDao {
             e.printStackTrace();
         }
         return categories;
+    }
+
+    @Override
+    public Category rowToObject(ResultSet rs) throws BookstoreException {
+        Category category = new Category();
+        try {
+            category.setId(rs.getInt("id"));
+            category.setName(rs.getString("name"));
+            return category;
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Map<String, Object> objectToRow(Category object) throws BookstoreException {
+        Map<String, Object> row =  new TreeMap<>(); // Tree map automatically sorts its elements
+        row.put("id", object.getId());
+        row.put("name", object.getName());
+        return row;
     }
 }

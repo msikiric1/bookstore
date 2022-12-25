@@ -6,10 +6,7 @@ import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Abstract class that contains all base sql operations (create, read, update and delete)
@@ -143,12 +140,28 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     public abstract Map<String, Object> objectToRow(T object) throws BookstoreException;
 
     /**
-     * Utility method that returns string with all columns that will be inserted
+     * Utility method that returns map entry with two strings as key-value pair that
+     * represent columns (e.g. "(id,name,address)") and question marks (e.g. "?,?,?") based on number of columns
      * @param row Map that represents a row
-     * @return prepared string with all columns except id
+     * @return Map<String, String>
      */
-    private String insertColumnsString(Map<String, Object> row) {
+    private Map.Entry<String, String> toPreparedInsertParts(Map<String, Object> row) {
+        StringBuilder columns = new StringBuilder();
+        StringBuilder questions = new StringBuilder();
 
+        int i = 1;
+        for(Map.Entry<String, Object> entry : row.entrySet()) {
+            if(entry.getKey().equals("id")) continue;
+            columns.append(entry.getKey());
+            questions.append("?");
+            if(i != row.size()) {
+                columns.append(",");
+                questions.append(",");
+            }
+            i++;
+        }
+
+        return new AbstractMap.SimpleEntry<String, String>(columns.toString(), questions.toString());
     }
 
     /**

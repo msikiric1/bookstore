@@ -81,7 +81,16 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
     @Override
     public void delete(int id) throws BookstoreException {
-
+        String delete = "DELETE FROM ? WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(delete);
+            stmt.setString(1, table);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
+        throw new BookstoreException("Object doesn't exist.")
     }
 
     @Override

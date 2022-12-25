@@ -46,11 +46,10 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
 
     @Override
     public T getById(int id) throws BookstoreException {
-        String query = "SELECT * FROM ? WHERE id = ?";
+        String query = "SELECT * FROM " + getTable() + " WHERE id = ?";
         try {
             PreparedStatement stmt = getConnection().prepareStatement(query);
-            stmt.setString(1, getTable());
-            stmt.setInt(2, id);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 T item = rowToObject(rs);

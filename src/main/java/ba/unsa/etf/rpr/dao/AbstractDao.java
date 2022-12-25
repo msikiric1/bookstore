@@ -61,7 +61,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
     }
 
     @Override
-    public T save(T item) throws BookstoreException {
+    public T add(T item) throws BookstoreException {
         Map<String, Object> row = objectToRow(item);
         Map.Entry<String, String> insertStrings = toPreparedInsertParts(row);
         StringBuilder insert = new StringBuilder()

@@ -15,7 +15,7 @@ import java.util.Properties;
  * @author Muaz Sikiric
  */
 public abstract class AbstractDao<T> implements Dao<T> {
-    private Connection conn;
+    private Connection connection;
     private String table;
 
     /**
@@ -27,18 +27,22 @@ public abstract class AbstractDao<T> implements Dao<T> {
         Properties prop = new Properties();
         try {
             prop.load(new FileInputStream("config.properties"));
-            conn = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
+            connection = DriverManager.getConnection(prop.getProperty("db.url"), prop.getProperty("db.username"), prop.getProperty("db.password"));
         } catch(IOException | SQLException e) {
             System.out.println("Greska prilikom povezivanja na bazu podataka:");
             System.out.println(e.getMessage());
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     @Override
     public T getById(int id) throws BookstoreException {
         String query = "SELECT * FROM ? WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt = getConnection().prepareStatement(query);
             stmt.setString(1, table);
             stmt.setInt(2, id);
             ResultSet rs = stmt.executeQuery();
@@ -65,7 +69,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
                 .append(")");
 
         try {
-            PreparedStatement stmt = conn.prepareStatement(insert.toString());
+            PreparedStatement stmt = getConnection().prepareStatement(insert.toString());
             // TODO:
 
         } catch(SQLException e) {
@@ -83,7 +87,7 @@ public abstract class AbstractDao<T> implements Dao<T> {
     public void delete(int id) throws BookstoreException {
         String delete = "DELETE FROM ? WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(delete);
+            PreparedStatement stmt = getConnection().prepareStatement(delete);
             stmt.setString(1, table);
             stmt.setInt(2, id);
             stmt.executeUpdate();

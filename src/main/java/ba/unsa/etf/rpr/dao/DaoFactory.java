@@ -5,8 +5,21 @@ package ba.unsa.etf.rpr.dao;
  * @author Muaz Sikiric
  */
 public class DaoFactory {
+    private static final BookDao bookDao = new BookDaoSQLImpl();
+    private static final AuthorDao authorDao = new AuthorDaoSQLImpl();
+    private static final CategoryDao categoryDao = new CategoryDaoSQLImpl();
 
     private DaoFactory() {}
 
+    public static BookDao bookDao() {
+        return bookDao;
+    }
 
+    public static AuthorDao authorDao() {
+        return authorDao;
+    }
+
+    public static CategoryDao categoryDao() {
+        return categoryDao;
+    }
 }

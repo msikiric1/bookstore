@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *
+ * Class that implements methods from BookDao interface
  * @author Muaz Sikiric
  */
 public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {

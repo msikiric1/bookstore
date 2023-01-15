@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *
+ * Class that implements methods from AuthorDao interface
  * @author Muaz Sikiric
  */
 public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {

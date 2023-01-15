@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.*;
 
 /**
- *
+ * Class that implements methods from CategoryDao interface
  * @author Muaz Sikiric
  */
 public class CategoryDaoSQLImpl extends AbstractDao<Category> implements CategoryDao {

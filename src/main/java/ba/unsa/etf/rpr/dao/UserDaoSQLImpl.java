@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Class that implements methods from UserDao interface
@@ -34,6 +35,11 @@ public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Map<String, Object> objectToRow(User object) {
-        return null;
+        Map<String, Object> row = new TreeMap<>();
+        row.put("id", object.getId());
+        row.put("username", object.getUsername());
+        row.put("password", object.getPassword());
+        row.put("is_admin", object.isAdmin());
+        return row;
     }
 }

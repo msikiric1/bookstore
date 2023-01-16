@@ -41,7 +41,7 @@
                 </HBox>
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Label fx:id="errorMsgLabel" text="Error message" />
+                        <Label fx:id="errorMsgLabel" text="Error message" wrapText="true" />
                     </children>
                 </HBox>
                 <HBox prefHeight="100.0" prefWidth="200.0">

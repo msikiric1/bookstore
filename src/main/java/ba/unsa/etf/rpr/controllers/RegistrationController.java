@@ -1,5 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
+import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +29,7 @@ public class RegistrationController {
     public Button registerBtn;
 
     public void initialize() {
+        errorMsgLabel.setVisible(false);
         usernameField.getStyleClass().add("invalid");
         usernameField.textProperty().addListener((observableValue, o, n) -> {
             if(n.trim().isEmpty()) {
@@ -47,9 +50,40 @@ public class RegistrationController {
                 confirmPasswordField.getStyleClass().add("valid");
             }
         });
+
     }
 
-    public void registerClick(ActionEvent actionEvent) {
+    public void registerClick(ActionEvent actionEvent) throws BookstoreException {
+        User user = new User();
+        user.setUsername(usernameField.getText());
+        user.setPassword(passwordField.getText());
+        try {
+            if(usernameField.getText().length() < 6)
+                throw new BookstoreException("Username needs to be at least 6 characters.");
+            if(passwordField.getText().length() < 8)
+                throw new BookstoreException("Password needs to be at least 8 characters.");
+            if(!passwordField.getText().equals(confirmPasswordField.getText()))
+                throw new BookstoreException("Passwords do not match.");
+            new UserDaoSQLImpl().add(user);
+        } catch(BookstoreException e) {
+            errorMsgLabel.setVisible(true);
+            errorMsgLabel.setText(e.getMessage());
+            return;
+        }
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.getIcons().add(new Image("/images/bookstore_icon.png"));
+            stage.setTitle("Bookstore | Main");
+            stage.setResizable(false);
+            stage.show();
+
+            Stage currentStage = (Stage) registerBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     public void goBackClick(ActionEvent actionEvent) throws BookstoreException {

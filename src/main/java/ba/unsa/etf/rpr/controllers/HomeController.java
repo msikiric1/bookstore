@@ -33,7 +33,20 @@ public class HomeController {
         }
     }
 
-    public void goToRegistration(ActionEvent actionEvent) {
+    public void goToRegistrationClick(ActionEvent actionEvent) throws BookstoreException {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/registration.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.setTitle("Bookstore | Register");
+            stage.setResizable(false);
+            stage.show();
+
+            Stage currentStage = (Stage) loginBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     public void closeAppClick(ActionEvent actionEvent) {

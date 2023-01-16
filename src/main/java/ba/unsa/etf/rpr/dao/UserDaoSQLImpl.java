@@ -3,6 +3,7 @@ package ba.unsa.etf.rpr.dao;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -41,5 +42,24 @@ public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
         row.put("password", object.getPassword());
         row.put("is_admin", object.isAdmin());
         return row;
+    }
+
+    @Override
+    public User getUser(String username, String password) throws BookstoreException {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try {
+            PreparedStatement stmt = getConnection().prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                User user = rowToObject(rs);
+                rs.close();
+                return user;
+            }
+        } catch(SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
+        return null;
     }
 }

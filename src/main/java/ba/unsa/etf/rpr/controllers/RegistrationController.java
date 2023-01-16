@@ -1,10 +1,22 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class RegistrationController {
     public TextField usernameField;
@@ -15,12 +27,45 @@ public class RegistrationController {
     public Button registerBtn;
 
     public void initialize() {
+        usernameField.getStyleClass().add("invalid");
+        usernameField.textProperty().addListener((observableValue, o, n) -> {
+            if(n.trim().isEmpty()) {
+                usernameField.getStyleClass().removeAll("valid");
+                usernameField.getStyleClass().add("invalid");
+            } else {
+                usernameField.getStyleClass().removeAll("invalid");
+                usernameField.getStyleClass().add("valid");
+            }
+        });
 
+        confirmPasswordField.textProperty().addListener((observableValue, o, n) -> {
+            if(n.trim().isEmpty() || !n.equals(passwordField.getText())) {
+                confirmPasswordField.getStyleClass().removeAll("valid");
+                confirmPasswordField.getStyleClass().add("invalid");
+            } else {
+                confirmPasswordField.getStyleClass().removeAll("invalid");
+                confirmPasswordField.getStyleClass().add("valid");
+            }
+        });
     }
 
     public void registerClick(ActionEvent actionEvent) {
     }
 
-    public void goBackClick(ActionEvent actionEvent) {
+    public void goBackClick(ActionEvent actionEvent) throws BookstoreException {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/home.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.getIcons().add(new Image("/images/bookstore_icon.png"));
+            stage.setTitle("Bookstore | Home");
+            stage.setResizable(false);
+            stage.show();
+
+            Stage currentStage = (Stage) registerBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 }

@@ -60,6 +60,6 @@ public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);
         }
-        return null;
+        throw new BookstoreException("User not found.");
     }
 }

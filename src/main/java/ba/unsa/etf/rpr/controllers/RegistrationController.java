@@ -3,6 +3,7 @@ package ba.unsa.etf.rpr.controllers;
 import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import ba.unsa.etf.rpr.exceptions.UserException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -59,17 +60,21 @@ public class RegistrationController {
         user.setPassword(passwordField.getText());
         try {
             if(usernameField.getText().length() < 6)
-                throw new BookstoreException("Username needs to be at least 6 characters.");
+                throw new UserException("Username needs to be at least 6 characters.");
             if(passwordField.getText().length() < 8)
-                throw new BookstoreException("Password needs to be at least 8 characters.");
+                throw new UserException("Password needs to be at least 8 characters.");
             if(!passwordField.getText().equals(confirmPasswordField.getText()))
-                throw new BookstoreException("Passwords do not match.");
+                throw new UserException("Passwords do not match.");
             new UserDaoSQLImpl().add(user);
-        } catch(BookstoreException e) {
+        } catch (UserException | BookstoreException e) {
+            if(e instanceof UserException)
+                errorMsgLabel.setText(e.getMessage());
+            else
+                errorMsgLabel.setText("User already exists.");
             errorMsgLabel.setVisible(true);
-            errorMsgLabel.setText(e.getMessage());
             return;
         }
+
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
             Stage stage = new Stage();

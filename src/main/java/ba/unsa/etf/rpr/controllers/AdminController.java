@@ -1,6 +1,10 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.DaoFactory;
+import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -21,25 +26,35 @@ public class AdminController {
     public TableView booksTable;
     public TableColumn booksColId;
     public TableColumn booksColTitle;
-    public TableColumn booksColAuthorId;
     public TableColumn booksColPublished;
     public TableColumn booksColPrice;
-    public TableColumn booksColCategoryId;
     public Button logoutBtn;
     public Button closeBtn;
     public Button deleteBookBtn;
     public Button viewCategoriesBtn;
     public Button viewAuthorsBtn;
     public Label usernameLabel;
+    private ObservableList<Book> books;
     private String username;
 
     public AdminController(String username) {
+        try {
+            books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
+        } catch(BookstoreException e) {
+            System.out.println("Something's wrong with books table");
+            throw new RuntimeException(e);
+        }
         this.username = username;
     }
 
     @FXML
     public void initialize() {
         usernameLabel.setText(usernameLabel.getText() + username);
+        booksColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));
+        booksColPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        booksTable.setItems(books);
     }
 
 

@@ -16,12 +16,10 @@
    <center>
       <TableView fx:id="booksTable" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="booksColId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="booksColTitle" prefWidth="75.0" text="Title" />
-            <TableColumn fx:id="booksColAuthorId" prefWidth="75.0" text="Author Id" />
-            <TableColumn fx:id="booksColPublished" prefWidth="75.0" text="Published" />
-            <TableColumn fx:id="booksColPrice" prefWidth="75.0" text="Price" />
-            <TableColumn fx:id="booksColCategoryId" prefWidth="75.0" text="Category Id" />
+          <TableColumn fx:id="booksColId" prefWidth="43.33331298828125" resizable="false" text="Id" />
+          <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="254.66665649414062" resizable="false" text="Title" />
+            <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="114.66668701171875" resizable="false" text="Published" />
+            <TableColumn fx:id="booksColPrice" minWidth="14.0" prefWidth="76.0" text="Price" />
         </columns>
       </TableView>
    </center>

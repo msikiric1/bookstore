@@ -5,9 +5,9 @@ package ba.unsa.etf.rpr.dao;
  * @author Muaz Sikiric
  */
 public class DaoFactory {
-    private static final BookDao bookDao = new BookDaoSQLImpl();
-    private static final AuthorDao authorDao = new AuthorDaoSQLImpl();
-    private static final CategoryDao categoryDao = new CategoryDaoSQLImpl();
+    private static final BookDao bookDao = BookDaoSQLImpl.getInstance();
+    private static final AuthorDao authorDao = AuthorDaoSQLImpl.getInstance();
+    private static final CategoryDao categoryDao = CategoryDaoSQLImpl.getInstance();
 
     private DaoFactory() {}
 

@@ -14,11 +14,22 @@ import java.util.TreeMap;
  * @author Muaz Sikiric
  */
 public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
+    private static AuthorDaoSQLImpl instance = null;
     /**
      * Constructor used for connecting to the database
      */
     public AuthorDaoSQLImpl() {
         super("authors");
+    }
+
+    public static AuthorDaoSQLImpl getInstance() {
+        if(instance == null)
+            instance = new AuthorDaoSQLImpl();
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
     }
 
     @Override

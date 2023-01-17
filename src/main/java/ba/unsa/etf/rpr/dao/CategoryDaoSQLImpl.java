@@ -11,12 +11,22 @@ import java.util.*;
  * @author Muaz Sikiric
  */
 public class CategoryDaoSQLImpl extends AbstractDao<Category> implements CategoryDao {
-
+    private static CategoryDaoSQLImpl instance = null;
     /**
      * Constructor used for connecting to the database
      */
     public CategoryDaoSQLImpl() {
         super("categories");
+    }
+
+    public static CategoryDaoSQLImpl getInstance() {
+        if(instance == null)
+            instance = new CategoryDaoSQLImpl();
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
     }
 
     @Override

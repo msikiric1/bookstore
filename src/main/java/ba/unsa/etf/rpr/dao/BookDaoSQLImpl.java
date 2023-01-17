@@ -16,11 +16,22 @@ import java.util.TreeMap;
  * @author Muaz Sikiric
  */
 public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
+    private static BookDaoSQLImpl instance = null;
     /**
      * Constructor that is used for connection to the database
      */
     public BookDaoSQLImpl() {
         super("books");
+    }
+
+    public static BookDaoSQLImpl getInstance() {
+        if(instance == null)
+            instance = new BookDaoSQLImpl();
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
     }
 
     @Override

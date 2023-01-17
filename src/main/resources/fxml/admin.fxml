@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.unsa.etf.rpr.controllers.AdminController">
    <center>
       <TableView fx:id="booksTable" BorderPane.alignment="CENTER">
         <columns>
@@ -37,10 +37,10 @@
                </HBox.margin>
             </Label>
             <Pane HBox.hgrow="ALWAYS" />
-            <Label alignment="CENTER" text="Hello, " />
-            <Button fx:id="logoutBtn" mnemonicParsing="false" text="Log out" />
+            <Label fx:id="usernameLabel" alignment="CENTER" text="Hello, " />
+            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" text="Log out" />
             <Separator orientation="VERTICAL" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" text="Close" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" text="Close" />
          </children>
          <BorderPane.margin>
             <Insets />
@@ -59,8 +59,8 @@
             <Button fx:id="deleteBookBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
             <Pane VBox.vgrow="ALWAYS" />
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" />
-            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Categories" />
-            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Authors" />
+            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCategoriesAction" text="Categories" />
+            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewAuthorsAction" text="Authors" />
          </children>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -15,10 +15,22 @@ import java.util.TreeMap;
  * @author Muaz Sikiric
  */
 public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
+    private static UserDaoSQLImpl instance = null;
+
     /**
      * Constructor used for connecting to the database
      */
     public UserDaoSQLImpl() { super("users"); }
+
+    public static UserDaoSQLImpl getInstance() {
+        if(instance == null)
+            instance = new UserDaoSQLImpl();
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
+    }
 
     @Override
     public User rowToObject(ResultSet rs) throws BookstoreException {

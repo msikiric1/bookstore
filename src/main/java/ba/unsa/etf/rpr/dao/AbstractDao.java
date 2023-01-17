@@ -13,7 +13,7 @@ import java.util.*;
  * @author Muaz Sikiric
  */
 public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
-    private Connection connection;
+    private static Connection connection = null;
     private String table;
 
     /**
@@ -22,22 +22,24 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
      */
     public AbstractDao(String table) {
         this.table = table;
-        Properties prop = new Properties();
-        try {
-            prop.load(ClassLoader.getSystemResource("config.properties").openStream());
-            String url = prop.getProperty("db.url");
-            String username = prop.getProperty("db.username");
-            String password = prop.getProperty("db.password");
-            connection = DriverManager.getConnection(url, username, password);
-        } catch(IOException | SQLException e) {
-            System.out.println("Greska prilikom povezivanja na bazu podataka:");
-            System.out.println(e.getMessage());
-            System.exit(0);
+        if(AbstractDao.connection == null) {
+            Properties prop = new Properties();
+            try {
+                prop.load(ClassLoader.getSystemResource("config.properties").openStream());
+                String url = prop.getProperty("db.url");
+                String username = prop.getProperty("db.username");
+                String password = prop.getProperty("db.password");
+                AbstractDao.connection = DriverManager.getConnection(url, username, password);
+            } catch (IOException | SQLException e) {
+                System.out.println("Greska prilikom povezivanja na bazu podataka:");
+                System.out.println(e.getMessage());
+                System.exit(0);
+            }
         }
     }
 
     public Connection getConnection() {
-        return connection;
+        return AbstractDao.connection;
     }
 
     public String getTable() {

@@ -14,19 +14,19 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TableView BorderPane.alignment="CENTER">
+      <TableView fx:id="booksTable" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="Id" />
-          <TableColumn prefWidth="75.0" text="Title" />
-            <TableColumn prefWidth="75.0" text="Author Id" />
-            <TableColumn prefWidth="75.0" text="Published" />
-            <TableColumn prefWidth="75.0" text="Price" />
-            <TableColumn prefWidth="75.0" text="Category Id" />
+          <TableColumn fx:id="booksColId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="booksColTitle" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="booksColAuthorId" prefWidth="75.0" text="Author Id" />
+            <TableColumn fx:id="booksColPublished" prefWidth="75.0" text="Published" />
+            <TableColumn fx:id="booksColPrice" prefWidth="75.0" text="Price" />
+            <TableColumn fx:id="booksColCategoryId" prefWidth="75.0" text="Category Id" />
         </columns>
       </TableView>
    </center>
    <top>
-      <HBox fx:id="navbar" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox id="navbar" alignment="CENTER" spacing="10.0" stylesheets="@../css/admin.css" BorderPane.alignment="CENTER">
          <children>
             <Label text="Books">
                <font>
@@ -38,13 +38,16 @@
             </Label>
             <Pane HBox.hgrow="ALWAYS" />
             <Label alignment="CENTER" text="Hello, " />
-            <Button mnemonicParsing="false" text="Log out" />
+            <Button fx:id="logoutBtn" mnemonicParsing="false" text="Log out" />
             <Separator orientation="VERTICAL" />
-            <Button mnemonicParsing="false" text="Close" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" text="Close" />
          </children>
          <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
       </HBox>
    </top>
    <right>
@@ -53,11 +56,11 @@
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Operations:" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Insert" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="deleteBookBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
             <Pane VBox.vgrow="ALWAYS" />
             <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Categories" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Authors" />
+            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Categories" />
+            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Authors" />
          </children>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

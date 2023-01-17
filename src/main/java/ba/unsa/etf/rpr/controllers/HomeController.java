@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,11 +18,15 @@ public class HomeController {
     public Button registerBtn;
     public Button closeBtn;
 
-    public void goToLoginClick(ActionEvent actionEvent) throws BookstoreException {
+    public HomeController() {
+    }
+
+    public void goToLoginAction(ActionEvent actionEvent) throws BookstoreException {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.getIcons().add(new Image("/images/bookstore_icon.png"));
             stage.setTitle("Bookstore | Login");
             stage.setResizable(false);
             stage.show();
@@ -33,11 +38,12 @@ public class HomeController {
         }
     }
 
-    public void goToRegistrationClick(ActionEvent actionEvent) throws BookstoreException {
+    public void goToRegistrationAction(ActionEvent actionEvent) throws BookstoreException {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/registration.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            stage.getIcons().add(new Image("/images/bookstore_icon.png"));
             stage.setTitle("Bookstore | Register");
             stage.setResizable(false);
             stage.show();
@@ -49,6 +55,8 @@ public class HomeController {
         }
     }
 
-    public void closeAppClick(ActionEvent actionEvent) {
+    public void closeAction(ActionEvent actionEvent) {
+        Stage currentStage = (Stage) loginBtn.getScene().getWindow();
+        currentStage.close();
     }
 }

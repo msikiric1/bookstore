@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/home.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.unsa.etf.rpr.controllers.HomeController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/home.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -21,9 +21,9 @@
       <Label text="Hi there, welcome to the BookStore!" GridPane.columnIndex="1" />
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#goToLoginClick" text="Go to the login page" />
-            <Button fx:id="registerBtn" mnemonicParsing="false" onAction="#goToRegistrationClick" text="Go to the registration page" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAppClick" text="Close the app" />
+            <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#goToLoginAction" text="Go to the login page" />
+            <Button fx:id="registerBtn" mnemonicParsing="false" onAction="#goToRegistrationAction" text="Go to the registration page" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" text="Close the app" />
          </children>
       </VBox>
       <Label text="Made with ♡ by Muaz Sikirić" GridPane.columnIndex="1" GridPane.rowIndex="2" />

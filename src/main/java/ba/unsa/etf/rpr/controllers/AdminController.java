@@ -43,8 +43,9 @@ public class AdminController {
     }
 
 
-    public void logoutAction(ActionEvent actionEvent) {
-
+    public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
+        HomeController homeController = new HomeController();
+        changeWindow("home", "Home", homeController, actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {

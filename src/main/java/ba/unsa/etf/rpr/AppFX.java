@@ -1,6 +1,8 @@
 package ba.unsa.etf.rpr;
 
+import ba.unsa.etf.rpr.controllers.HomeController;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,9 +14,11 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 public class AppFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/home.fxml"));
+        HomeController homeController = new HomeController();
+        loader.setController(homeController);
         stage.setTitle("Bookstore | Home");
-        stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        stage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
         stage.getIcons().add(new Image("/images/bookstore_icon.png"));
         stage.setResizable(false);
         stage.show();

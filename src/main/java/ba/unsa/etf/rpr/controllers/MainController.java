@@ -12,13 +12,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -27,6 +31,7 @@ public class MainController {
     public Label usernameLabel;
     public TextField searchField;
     public ListView booksListView;
+    public VBox categoriesBox;
     private ObservableList<Book> books;
     private ObservableList<Book> filteredBooks;
     private ObservableList<Author> authors;
@@ -50,10 +55,23 @@ public class MainController {
     public void initialize() {
         usernameLabel.setText(usernameLabel.getText() + username);
         refresh();
+
+        for (Category category : categories) {
+            Button categoryButton = new Button(category.getName());
+            categoryButton.setOnAction(event -> {
+                filteredBooks = books.stream().filter(book -> {
+                    return book.getCategory().getName().toLowerCase().contains(category.getName().toLowerCase());
+                }).collect(Collectors.toCollection(FXCollections::observableArrayList));
+                refresh();
+            });
+            categoriesBox.getChildren().add(categoryButton);
+        }
+
         searchField.textProperty().addListener((observable, o, n) -> {
             searchBooks(n);
             refresh();
         });
+
     }
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {

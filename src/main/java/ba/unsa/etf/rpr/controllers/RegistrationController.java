@@ -96,7 +96,7 @@ public class RegistrationController {
     }
 
     public void goToLoginAction(ActionEvent actionEvent) throws BookstoreException {
-        changeWindow("register", "Register", new RegistrationController(), actionEvent);
+        changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     /**

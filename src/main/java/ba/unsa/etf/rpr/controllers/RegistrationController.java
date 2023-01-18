@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
@@ -27,37 +28,45 @@ public class RegistrationController {
     public PasswordField passwordField;
     public PasswordField confirmPasswordField;
     public Label errorMsgLabel;
-    public Button goBackBtn;
     public Button registerBtn;
 
     public RegistrationController() {}
 
     public void initialize() {
         errorMsgLabel.setVisible(false);
-        usernameField.getStyleClass().add("invalid");
         usernameField.textProperty().addListener((observableValue, o, n) -> {
             if(n.trim().isEmpty()) {
-                usernameField.getStyleClass().removeAll("valid");
+                usernameField.getStyleClass().removeAll("default");
                 usernameField.getStyleClass().add("invalid");
             } else {
                 usernameField.getStyleClass().removeAll("invalid");
-                usernameField.getStyleClass().add("valid");
+                usernameField.getStyleClass().add("default");
+            }
+        });
+
+        passwordField.textProperty().addListener((observableValue, o, n) -> {
+            if(n.trim().isEmpty()) {
+                passwordField.getStyleClass().removeAll("default");
+                passwordField.getStyleClass().add("invalid");
+            } else {
+                passwordField.getStyleClass().removeAll("invalid");
+                passwordField.getStyleClass().add("default");
             }
         });
 
         confirmPasswordField.textProperty().addListener((observableValue, o, n) -> {
             if(n.trim().isEmpty() || !n.equals(passwordField.getText())) {
-                confirmPasswordField.getStyleClass().removeAll("valid");
+                confirmPasswordField.getStyleClass().removeAll("default");
                 confirmPasswordField.getStyleClass().add("invalid");
             } else {
                 confirmPasswordField.getStyleClass().removeAll("invalid");
-                confirmPasswordField.getStyleClass().add("valid");
+                confirmPasswordField.getStyleClass().add("default");
             }
         });
 
     }
 
-    public void registerClick(ActionEvent actionEvent) throws BookstoreException {
+    public void registerAction(ActionEvent actionEvent) throws BookstoreException {
         User user = new User();
         user.setUsername(usernameField.getText());
         user.setPassword(passwordField.getText());
@@ -68,7 +77,7 @@ public class RegistrationController {
                 throw new UserException("Password needs to be at least 8 characters.");
             if(!passwordField.getText().equals(confirmPasswordField.getText()))
                 throw new UserException("Passwords do not match.");
-            new UserDaoSQLImpl().add(user);
+            DaoFactory.userDao().add(user);
         } catch (UserException | BookstoreException e) {
             if(e instanceof UserException)
                 errorMsgLabel.setText(e.getMessage());
@@ -81,8 +90,13 @@ public class RegistrationController {
         changeWindow("main", "Main", new MainController(usernameField.getText()), actionEvent);
     }
 
-    public void goBackClick(ActionEvent actionEvent) throws BookstoreException {
-        changeWindow("home", "Home", new HomeController(), actionEvent);
+    public void closeAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) registerBtn.getScene().getWindow();
+        stage.close();
+    }
+
+    public void goToLoginAction(ActionEvent actionEvent) throws BookstoreException {
+        changeWindow("register", "Register", new RegistrationController(), actionEvent);
     }
 
     /**

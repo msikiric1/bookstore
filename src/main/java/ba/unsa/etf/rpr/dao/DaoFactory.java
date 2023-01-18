@@ -8,6 +8,7 @@ public class DaoFactory {
     private static final BookDao bookDao = BookDaoSQLImpl.getInstance();
     private static final AuthorDao authorDao = AuthorDaoSQLImpl.getInstance();
     private static final CategoryDao categoryDao = CategoryDaoSQLImpl.getInstance();
+    private static final UserDao userDao = UserDaoSQLImpl.getInstance();
 
     private DaoFactory() {}
 
@@ -21,5 +22,9 @@ public class DaoFactory {
 
     public static CategoryDao categoryDao() {
         return categoryDao;
+    }
+
+    public static UserDao userDao() {
+        return userDao;
     }
 }

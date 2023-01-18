@@ -4,8 +4,10 @@ import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class DetailsController {
     public Label pageLabel;
@@ -29,6 +31,8 @@ public class DetailsController {
         generateDetails();
     }
     public void closeAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) pageLabel.getScene().getWindow();
+        stage.close();
     }
 
     private void generateDetails() {
@@ -40,6 +44,9 @@ public class DetailsController {
             detailsBox.getChildren().add(new Label("Category: " + book.getCategory().getName()));
         } else {
 
+        }
+        for(Node detailsText : detailsBox.getChildren()) {
+            detailsText.getStyleClass().add("details-text");
         }
     }
 }

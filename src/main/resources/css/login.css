@@ -1,0 +1,7 @@
+.default {
+    -fx-background-color: white;
+}
+
+.invalid {
+    -fx-background-color: #ffb3c1;
+}

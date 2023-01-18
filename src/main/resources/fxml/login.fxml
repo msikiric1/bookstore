@@ -2,41 +2,122 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.unsa.etf.rpr.controllers.LoginController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" />
-    <ColumnConstraints hgrow="SOMETIMES" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <VBox GridPane.columnIndex="1">
-         <children>
-            <Label text="Username:" />
-            <TextField fx:id="usernameField" />
-            <Label text="Password:" />
-            <PasswordField fx:id="passwordField" />
-            <Label fx:id="errorMsgLabel" text="Error message" />
-            <ButtonBar>
-              <buttons>
-                <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#loginClick" styleClass="btn" text="Login" />
-                <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeClick" styleClass="btn" text="Close" />
-              </buttons>
-            </ButtonBar>
-         </children>
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </VBox>
-   </children>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="329.0" prefWidth="473.0" stylesheets="@../css/login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" prefWidth="204.6666463216146" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="314.0" minWidth="10.0" prefWidth="268.66668701171875" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <VBox maxHeight="1.7976931348623157E308" prefHeight="400.0" prefWidth="152.0" style="-fx-background-color: #ccecc6;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <children>
+                <VBox alignment="CENTER">
+                    <children>
+                        <HBox>
+                            <children>
+                                <Label style="-fx-font-weight: 700;" text="Log In" textFill="#5c8254">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="closeBtn" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#closeAction" style="-fx-border-width: 0; -fx-background-color: #8ac37e;" text="Close" textFill="WHITE">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+                <VBox spacing="10.0">
+                    <children>
+                        <Label text="Username:" textFill="#4d6d46">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                            <padding>
+                                <Insets bottom="-5.0" />
+                            </padding>
+                        </Label>
+                        <TextField fx:id="usernameField" styleClass="default" />
+                        <Label text="Password:" textFill="#4d6d46">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="-5.0" />
+                            </VBox.margin>
+                        </Label>
+                        <PasswordField fx:id="passwordField" styleClass="default" />
+                        <Label fx:id="errorMsgLabel" />
+                        <Button fx:id="loginBtn" defaultButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loginAction" style="-fx-border-width: 0; -fx-background-color: #8ac37e;" text="Log In" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                        <Separator prefWidth="200.0" style="-fx-background-color: #ccecc6;">
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </Separator>
+                        <Button fx:id="registerBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#goToRegistrationAction" style="-fx-background-color: #52b69a;" text="Create new account" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </VBox>
+        <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="400.0" prefWidth="447.0" style="-fx-background-color: #8ac37e;" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <children>
+                <Pane prefHeight="200.0" prefWidth="200.0" />
+                <Label style="-fx-font-weight: 700;" text="Bookstore" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/bookstore-home.png" />
+                    </image>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </ImageView>
+                <Pane prefHeight="200.0" prefWidth="200.0" />
+                <Label alignment="CENTER" text="Made with ♡ by Muaz Sikirić" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="13.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="10.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+    </children>
 </GridPane>

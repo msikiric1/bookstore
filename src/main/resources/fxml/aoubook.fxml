@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane prefHeight="333.0" prefWidth="291.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.unsa.etf.rpr.controllers.AoUController">
+<GridPane prefHeight="333.0" prefWidth="291.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -26,7 +25,7 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="413.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <Label fx:id="pageLabel" text="Add/Update book (button)">
+            <Label fx:id="pageLabel" text="Add/Update a book">
                <font>
                   <Font size="18.0" />
                </font>
@@ -85,8 +84,8 @@
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button fx:id="SubmitBtn" defaultButton="true" mnemonicParsing="false" text="Add/Update" />
-                  <Button fx:id="CancelBtn" cancelButton="true" mnemonicParsing="false" text="Cancel" />
+                <Button fx:id="SubmitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" text="Add/Update" />
+                  <Button fx:id="CancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
               </buttons>
                <padding>
                   <Insets right="10.0" />

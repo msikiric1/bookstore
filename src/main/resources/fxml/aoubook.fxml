@@ -25,7 +25,7 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="413.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <Label fx:id="pageLabel" text="Add/Update a book">
+            <Label fx:id="pageLabel" text=" a book">
                <font>
                   <Font size="18.0" />
                </font>
@@ -42,6 +42,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
@@ -71,11 +72,16 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Spinner fx:id="priceSpinner" editable="true" min="5" max="50" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Spinner fx:id="priceSpinner" editable="true" max="50" maxWidth="1.7976931348623157E308" min="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
                   <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ComboBox fx:id="categoryCbox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="errorMsgLabel" text="Error message" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

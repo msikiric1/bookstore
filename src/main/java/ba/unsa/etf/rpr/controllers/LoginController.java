@@ -29,7 +29,6 @@ public class LoginController {
     public TextField usernameField;
     public PasswordField passwordField;
     public Button loginBtn;
-    public Button closeBtn;
     public Label errorMsgLabel;
 
     public LoginController() {}
@@ -69,38 +68,10 @@ public class LoginController {
 
         if(user.isAdmin()) {
             System.out.println("admin");
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin.fxml"));
-                AdminController adminController = new AdminController(usernameField.getText());
-                loader.setController(adminController);
-                Stage stage = new Stage();
-                stage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-                stage.getIcons().add(new Image("/images/bookstore_icon.png"));
-                stage.setTitle("Bookstore | Admin");
-                stage.setResizable(false);
-                stage.show();
-
-                Stage currentStage = (Stage) loginBtn.getScene().getWindow();
-                currentStage.close();
-            } catch (IOException e) {
-                throw new BookstoreException(e.getMessage(), e);
-            }
+            changeWindow("admin", "Admin", new AdminController(usernameField.getText()), actionEvent);
         } else {
             System.out.println("user");
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-                stage.getIcons().add(new Image("/images/bookstore_icon.png"));
-                stage.setTitle("Bookstore | Main");
-                stage.setResizable(false);
-                stage.show();
-
-                Stage currentStage = (Stage) loginBtn.getScene().getWindow();
-                currentStage.close();
-            } catch (IOException e) {
-                throw new BookstoreException(e.getMessage(), e);
-            }
+            changeWindow("main", "Main", new MainController(usernameField.getText()), actionEvent);
         }
     }
 

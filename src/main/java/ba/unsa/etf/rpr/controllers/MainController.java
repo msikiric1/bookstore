@@ -84,9 +84,6 @@ public class MainController {
         stage.close();
     }
 
-    public void searchAction(ActionEvent actionEvent) {
-    }
-
     public void detailsAction(ActionEvent actionEvent) throws BookstoreException {
         Book selectedBook = filteredBooks.stream().filter(book -> {
             if(booksListView.getSelectionModel().getSelectedItem() == null) return false;
@@ -106,17 +103,6 @@ public class MainController {
 
     private void refresh() {
         booksListView.setItems(filteredBooks);
-    }
-
-    public void addAction(ActionEvent actionEvent) throws BookstoreException {
-        AoUController aouController = new AoUController("Add", authors, categories);
-        openWindow("aoubook", "Add a book", aouController, actionEvent);
-    }
-
-    public void updateAction(ActionEvent actionEvent) {
-    }
-
-    public void deleteAction(ActionEvent actionEvent) {
     }
 
     /**

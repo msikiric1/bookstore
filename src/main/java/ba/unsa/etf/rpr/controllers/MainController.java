@@ -10,9 +10,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+
+import java.util.stream.Collectors;
 
 public class MainController {
     public Label usernameLabel;
+    public TextField searchField;
+    public ListView booksListView;
     private ObservableList<Book> books;
     private ObservableList<Book> filteredBooks;
     private ObservableList<Author> authors;
@@ -29,11 +35,17 @@ public class MainController {
             throw new RuntimeException(e);
         }
         this.username = username;
+        this.filteredBooks = books;
     }
 
     @FXML
     public void initialize() {
         usernameLabel.setText(usernameLabel.getText() + username);
+        refresh();
+        searchField.textProperty().addListener((observable, o, n) -> {
+            searchBooks(n);
+            refresh();
+        });
     }
 
     public void logoutAction(ActionEvent actionEvent) {
@@ -46,5 +58,15 @@ public class MainController {
     }
 
     public void detailsAction(ActionEvent actionEvent) {
+    }
+
+    private void searchBooks(String searchString) {
+        filteredBooks = books.stream().filter(book -> {
+           return book.getTitle().toLowerCase().contains(searchString.toLowerCase());
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
+
+    private void refresh() {
+        booksListView.setItems(filteredBooks);
     }
 }

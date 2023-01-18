@@ -62,6 +62,7 @@ public class MainController {
                 filteredBooks = books.stream().filter(book -> {
                     return book.getCategory().getName().toLowerCase().contains(category.getName().toLowerCase());
                 }).collect(Collectors.toCollection(FXCollections::observableArrayList));
+                searchField.setText("");
                 refresh();
             });
             categoriesBox.getChildren().add(categoryButton);
@@ -86,11 +87,15 @@ public class MainController {
     public void searchAction(ActionEvent actionEvent) {
     }
 
-    public void detailsAction(ActionEvent actionEvent) {
+    public void detailsAction(ActionEvent actionEvent) throws BookstoreException {
         Book selectedBook = filteredBooks.stream().filter(book -> {
+            if(booksListView.getSelectionModel().getSelectedItem() == null) return false;
             return booksListView.getSelectionModel().getSelectedItem().getId() == book.getId();
         }).findAny().orElse(null);
-        ;
+
+        if (selectedBook == null) return;
+
+        openWindow("details", "Book details", new DetailsController(selectedBook), actionEvent);
     }
 
     private void searchBooks(String searchString) {

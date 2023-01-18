@@ -1,7 +1,9 @@
 package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.dao.DaoFactory;
+import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
+import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import jdk.jpackage.internal.Log;
 
 import java.io.IOException;
 
@@ -35,13 +38,17 @@ public class AdminController {
     public Button viewAuthorsBtn;
     public Label usernameLabel;
     private ObservableList<Book> books;
+    private ObservableList<Author> authors;
+    private ObservableList<Category> categories;
     private String username;
 
     public AdminController(String username) {
         try {
             books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
+            authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
+            categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
         } catch(BookstoreException e) {
-            System.out.println("Something's wrong with books table");
+            System.out.println("Something's wrong with retrieving data from tables");
             throw new RuntimeException(e);
         }
         this.username = username;
@@ -59,8 +66,7 @@ public class AdminController {
 
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        HomeController homeController = new HomeController();
-        changeWindow("home", "Home", homeController, actionEvent);
+        changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {
@@ -68,10 +74,14 @@ public class AdminController {
         stage.close();
     }
 
-    public void viewCategoriesAction(ActionEvent actionEvent) {
+    public void viewCategoriesAction(ActionEvent actionEvent) throws BookstoreException {
+        CategoryController categoryController = new CategoryController(books, authors, categories);
+        changeWindow("categories", "Categories", categoryController, actionEvent);
     }
 
-    public void viewAuthorsAction(ActionEvent actionEvent) {
+    public void viewAuthorsAction(ActionEvent actionEvent) throws BookstoreException {
+        AuthorController authorController = new AuthorController(books, authors, categories);
+        changeWindow("authors", "Authors", authorController, actionEvent);
     }
 
     /**

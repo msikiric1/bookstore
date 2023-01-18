@@ -30,6 +30,8 @@ public class RegistrationController {
     public Button goBackBtn;
     public Button registerBtn;
 
+    public RegistrationController() {}
+
     public void initialize() {
         errorMsgLabel.setVisible(false);
         usernameField.getStyleClass().add("invalid");

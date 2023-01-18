@@ -71,7 +71,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Spinner fx:id="priceSpinner" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Spinner fx:id="priceSpinner" editable="true" min="5" max="50" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
                   <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -84,8 +84,8 @@
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button fx:id="SubmitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" text="Add/Update" />
-                  <Button fx:id="CancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+                <Button fx:id="submitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" text="Add/Update" />
+                  <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
               </buttons>
                <padding>
                   <Insets right="10.0" />

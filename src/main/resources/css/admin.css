@@ -22,10 +22,10 @@
 }
 
 .table-row-cell: odd{
-    -fx-background-color: #93f9b911;
+    -fx-background-color: #ccecc6;
 }
 .table-row-cell: even{
-    -fx-background-color: #1dbbdd11;
+    -fx-background-color: #b9dbb2;
 }
 
 .table-view *.scroll-bar:horizontal *.increment-button,
@@ -43,4 +43,20 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-shape: null;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  #8ac37e;
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  #8ac37e;
 }

@@ -88,7 +88,7 @@ public class AdminController {
     }
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
-        AoUController aouController = new AoUController("Add", authors, categories, null);
+        AoUController aouController = new AoUController("Add", authors, categories, new Book());
         Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {

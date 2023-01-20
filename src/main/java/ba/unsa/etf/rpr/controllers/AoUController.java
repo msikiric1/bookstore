@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.BookDao;
 import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
@@ -25,14 +26,13 @@ public class AoUController {
     private String addOrUpdate;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
-    private Book bookToUpdate;
-    private Book newBook;
+    private Book book;
 
     public AoUController(String addOrUpdate, ObservableList<Author> authors, ObservableList<Category> categories, Book book) {
         this.addOrUpdate = addOrUpdate;
         this.authors = authors;
         this.categories = categories;
-        this.bookToUpdate = book;
+        this.book = book;
     }
 
     @FXML
@@ -47,12 +47,12 @@ public class AoUController {
             authorCbox.getSelectionModel().selectFirst();
             categoryCbox.getSelectionModel().selectFirst();
         } else if(addOrUpdate.equalsIgnoreCase("update")) {
-            if(bookToUpdate != null) {
-                titleField.setText(bookToUpdate.getTitle());
-                authorCbox.getSelectionModel().select(bookToUpdate.getAuthor());
-                publishedPicker.setValue(bookToUpdate.getPublished());
-                priceSpinner.getValueFactory().setValue(bookToUpdate.getPrice());
-                categoryCbox.getSelectionModel().select(bookToUpdate.getCategory());
+            if(book != null) {
+                titleField.setText(book.getTitle());
+                authorCbox.getSelectionModel().select(book.getAuthor());
+                publishedPicker.setValue(book.getPublished());
+                priceSpinner.getValueFactory().setValue(book.getPrice());
+                categoryCbox.getSelectionModel().select(book.getCategory());
             } else {
                 System.out.println("Trying to update a book that was not selected.");
             }
@@ -60,7 +60,6 @@ public class AoUController {
     }
 
     public void submitAction(ActionEvent actionEvent) {
-        Book book = new Book();
         try {
             validate(titleField, publishedPicker);
         } catch (BookstoreException e) {
@@ -68,17 +67,20 @@ public class AoUController {
             errorMsgLabel.setText(e.getMessage());
             return;
         }
-        book.setTitle(titleField.getText());
-        book.setAuthor((Author) authorCbox.getSelectionModel().getSelectedItem());
-        book.setPublished(publishedPicker.getValue());
-        book.setPrice((Double) priceSpinner.getValue());
-        book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
+        this.book.setTitle(titleField.getText());
+        this.book.setAuthor((Author) authorCbox.getSelectionModel().getSelectedItem());
+        this.book.setPublished(publishedPicker.getValue());
+        this.book.setPrice((Double) priceSpinner.getValue());
+        this.book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
         try {
-            new BookDaoSQLImpl().add(book);
-            this.newBook = book;
+            if(addOrUpdate.equalsIgnoreCase("add")) {
+                new BookDaoSQLImpl().add(book);
+            } else if(addOrUpdate.equalsIgnoreCase("update")) {
+                new BookDaoSQLImpl().update(book);
+            }
             closeWindow();
         } catch(BookstoreException e) {
-            errorMsgLabel.setText("There was an error while adding a new book to the database.");
+            errorMsgLabel.setText("There was an error while adding/updating a book.");
             return;
         }
     }
@@ -100,6 +102,6 @@ public class AoUController {
     }
 
     public Book getBook() {
-        return newBook;
+        return book;
     }
 }

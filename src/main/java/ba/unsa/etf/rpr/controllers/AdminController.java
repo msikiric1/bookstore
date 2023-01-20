@@ -88,30 +88,31 @@ public class AdminController {
     }
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aoubook.fxml"));
-        AoUController aouController = new AoUController(true, authors, categories);
-        loader.setController(aouController);
-        Stage newStage = new Stage();
-        try {
-            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-        } catch (IOException e) {
-            throw new BookstoreException("FXML file does not exist.");
-        }
-        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
-        newStage.setTitle("Bookstore | Add");
-        newStage.setResizable(false);
-        newStage.show();
+        AoUController aouController = new AoUController("Add", authors, categories, null);
+        Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
-            Book book = aouController.getBook();
-            if(book != null) {
-                books.add(book);
+            Book newBook = aouController.getBook();
+            if(newBook != null) {
+                books.add(newBook);
                 booksTable.refresh();
             }
         });
     }
 
-    public void updateAction(ActionEvent actionEvent) {
+    public void updateAction(ActionEvent actionEvent) throws BookstoreException {
+        Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
+        if(selectedBook == null) return;
+        AoUController aouController = new AoUController("Update", authors, categories, selectedBook);
+        Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
+
+        newStage.setOnHiding(event -> {
+            Book updatedBook = aouController.getBook();
+            if(updatedBook != null) {
+                books.set(books.indexOf(selectedBook), updatedBook);
+                booksTable.refresh();
+            }
+        });
     }
 
     public void deleteAction(ActionEvent actionEvent) {
@@ -154,7 +155,7 @@ public class AdminController {
         stage.close();
     }
 
-    private void openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
+    private Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
         loader.setController(controller);
         Stage newStage = new Stage();
@@ -167,5 +168,6 @@ public class AdminController {
         newStage.setTitle("Bookstore | " + title);
         newStage.setResizable(false);
         newStage.show();
+        return newStage;
     }
 }

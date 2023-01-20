@@ -41,7 +41,7 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
             book.setId(rs.getInt("id"));
             book.setTitle(rs.getString("title"));
             book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
-            book.setPublished(rs.getDate("published"));
+            book.setPublished(rs.getDate("published").toLocalDate());
             book.setPrice(rs.getDouble("price"));
             book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
             return book;

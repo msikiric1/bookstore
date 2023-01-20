@@ -1,6 +1,6 @@
 package ba.unsa.etf.rpr.domain;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -11,7 +11,7 @@ public class Book implements Identifiable {
     private int id;
     private String title;
     private Author author;
-    private Date published;
+    private LocalDate published;
     private Double price;
     private Category category;
 
@@ -39,11 +39,11 @@ public class Book implements Identifiable {
         this.author = author;
     }
 
-    public Date getPublished() {
+    public LocalDate getPublished() {
         return published;
     }
 
-    public void setPublished(Date published) {
+    public void setPublished(LocalDate published) {
         this.published = published;
     }
 

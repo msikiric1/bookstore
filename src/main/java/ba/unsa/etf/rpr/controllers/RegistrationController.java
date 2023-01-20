@@ -5,6 +5,7 @@ import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import ba.unsa.etf.rpr.exceptions.UserException;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -33,6 +34,7 @@ public class RegistrationController {
     public RegistrationController() {}
 
     public void initialize() {
+        Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
         errorMsgLabel.setVisible(false);
         usernameField.textProperty().addListener((observableValue, o, n) -> {
             if(n.trim().isEmpty()) {
@@ -83,6 +85,7 @@ public class RegistrationController {
                 errorMsgLabel.setText(e.getMessage());
             else
                 errorMsgLabel.setText("User already exists.");
+
             errorMsgLabel.setVisible(true);
             return;
         }

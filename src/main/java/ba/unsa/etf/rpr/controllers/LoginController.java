@@ -4,6 +4,7 @@ import ba.unsa.etf.rpr.dao.UserDao;
 import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
         errorMsgLabel.setVisible(false);
         usernameField.textProperty().addListener((observableValue, o, n) -> {
             if(n.trim().isEmpty()) {

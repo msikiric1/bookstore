@@ -86,6 +86,42 @@ public class AdminController {
         changeWindow("authors", "Authors", authorController, actionEvent);
     }
 
+    public void addAction(ActionEvent actionEvent) throws BookstoreException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aoubook.fxml"));
+        AoUController aouController = new AoUController("Add", authors, categories);
+        loader.setController(aouController);
+        Stage newStage = new Stage();
+        try {
+            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        } catch (IOException e) {
+            throw new BookstoreException("FXML file does not exist.");
+        }
+        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
+        newStage.setTitle("Bookstore | Add");
+        newStage.setResizable(false);
+        newStage.show();
+
+        newStage.setOnHiding(event -> {
+            Book book = aouController.getBook();
+            if(book != null) {
+                books.add(book);
+                booksTable.refresh();
+            }
+        });
+    }
+
+    public void updateAction(ActionEvent actionEvent) {
+    }
+
+    public void deleteAction(ActionEvent actionEvent) {
+    }
+
+    private void refresh() {
+        for(Book book : books) {
+            booksTable.getItems().add(book);
+        }
+    }
+
     /**
      * Helper function used for displaying a different window
      * @param fxmlFileName name of the FXML file
@@ -111,17 +147,6 @@ public class AdminController {
         Node n = (Node) actionEvent.getSource();
         Stage stage = (Stage) n.getScene().getWindow();
         stage.close();
-    }
-
-    public void addAction(ActionEvent actionEvent) throws BookstoreException {
-        AoUController aouController = new AoUController("Add", authors, categories);
-        openWindow("aoubook", "Add a book", aouController, actionEvent);
-    }
-
-    public void updateAction(ActionEvent actionEvent) {
-    }
-
-    public void deleteAction(ActionEvent actionEvent) {
     }
 
     private void openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {

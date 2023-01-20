@@ -1,5 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
+import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
@@ -25,6 +27,7 @@ public class AoUController {
     private String addOrUpdate;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
+    private Book book;
 
     public AoUController(String addOrUpdate, ObservableList<Author> authors, ObservableList<Category> categories) {
         this.addOrUpdate = addOrUpdate;
@@ -58,19 +61,22 @@ public class AoUController {
             return;
         }
         book.setTitle(titleField.getText());
-        book.setAuthor((Author) authorCbox.getValue());
-        /*
+        book.setAuthor((Author) authorCbox.getSelectionModel().getSelectedItem());
+        book.setPublished(publishedPicker.getValue());
+        book.setPrice((Double) priceSpinner.getValue());
+        book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
         try {
-
-        } catch() {
-
+            new BookDaoSQLImpl().add(book);
+            this.book = book;
+            closeWindow();
+        } catch(BookstoreException e) {
+            errorMsgLabel.setText("There was an error while adding a new book to the database.");
+            return;
         }
-        */
     }
 
     public void cancelAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) titleField.getScene().getWindow();
-        stage.close();
+        closeWindow();
     }
 
     private void validate(TextField titleField, DatePicker publishedPicker) throws BookstoreException {
@@ -78,5 +84,14 @@ public class AoUController {
             throw new BookstoreException("Title should be at least 10 characters.");
         if(LocalDate.now().isBefore(publishedPicker.getValue()))
             throw new BookstoreException("Publish date can not be in the future.");
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) titleField.getScene().getWindow();
+        stage.close();
+    }
+
+    public Book getBook() {
+        return book;
     }
 }

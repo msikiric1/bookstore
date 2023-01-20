@@ -72,7 +72,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Spinner fx:id="priceSpinner" editable="true" max="50" maxWidth="1.7976931348623157E308" min="5" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Spinner fx:id="priceSpinner" editable="true" max="50.0" maxWidth="1.7976931348623157E308" min="5.0" amountToStepBy="0.1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
                   <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />

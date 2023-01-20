@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
@@ -88,7 +89,7 @@ public class AdminController {
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/aoubook.fxml"));
-        AoUController aouController = new AoUController("Add", authors, categories);
+        AoUController aouController = new AoUController(true, authors, categories);
         loader.setController(aouController);
         Stage newStage = new Stage();
         try {
@@ -114,11 +115,15 @@ public class AdminController {
     }
 
     public void deleteAction(ActionEvent actionEvent) {
-    }
-
-    private void refresh() {
-        for(Book book : books) {
-            booksTable.getItems().add(book);
+        Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
+        if(selectedBook != null) {
+            try {
+                new BookDaoSQLImpl().delete(selectedBook.getId());
+                books.remove(selectedBook);
+                booksTable.refresh();
+            } catch (BookstoreException e) {
+                System.out.println("Error while deleting the book."); // change
+            }
         }
     }
 

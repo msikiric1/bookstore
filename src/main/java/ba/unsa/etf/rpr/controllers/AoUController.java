@@ -1,12 +1,10 @@
 package ba.unsa.etf.rpr.controllers;
 
 import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
-import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,12 +25,14 @@ public class AoUController {
     private String addOrUpdate;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
-    private Book book;
+    private Book bookToUpdate;
+    private Book newBook;
 
-    public AoUController(String addOrUpdate, ObservableList<Author> authors, ObservableList<Category> categories) {
+    public AoUController(String addOrUpdate, ObservableList<Author> authors, ObservableList<Category> categories, Book book) {
         this.addOrUpdate = addOrUpdate;
         this.authors = authors;
         this.categories = categories;
+        this.bookToUpdate = book;
     }
 
     @FXML
@@ -40,14 +40,22 @@ public class AoUController {
         errorMsgLabel.setVisible(false);
         pageLabel.setText(addOrUpdate + titleField.getText());
         authorCbox.getItems().addAll(authors);
-        authorCbox.getSelectionModel().selectFirst();
         categoryCbox.getItems().addAll(categories);
-        categoryCbox.getSelectionModel().selectFirst();
         submitBtn.setText(addOrUpdate);
-        if(addOrUpdate.equals("Add")) {
+        if(addOrUpdate.equalsIgnoreCase("add")) {
             publishedPicker.setValue(LocalDate.now());
-        } else {
-
+            authorCbox.getSelectionModel().selectFirst();
+            categoryCbox.getSelectionModel().selectFirst();
+        } else if(addOrUpdate.equalsIgnoreCase("update")) {
+            if(bookToUpdate != null) {
+                titleField.setText(bookToUpdate.getTitle());
+                authorCbox.getSelectionModel().select(bookToUpdate.getAuthor());
+                publishedPicker.setValue(bookToUpdate.getPublished());
+                priceSpinner.getValueFactory().setValue(bookToUpdate.getPrice());
+                categoryCbox.getSelectionModel().select(bookToUpdate.getCategory());
+            } else {
+                System.out.println("Trying to update a book that was not selected.");
+            }
         }
     }
 
@@ -67,7 +75,7 @@ public class AoUController {
         book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
         try {
             new BookDaoSQLImpl().add(book);
-            this.book = book;
+            this.newBook = book;
             closeWindow();
         } catch(BookstoreException e) {
             errorMsgLabel.setText("There was an error while adding a new book to the database.");
@@ -92,6 +100,6 @@ public class AoUController {
     }
 
     public Book getBook() {
-        return book;
+        return newBook;
     }
 }

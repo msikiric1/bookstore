@@ -12,33 +12,49 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TableView fx:id="booksTable" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn fx:id="booksColId" prefWidth="43.33331298828125" resizable="false" text="Id" />
-          <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="254.66665649414062" resizable="false" text="Title" />
-            <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="114.66668701171875" resizable="false" text="Published" />
-            <TableColumn fx:id="booksColPrice" minWidth="14.0" prefWidth="76.0" text="Price" />
-        </columns>
-      </TableView>
+      <VBox style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="booksTable">
+              <columns>
+                <TableColumn fx:id="booksColId" prefWidth="34.0" resizable="false" text="Id" />
+                <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="300.0" resizable="false" text="Title" />
+                  <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="95.33331298828125" resizable="false" text="Published" />
+                  <TableColumn fx:id="booksColPrice" minWidth="14.0" prefWidth="58.66668701171875" text="Price" />
+              </columns>
+            </TableView>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="10.0" top="10.0" />
+         </padding>
+      </VBox>
    </center>
    <top>
-      <HBox id="navbar" alignment="CENTER" spacing="10.0" stylesheets="@../css/admin.css" BorderPane.alignment="CENTER">
+      <HBox id="navbar" alignment="CENTER" spacing="10.0" style="-fx-background-color: #8ac37e;" stylesheets="@../css/admin.css" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Books">
+            <Label text="Books" textFill="WHITE">
                <font>
-                  <Font size="18.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
             </Label>
             <Pane HBox.hgrow="ALWAYS" />
-            <Label fx:id="usernameLabel" alignment="CENTER" text="Hello, " />
-            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" text="Log out" />
-            <Separator orientation="VERTICAL" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            <Label fx:id="usernameLabel" alignment="CENTER" text="Hello, " textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Log out" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
+            <Separator orientation="VERTICAL" style="-fx-border-width: 0;" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Close" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -49,20 +65,44 @@
       </HBox>
    </top>
    <right>
-      <VBox prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+      <VBox prefWidth="100.0" spacing="5.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Operations:" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Insert" />
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update" />
-            <Button fx:id="deleteBookBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Operations:" textFill="#618958">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Button fx:id="addBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Add" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
+            <Button fx:id="updateBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Update" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
+            <Button fx:id="deleteBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Delete" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
             <Pane VBox.vgrow="ALWAYS" />
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" />
-            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCategoriesAction" text="Categories" />
-            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewAuthorsAction" text="Authors" />
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" textFill="#618958">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCategoriesAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Categories" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
+            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewAuthorsAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Authors" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
          <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+         </padding>
       </VBox>
    </right>
 </BorderPane>

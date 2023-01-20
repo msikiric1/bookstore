@@ -19,7 +19,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import jdk.jpackage.internal.Log;
 
 import java.io.IOException;
 
@@ -33,7 +32,6 @@ public class AdminController {
     public TableColumn booksColPrice;
     public Button logoutBtn;
     public Button closeBtn;
-    public Button deleteBookBtn;
     public Button viewCategoriesBtn;
     public Button viewAuthorsBtn;
     public Label usernameLabel;
@@ -56,7 +54,11 @@ public class AdminController {
 
     @FXML
     public void initialize() {
-        usernameLabel.setText(usernameLabel.getText() + username);
+        usernameLabel.setText("Hello, " + username + "!");
+        booksColId.setResizable(false);
+        booksColTitle.setResizable(false);
+        booksColPublished.setResizable(false);
+        booksColPrice.setResizable(false);
         booksColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));
@@ -75,12 +77,12 @@ public class AdminController {
     }
 
     public void viewCategoriesAction(ActionEvent actionEvent) throws BookstoreException {
-        CategoryController categoryController = new CategoryController(books, authors, categories);
+        CategoryController categoryController = new CategoryController(books, authors, categories, username);
         changeWindow("categories", "Categories", categoryController, actionEvent);
     }
 
     public void viewAuthorsAction(ActionEvent actionEvent) throws BookstoreException {
-        AuthorController authorController = new AuthorController(books, authors, categories);
+        AuthorController authorController = new AuthorController(books, authors, categories, username);
         changeWindow("authors", "Authors", authorController, actionEvent);
     }
 
@@ -109,5 +111,31 @@ public class AdminController {
         Node n = (Node) actionEvent.getSource();
         Stage stage = (Stage) n.getScene().getWindow();
         stage.close();
+    }
+
+    public void addAction(ActionEvent actionEvent) throws BookstoreException {
+        AoUController aouController = new AoUController("Add", authors, categories);
+        openWindow("aoubook", "Add a book", aouController, actionEvent);
+    }
+
+    public void updateAction(ActionEvent actionEvent) {
+    }
+
+    public void deleteAction(ActionEvent actionEvent) {
+    }
+
+    private void openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
+        loader.setController(controller);
+        Stage newStage = new Stage();
+        try {
+            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        } catch (IOException e) {
+            throw new BookstoreException("FXML file does not exist.");
+        }
+        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
+        newStage.setTitle("Bookstore | " + title);
+        newStage.setResizable(false);
+        newStage.show();
     }
 }

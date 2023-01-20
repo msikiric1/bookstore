@@ -36,6 +36,7 @@ public class AdminController {
     public Button viewCategoriesBtn;
     public Button viewAuthorsBtn;
     public Label usernameLabel;
+    public Label infoLabel;
     private ObservableList<Book> books;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
@@ -96,13 +97,17 @@ public class AdminController {
             if(newBook != null) {
                 books.add(newBook);
                 booksTable.refresh();
+                infoLabel.setText("Info: Added a new book successfully.");
             }
         });
     }
 
     public void updateAction(ActionEvent actionEvent) throws BookstoreException {
         Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
-        if(selectedBook == null) return;
+        if(selectedBook == null) {
+            infoLabel.setText("Info: You need to select a book that you want to update.");
+            return;
+        }
         AoUController aouController = new AoUController("Update", authors, categories, selectedBook);
         Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
 
@@ -111,6 +116,7 @@ public class AdminController {
             if(updatedBook != null) {
                 books.set(books.indexOf(selectedBook), updatedBook);
                 booksTable.refresh();
+                infoLabel.setText("Info: Updated a new book successfully.");
             }
         });
     }
@@ -122,9 +128,12 @@ public class AdminController {
                 new BookDaoSQLImpl().delete(selectedBook.getId());
                 books.remove(selectedBook);
                 booksTable.refresh();
+                infoLabel.setText("Info: Deleted a book successfully.");
             } catch (BookstoreException e) {
                 System.out.println("Error while deleting the book."); // change
             }
+        } else {
+            infoLabel.setText("Info: You need to select a book that you want to delete.");
         }
     }
 

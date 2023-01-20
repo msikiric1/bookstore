@@ -14,16 +14,24 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/admin.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
+      <VBox spacing="5.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
             <TableView fx:id="booksTable">
               <columns>
                 <TableColumn fx:id="booksColId" prefWidth="34.0" resizable="false" text="Id" />
-                <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="300.0" resizable="false" text="Title" />
-                  <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="95.33331298828125" resizable="false" text="Published" />
+                <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="240.0" resizable="false" text="Title" />
+                  <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="155.33331298828125" resizable="false" text="Published" />
                   <TableColumn fx:id="booksColPrice" minWidth="14.0" prefWidth="58.66668701171875" text="Price" />
               </columns>
             </TableView>
+            <Label fx:id="infoLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #add5a5; -fx-background-radius: 3px;" text="Info:" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="3.0" right="3.0" />
+               </padding>
+            </Label>
          </children>
          <padding>
             <Insets bottom="5.0" left="10.0" top="10.0" />

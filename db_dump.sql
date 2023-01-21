@@ -41,7 +41,7 @@ CREATE TABLE `authors` (
 
 LOCK TABLES `authors` WRITE;
 /*!40000 ALTER TABLE `authors` DISABLE KEYS */;
-INSERT INTO `authors` VALUES (1,'J. K. Rowling','131 Iroquois Street Southgate, MI 48195','+992 32 446 6229'),(2,'Dan Brown','7459 Gulf Lane Raeford, NC 28376','+1-202-555-0184'),(3,'	J. R. R. Tolkien','9057 Vermont Road Cockeysville, MD 21030','+380 44 969 8893'),(4,'Charles Dickens','809 North Peg Shop Dr. Ladson, SC 29456','+255 75 231 4297'),(5,'Vladimir Nabokov','8551 St Margarets Road Seymour, IN 47274','+886 4 8555 1487'),(6,'Carl Sagan','7365 Cherry Hill Court Kingston, NY 12401','+34 964 506 034'),(7,'Steven Hawking','611 Penn Street Long Branch, NJ 07740','+977 985 917 7236'),(8,'Spencer Johnson','2522 South College Drive, Fayetteville AR 72701','+64 3 002 6409');
+INSERT INTO `authors` VALUES (1,'J. K. Rowling','131 Iroquois Street Southgate, MI 48195','+992 32 446 6229'),(2,'Dan Brown','7459 Gulf Lane Raeford, NC 28376','+1-202-555-0184'),(3,'J. R. R. Tolkien','9057 Vermont Road Cockeysville, MD 21030','+380 44 969 8893'),(4,'Charles Dickens','809 North Peg Shop Dr. Ladson, SC 29456','+255 75 231 4297'),(5,'Vladimir Nabokov','8551 St Margarets Road Seymour, IN 47274','+886 4 8555 1487'),(6,'Carl Sagan','7365 Cherry Hill Court Kingston, NY 12401','+34 964 506 034'),(7,'Steven Hawking','611 Penn Street Long Branch, NJ 07740','+977 985 917 7236'),(8,'Spencer Johnson','2522 South College Drive, Fayetteville AR 72701','+64 3 002 6409');
 /*!40000 ALTER TABLE `authors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +65,7 @@ CREATE TABLE `books` (
   KEY `fk_author_id_idx` (`author_id`),
   CONSTRAINT `fk_author_id` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_category_id` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'Harry Potter and the Philosopher\'s Stone',1,'2000-03-20',15,1),(2,'The Hobbit',3,'1995-08-21',30,2),(3,'The Little Prince',4,'2010-05-01',10,4),(4,'Umberto Eco',5,'2003-06-21',13.9,2),(5,'A Brief History of Time',2,'2006-09-04',32.9,7),(6,'Jaws',5,'1989-04-02',19.9,5),(7,'The Power of Positive Thinking',1,'2000-06-24',24.9,3),(8,'War and Peace',2,'1999-10-08',17.9,4),(9,'Cosmos',6,'2013-01-08',33.9,2),(10,'The Da Vinci Code',2,'2004-07-02',9.9,6);
+INSERT INTO `books` VALUES (1,'Harry Potter and the Philosopher\'s Stone',4,'2000-03-20',15.9,1),(2,'The Hobbit',3,'1995-08-21',30.9,2),(3,'The Little Prince',4,'2010-05-01',10.9,4),(5,'A Brief History of Time',2,'2006-09-04',32.9,7),(6,'Jaws',5,'1989-04-02',19.9,5),(7,'The Power of Positive Thinking',1,'2000-06-24',24.9,3),(8,'War and Peace',2,'1999-10-08',17.9,4),(9,'Cosmos',6,'2013-01-08',33.9,2),(10,'The Da Vinci Code',2,'2004-07-02',9.9,6);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,8 +100,36 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (6,'Adventure'),(1,'Fantasy'),(4,'Fiction'),(7,'Horror'),(8,'Humour'),(2,'Novel'),(3,'Productivity'),(5,'Science');
+INSERT INTO `categories` VALUES (6,'Adventure'),(1,'Fantasy'),(4,'Fiction'),(7,'Horror'),(8,'Humour'),(2,'Novel'),(3,'Productivity'),(5,'Science'),(9,'Thriller');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `is_admin` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idusers_UNIQUE` (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','admin',1),(8,'testing','password',0);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -113,4 +141,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-25 22:56:23
+-- Dump completed on 2023-01-21  2:04:37

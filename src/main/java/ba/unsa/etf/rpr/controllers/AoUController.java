@@ -1,11 +1,13 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.dao.BookDao;
 import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AoUController {
     public Label pageLabel;
@@ -24,11 +28,12 @@ public class AoUController {
     public Button submitBtn;
     public Label errorMsgLabel;
     private String addOrUpdate;
-    private ObservableList<Author> authors;
-    private ObservableList<Category> categories;
+    private List<Author> authors;
+    private List<Category> categories;
     private Book book;
+    private WindowManager wm = new WindowManager();
 
-    public AoUController(String addOrUpdate, ObservableList<Author> authors, ObservableList<Category> categories, Book book) {
+    public AoUController(String addOrUpdate, List<Author> authors, List<Category> categories, Book book) {
         this.addOrUpdate = addOrUpdate;
         this.authors = authors;
         this.categories = categories;
@@ -38,9 +43,13 @@ public class AoUController {
     @FXML
     public void initialize() {
         errorMsgLabel.setVisible(false);
-        pageLabel.setText(addOrUpdate + titleField.getText());
-        authorCbox.getItems().addAll(authors);
-        categoryCbox.getItems().addAll(categories);
+        pageLabel.setText(addOrUpdate + " a book");
+        authorCbox.getItems().addAll(authors.stream().map(author -> {
+            return author.getName().trim();
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        categoryCbox.getItems().addAll(categories.stream().map(category -> {
+            return category.getName().trim();
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
         submitBtn.setText(addOrUpdate);
         if(addOrUpdate.equalsIgnoreCase("add")) {
             publishedPicker.setValue(LocalDate.now());
@@ -78,7 +87,7 @@ public class AoUController {
             } else if(addOrUpdate.equalsIgnoreCase("update")) {
                 new BookDaoSQLImpl().update(book);
             }
-            closeWindow();
+            wm.closeWindow(actionEvent);
         } catch(BookstoreException e) {
             errorMsgLabel.setText("There was an error while adding/updating a book.");
             return;
@@ -86,7 +95,7 @@ public class AoUController {
     }
 
     public void cancelAction(ActionEvent actionEvent) {
-        closeWindow();
+        wm.closeWindow(actionEvent);
     }
 
     private void validate(TextField titleField, DatePicker publishedPicker) throws BookstoreException {
@@ -94,11 +103,6 @@ public class AoUController {
             throw new BookstoreException("Title should be at least 10 characters.");
         if(LocalDate.now().isBefore(publishedPicker.getValue()))
             throw new BookstoreException("Publish date can not be in the future.");
-    }
-
-    private void closeWindow() {
-        Stage stage = (Stage) titleField.getScene().getWindow();
-        stage.close();
     }
 
     public Book getBook() {

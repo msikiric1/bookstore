@@ -43,6 +43,7 @@ public class AuthorCategoryController {
     private List<Author> authors;
     private List<Category> categories;
     private String username;
+    private WindowManager wm = new WindowManager();
 
     public AuthorCategoryController(List<Author> authors, List<Category> categories, List<Book> books, String username) {
         this.authors = authors;
@@ -119,14 +120,14 @@ public class AuthorCategoryController {
 
     public void viewBooksAction(ActionEvent actionEvent) throws BookstoreException {
         AdminController adminController = new AdminController(books, authors, categories, username);
-        new WindowManager().changeWindow("admin", "Admin", adminController, actionEvent);
+        wm.changeWindow("admin", "Admin", adminController, actionEvent);
     }
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        new WindowManager().changeWindow("login", "Login", new LoginController(), actionEvent);
+        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {
-        new WindowManager().closeWindow(actionEvent);
+        wm.closeWindow(actionEvent);
     }
 }

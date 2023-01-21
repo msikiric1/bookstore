@@ -1,16 +1,12 @@
 package ba.unsa.etf.rpr.controllers;
 
-import ba.unsa.etf.rpr.domain.Author;
+import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.domain.Book;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class DetailsController {
-    public Label pageLabel;
     public Label titleLabel;
     public Label authorLabel;
     public Label addressLabel;
@@ -19,6 +15,7 @@ public class DetailsController {
     public Label priceLabel;
     public Label categoryLabel;
     private Book book;
+    private WindowManager wm = new WindowManager();
 
     public DetailsController(Book book) {
         this.book = book;
@@ -28,8 +25,7 @@ public class DetailsController {
         generateDetails();
     }
     public void closeAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) pageLabel.getScene().getWindow();
-        stage.close();
+        wm.closeWindow(actionEvent);
     }
 
     private void generateDetails() {

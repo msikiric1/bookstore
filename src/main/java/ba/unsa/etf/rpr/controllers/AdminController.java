@@ -42,6 +42,7 @@ public class AdminController {
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
     private String username;
+    private WindowManager wm = new WindowManager();
 
     public AdminController(ObservableList<Book> books, ObservableList<Author> authors, ObservableList<Category> categories, String username) {
         if(books == null || authors == null || categories == null) {
@@ -79,22 +80,21 @@ public class AdminController {
 
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        new WindowManager().changeWindow("login", "Login", new LoginController(), actionEvent);
+        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) usernameLabel.getScene().getWindow();
-        stage.close();
+        wm.closeWindow();
     }
 
     public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
         AuthorCategoryController acController = new AuthorCategoryController(authors, categories, books, username);
-        new WindowManager().changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
+        wm.changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
     }
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
         AoUController aouController = new AoUController("Add", authors, categories, new Book());
-        Stage newStage = new WindowManager().openWindow("aoubook", "Add", aouController, actionEvent);
+        Stage newStage = wm.openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book newBook = aouController.getBook();
@@ -113,7 +113,7 @@ public class AdminController {
             return;
         }
         AoUController aouController = new AoUController("Update", authors, categories, selectedBook);
-        Stage newStage = new WindowManager().openWindow("aoubook", "Add", aouController, actionEvent);
+        Stage newStage = wm.openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book updatedBook = aouController.getBook();

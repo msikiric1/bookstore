@@ -25,7 +25,7 @@ public class WindowManager {
      * @param actionEvent an event representing some type of action
      * @throws BookstoreException exception is thrown if a file with given name does not exist
      */
-    private void changeWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
+    public void changeWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
         openWindow(fxmlFileName, title, controller, actionEvent);
         closeWindow(actionEvent);
     }
@@ -38,7 +38,7 @@ public class WindowManager {
      * @param actionEvent an event representing some type of action
      * @throws BookstoreException exception is thrown if a file with given name does not exist
      */
-    private Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
+    public Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
         loader.setController(controller);
         Stage newStage = new Stage();

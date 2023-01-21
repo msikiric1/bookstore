@@ -1,9 +1,11 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -36,12 +39,12 @@ public class AuthorCategoryController {
     public Label usernameLabel;
     public RadioButton authorsRadioBtn;
     public RadioButton categoriesRadioBtn;
-    private ObservableList<Book> books;
-    private ObservableList<Author> authors;
-    private ObservableList<Category> categories;
+    private List<Book> books;
+    private List<Author> authors;
+    private List<Category> categories;
     private String username;
 
-    public AuthorCategoryController(ObservableList<Author> authors, ObservableList<Category> categories, ObservableList<Book> books, String username) {
+    public AuthorCategoryController(List<Author> authors, List<Category> categories, List<Book> books, String username) {
         this.authors = authors;
         this.categories = categories;
         this.books = books;
@@ -62,24 +65,43 @@ public class AuthorCategoryController {
         authorsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         authorsColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         authorsColPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        authorsTable.setItems(authors);
+        authorsTable.setItems(FXCollections.observableArrayList(authors));
 
         categoriesColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         categoriesColName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        categoriesTable.setItems(categories);
+        categoriesTable.setItems(FXCollections.observableArrayList(categories));
 
         ToggleGroup type = new ToggleGroup();
         authorsRadioBtn.setToggleGroup(type);
         categoriesRadioBtn.setToggleGroup(type);
         authorsRadioBtn.setSelected(true);
 
+        RadioButton selectedType = (RadioButton) type.getSelectedToggle();
+        if(selectedType.getText().equalsIgnoreCase("authors")) {
+            authorsTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
+                Author author = (Author) n;
+                nameField.setText(author.getName());
+                addressField.setText(author.getAddress());
+                phoneField.setText(author.getPhone());
+            });
+        } else {
+            categoriesTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
+                Category category = (Category) n;
+                nameField.setText(category.getName());
+                addressField.setText("");
+                phoneField.setText("");
+            });
+        }
+
         type.selectedToggleProperty().addListener((observable, o, n) -> {
             RadioButton selectedRadioBtn = (RadioButton) type.getSelectedToggle();
 
             if(selectedRadioBtn.getText().equalsIgnoreCase("authors")) {
+                nameField.setPromptText("Author name");
                 addressField.setVisible(true);
                 phoneField.setVisible(true);
             } else {
+                nameField.setPromptText("Category name");
                 addressField.setVisible(false);
                 phoneField.setVisible(false);
             }
@@ -97,42 +119,14 @@ public class AuthorCategoryController {
 
     public void viewBooksAction(ActionEvent actionEvent) throws BookstoreException {
         AdminController adminController = new AdminController(books, authors, categories, username);
-        changeWindow("admin", "Admin", adminController, actionEvent);
+        new WindowManager().changeWindow("admin", "Admin", adminController, actionEvent);
     }
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        changeWindow("login", "Login", new LoginController(), actionEvent);
+        new WindowManager().changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) usernameLabel.getScene().getWindow();
-        stage.close();
-    }
-
-    /**
-     * Helper function used for displaying a different window
-     * @param fxmlFileName name of the FXML file
-     * @param title title that will be displayed as "Bookstore | 'title'"
-     * @param controller controller for the new window
-     * @param actionEvent actionEvent parameter that is passed down by the method that called this method
-     * @throws BookstoreException exception is thrown if a file with given name does not exist
-     */
-    private void changeWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
-        loader.setController(controller);
-        Stage newStage = new Stage();
-        try {
-            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-        } catch (IOException e) {
-            throw new BookstoreException("FXML file does not exist.");
-        }
-        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
-        newStage.setTitle("Bookstore | " + title);
-        newStage.setResizable(false);
-        newStage.show();
-
-        Node n = (Node) actionEvent.getSource();
-        Stage stage = (Stage) n.getScene().getWindow();
-        stage.close();
+        new WindowManager().closeWindow(actionEvent);
     }
 }

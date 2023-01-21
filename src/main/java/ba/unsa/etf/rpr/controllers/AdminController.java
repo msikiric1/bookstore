@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.domain.Author;
@@ -78,7 +79,7 @@ public class AdminController {
 
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        changeWindow("login", "Login", new LoginController(), actionEvent);
+        new WindowManager().changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     public void closeAction(ActionEvent actionEvent) {
@@ -88,12 +89,12 @@ public class AdminController {
 
     public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
         AuthorCategoryController acController = new AuthorCategoryController(authors, categories, books, username);
-        changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
+        new WindowManager().changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
     }
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
         AoUController aouController = new AoUController("Add", authors, categories, new Book());
-        Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
+        Stage newStage = new WindowManager().openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book newBook = aouController.getBook();
@@ -112,7 +113,7 @@ public class AdminController {
             return;
         }
         AoUController aouController = new AoUController("Update", authors, categories, selectedBook);
-        Stage newStage = openWindow("aoubook", "Add", aouController, actionEvent);
+        Stage newStage = new WindowManager().openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book updatedBook = aouController.getBook();
@@ -138,48 +139,5 @@ public class AdminController {
         } else {
             infoLabel.setText("Info: You need to select a book that you want to delete.");
         }
-    }
-
-    /**
-     * Helper function used for displaying a different window
-     * @param fxmlFileName name of the FXML file
-     * @param title title that will be displayed as "Bookstore | 'title'"
-     * @param controller controller for the new window
-     * @param actionEvent actionEvent parameter that is passed down by the method that called this method
-     * @throws BookstoreException exception is thrown if a file with given name does not exist
-     */
-    private void changeWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
-        loader.setController(controller);
-        Stage newStage = new Stage();
-        try {
-            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-        } catch (IOException e) {
-            throw new BookstoreException("FXML file does not exist.");
-        }
-        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
-        newStage.setTitle("Bookstore | " + title);
-        newStage.setResizable(false);
-        newStage.show();
-
-        Node n = (Node) actionEvent.getSource();
-        Stage stage = (Stage) n.getScene().getWindow();
-        stage.close();
-    }
-
-    private Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
-        loader.setController(controller);
-        Stage newStage = new Stage();
-        try {
-            newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-        } catch (IOException e) {
-            throw new BookstoreException("FXML file does not exist.");
-        }
-        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
-        newStage.setTitle("Bookstore | " + title);
-        newStage.setResizable(false);
-        newStage.show();
-        return newStage;
     }
 }

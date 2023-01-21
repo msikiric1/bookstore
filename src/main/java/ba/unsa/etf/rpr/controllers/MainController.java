@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -31,7 +28,8 @@ public class MainController {
     public Label usernameLabel;
     public TextField searchField;
     public ListView<Book> booksListView;
-    public VBox categoriesBox;
+    public ComboBox categoryCbox;
+    public ComboBox authorCbox;
     private ObservableList<Book> books;
     private ObservableList<Book> filteredBooks;
     private ObservableList<Author> authors;
@@ -53,9 +51,11 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        usernameLabel.setText(usernameLabel.getText() + username);
-        refresh();
-
+        usernameLabel.setText("Hello, " + username + "!");
+        booksListView.setItems(filteredBooks);
+        booksListView.refresh();
+        authorCbox.getItems().addAll(authors.stream().map(author -> author.getName().trim()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        categoryCbox.getItems().addAll(categories.stream().map(category -> category.getName().trim()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
         for (Category category : categories) {
             Button categoryButton = new Button(category.getName());
             categoryButton.setOnAction(event -> {
@@ -63,9 +63,8 @@ public class MainController {
                     return book.getCategory().getName().toLowerCase().contains(category.getName().toLowerCase());
                 }).collect(Collectors.toCollection(FXCollections::observableArrayList));
                 searchField.setText("");
-                refresh();
+                booksListView.refresh();
             });
-            categoriesBox.getChildren().add(categoryButton);
         }
 
         searchField.textProperty().addListener((observable, o, n) -> {

@@ -42,15 +42,22 @@ public class AdminController {
     private ObservableList<Category> categories;
     private String username;
 
-    public AdminController(String username) {
-        try {
-            this.books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
-            this.authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
-            this.categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
-        } catch(BookstoreException e) {
-            System.out.println("Something's wrong with retrieving data from tables");
-            throw new RuntimeException(e);
+    public AdminController(ObservableList<Book> books, ObservableList<Author> authors, ObservableList<Category> categories, String username) {
+        if(books == null || authors == null || categories == null) {
+            try {
+                this.books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
+                this.authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
+                this.categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
+            } catch(BookstoreException e) {
+                System.out.println("Something's wrong with retrieving data from tables");
+                throw new RuntimeException(e);
+            }
+        } else {
+            this.books = books;
+            this.authors = authors;
+            this.categories = categories;
         }
+
         this.username = username;
     }
 
@@ -61,6 +68,7 @@ public class AdminController {
         booksColTitle.setResizable(false);
         booksColPublished.setResizable(false);
         booksColPrice.setResizable(false);
+
         booksColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));

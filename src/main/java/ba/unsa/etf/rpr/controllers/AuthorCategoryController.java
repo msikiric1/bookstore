@@ -11,10 +11,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -22,7 +24,6 @@ public class AuthorCategoryController {
     public TextField nameField;
     public TextField addressField;
     public TextField phoneField;
-    public ComboBox typeCbox;
     public TableView authorsTable;
     public TableColumn authorsColId;
     public TableColumn authorsColName;
@@ -33,6 +34,8 @@ public class AuthorCategoryController {
     public TableColumn categoriesColName;
     public Label infoLabel;
     public Label usernameLabel;
+    public RadioButton authorsRadioBtn;
+    public RadioButton categoriesRadioBtn;
     private ObservableList<Book> books;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
@@ -55,6 +58,32 @@ public class AuthorCategoryController {
         categoriesColId.setResizable(false);
         categoriesColName.setResizable(false);
 
+        authorsColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        authorsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        authorsColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        authorsColPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        authorsTable.setItems(authors);
+
+        categoriesColId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        categoriesColName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        categoriesTable.setItems(categories);
+
+        ToggleGroup type = new ToggleGroup();
+        authorsRadioBtn.setToggleGroup(type);
+        categoriesRadioBtn.setToggleGroup(type);
+        authorsRadioBtn.setSelected(true);
+
+        type.selectedToggleProperty().addListener((observable, o, n) -> {
+            RadioButton selectedRadioBtn = (RadioButton) type.getSelectedToggle();
+
+            if(selectedRadioBtn.getText().equalsIgnoreCase("authors")) {
+                addressField.setVisible(true);
+                phoneField.setVisible(true);
+            } else {
+                addressField.setVisible(false);
+                phoneField.setVisible(false);
+            }
+        });
     }
 
     public void addAction(ActionEvent actionEvent) {
@@ -66,7 +95,9 @@ public class AuthorCategoryController {
     public void deleteAction(ActionEvent actionEvent) {
     }
 
-    public void viewBooksAction(ActionEvent actionEvent) {
+    public void viewBooksAction(ActionEvent actionEvent) throws BookstoreException {
+        AdminController adminController = new AdminController(books, authors, categories, username);
+        changeWindow("admin", "Admin", adminController, actionEvent);
     }
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {

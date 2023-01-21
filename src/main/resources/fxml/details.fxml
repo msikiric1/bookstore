@@ -39,24 +39,24 @@
    <center>
       <VBox id="detailsBox" fx:id="detailsVBox" spacing="10.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Title:" textFill="#7ab16e">
+            <Label fx:id="titleLabel" text="Title:" textFill="#7ab16e">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label text="Author:" textFill="#7ab16e">
+            <Label fx:id="authorLabel" text="Author:" textFill="#7ab16e">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <VBox fx:id="authorDetailsVbox" spacing="10.0">
+            <VBox fx:id="authorDetailsVbox" spacing="10.0" style="-fx-border-color: #8ac37e; -fx-border-radius: 3px;">
                <children>
-                  <Label text="Address:" textFill="#7ab16e">
+                  <Label fx:id="addressLabel" text="Address:" textFill="#7ab16e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Contact:" textFill="#7ab16e">
+                  <Label fx:id="contactLabel" text="Contact:" textFill="#7ab16e">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -66,17 +66,17 @@
                   <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
                </padding>
             </VBox>
-            <Label text="Published:" textFill="#7ab16e">
+            <Label fx:id="publishedLabel" text="Published:" textFill="#7ab16e">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label text="Price:" textFill="#7ab16e">
+            <Label fx:id="priceLabel" text="Price:" textFill="#7ab16e">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label text="Category:" textFill="#7ab16e">
+            <Label fx:id="categoryLabel" text="Category:" textFill="#7ab16e">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

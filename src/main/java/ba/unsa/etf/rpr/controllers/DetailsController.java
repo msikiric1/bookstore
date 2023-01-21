@@ -11,23 +11,20 @@ import javafx.stage.Stage;
 
 public class DetailsController {
     public Label pageLabel;
-    public VBox detailsBox;
-    private Book book = null;
-    private Author author = null;
-    private String pageTitle;
+    public Label titleLabel;
+    public Label authorLabel;
+    public Label addressLabel;
+    public Label contactLabel;
+    public Label publishedLabel;
+    public Label priceLabel;
+    public Label categoryLabel;
+    private Book book;
 
-    public DetailsController(Object object) {
-        if (object instanceof Book) {
-            this.book = (Book) object;
-            this.pageTitle = "Book Details";
-        } else if (object instanceof Author) {
-            author = (Author) object;
-            this.pageTitle = "Author Details";
-        }
+    public DetailsController(Book book) {
+        this.book = book;
     }
     @FXML
     public void initialize() {
-        pageLabel.setText(pageTitle);
         generateDetails();
     }
     public void closeAction(ActionEvent actionEvent) {
@@ -36,17 +33,12 @@ public class DetailsController {
     }
 
     private void generateDetails() {
-        if (book != null) {
-            detailsBox.getChildren().add(new Label("Title: " + book.getTitle()));
-            detailsBox.getChildren().add(new Label("Author: " + book.getAuthor().getName()));
-            detailsBox.getChildren().add(new Label("Published: " + book.getPublished()));
-            detailsBox.getChildren().add(new Label("Price: " + book.getPrice() + "$"));
-            detailsBox.getChildren().add(new Label("Category: " + book.getCategory().getName()));
-        } else {
-
-        }
-        for(Node detailsText : detailsBox.getChildren()) {
-            detailsText.getStyleClass().add("details-text");
-        }
+        titleLabel.setText("Title: " + book.getTitle());
+        authorLabel.setText("Author: " + book.getAuthor().getName());
+        addressLabel.setText("Address: " + book.getAuthor().getAddress());
+        contactLabel.setText("Contact: " + book.getAuthor().getPhone());
+        publishedLabel.setText("Published: " + book.getPublished());
+        priceLabel.setText("Price: $" + book.getPrice());
+        categoryLabel.setText("Category: " + book.getCategory().getName());
     }
 }

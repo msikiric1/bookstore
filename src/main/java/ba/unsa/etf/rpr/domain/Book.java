@@ -65,14 +65,7 @@ public class Book implements Identifiable {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author +
-                ", published=" + published +
-                ", price=" + price +
-                ", category=" + category +
-                '}';
+        return getTitle() + " by " + getAuthor().getName() + " (" + getCategory().getName() + ")";
     }
 
     @Override

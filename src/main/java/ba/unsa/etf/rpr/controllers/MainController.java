@@ -31,11 +31,12 @@ public class MainController {
     public ComboBox categoryCbox;
     public ComboBox authorCbox;
     private ObservableList<Book> books;
-    private ObservableList<Book> filteredBooks;
     private ObservableList<Author> authors;
     private ObservableList<Category> categories;
-            
     private String username;
+
+    private ObservableList<Book> filteredBooks;
+
     public MainController(String username) {
         try {
             books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
@@ -53,25 +54,31 @@ public class MainController {
     public void initialize() {
         usernameLabel.setText("Hello, " + username + "!");
         booksListView.setItems(filteredBooks);
-        booksListView.refresh();
-        authorCbox.getItems().addAll(authors.stream().map(author -> author.getName().trim()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        categoryCbox.getItems().addAll(categories.stream().map(category -> category.getName().trim()).collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        for (Category category : categories) {
-            Button categoryButton = new Button(category.getName());
-            categoryButton.setOnAction(event -> {
-                filteredBooks = books.stream().filter(book -> {
-                    return book.getCategory().getName().toLowerCase().contains(category.getName().toLowerCase());
-                }).collect(Collectors.toCollection(FXCollections::observableArrayList));
-                searchField.setText("");
-                booksListView.refresh();
-            });
-        }
+        authorCbox.getItems().add("");
+        authorCbox.getItems().addAll(authors.stream().map(author -> {
+            return author.getName().trim();
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        authorCbox.getSelectionModel().selectFirst();
+        categoryCbox.getItems().add("");
+        categoryCbox.getItems().addAll(categories.stream().map(category -> {
+            return category.getName().trim();
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        categoryCbox.getSelectionModel().selectFirst();
 
         searchField.textProperty().addListener((observable, o, n) -> {
-            searchBooks(n);
-            refresh();
+            searchBooks();
+            refresh(filteredBooks);
         });
 
+        categoryCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
+            searchBooks();
+            refresh(filteredBooks);
+        });
+
+        authorCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
+            searchBooks();
+            refresh(filteredBooks);
+        });
     }
 
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
@@ -94,14 +101,21 @@ public class MainController {
         openWindow("details", "Book details", new DetailsController(selectedBook), actionEvent);
     }
 
-    private void searchBooks(String searchString) {
-        filteredBooks = books.stream().filter(book -> {
-           return book.getTitle().toLowerCase().contains(searchString.toLowerCase());
+    private void searchBooks() {
+        String searchString = searchField.getText();
+        String searchCategory = categoryCbox.getSelectionModel().getSelectedItem() != null ?
+                categoryCbox.getSelectionModel().getSelectedItem().toString() : "";
+        String searchAuthor = authorCbox.getSelectionModel().getSelectedItem() != null ?
+                authorCbox.getSelectionModel().getSelectedItem().toString() : "";
+        this.filteredBooks = books.stream().filter(book -> {
+           return book.getTitle().toLowerCase().contains(searchString) &&
+                   book.getCategory().getName().contains(searchCategory) &&
+                   book.getAuthor().getName().contains(searchAuthor);
         }).collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
 
-    private void refresh() {
-        booksListView.setItems(filteredBooks);
+    private void refresh(ObservableList<Book> books) {
+        booksListView.setItems(books);
     }
 
     /**

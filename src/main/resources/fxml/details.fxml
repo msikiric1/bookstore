@@ -8,35 +8,79 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/details.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="300.0" stylesheets="@../css/details.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
-      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#closeAction" style="-fx-background-color: #8ac37e;" text="Close" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
    </bottom>
-   <center>
-      <VBox BorderPane.alignment="CENTER">
+   <top>
+      <HBox style="-fx-background-color: #8ac37e;" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="pageLabel" text="Book details">
+            <Label fx:id="pageLabel" text="Book details" textFill="WHITE">
                <font>
-                  <Font size="20.0" />
-               </font></Label>
-            <VBox id="detailsBox" fx:id="detailsBox" spacing="10.0">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <VBox id="detailsBox" fx:id="detailsVBox" spacing="10.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Title:" textFill="#7ab16e">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Author:" textFill="#7ab16e">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <VBox fx:id="authorDetailsVbox" spacing="10.0">
                <children>
-                  <Label text="Label">
+                  <Label text="Address:" textFill="#7ab16e">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-               </children></VBox>
+                  <Label text="Contact:" textFill="#7ab16e">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+               </padding>
+            </VBox>
+            <Label text="Published:" textFill="#7ab16e">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Price:" textFill="#7ab16e">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Category:" textFill="#7ab16e">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

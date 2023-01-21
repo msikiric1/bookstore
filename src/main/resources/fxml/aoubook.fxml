@@ -10,12 +10,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="333.0" prefWidth="291.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane prefWidth="291.0" stylesheets="@../css/aoubook.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -23,16 +22,20 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <VBox prefHeight="400.0" prefWidth="413.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <VBox style="-fx-background-color: #ccecc6;" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <Label fx:id="pageLabel" text=" a book">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </Label>
+            <HBox style="-fx-background-color: #8ac37e;">
+               <children>
+                  <Label fx:id="pageLabel" style="-fx-border-width: 0 0 2 0; -fx-border-color: #8ac37e;" text="Add/update a book" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
             <GridPane hgap="10.0" vgap="10.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.66668701171875" minWidth="10.0" prefWidth="89.0" />
@@ -47,51 +50,59 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Title:" GridPane.halignment="LEFT">
+                  <Label text="Title:" textFill="#7ab16e" GridPane.halignment="LEFT">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Author:" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                  <Label text="Author:" textFill="#7ab16e" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Published:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                  <Label text="Published:" textFill="#7ab16e" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Price:" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                  <Label text="Price:" textFill="#7ab16e" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Label text="Category:" GridPane.halignment="LEFT" GridPane.rowIndex="4">
+                  <Label text="Category:" textFill="#7ab16e" GridPane.halignment="LEFT" GridPane.rowIndex="4">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
-                  <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Spinner fx:id="priceSpinner" amountToStepBy="0.1" editable="true" max="50.0" maxWidth="1.7976931348623157E308" min="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <ComboBox fx:id="categoryCbox" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="errorMsgLabel" text="Error message" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <ComboBox fx:id="categoryCbox" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="errorMsgLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ade1a3; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                      <font>
-                        <Font size="13.0" />
+                        <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets left="10.0" right="10.0" top="10.0" />
                </padding>
             </GridPane>
-            <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <children>
-                <Button fx:id="submitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" text="Add/Update" />
-                  <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+                <Button fx:id="submitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" style="-fx-background-color: #52b69a; -fx-border-width: 0;" text="Add/Update" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
+                  <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Cancel" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

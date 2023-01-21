@@ -1,7 +1,9 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.AuthorManager;
+import ba.unsa.etf.rpr.business.BookManager;
+import ba.unsa.etf.rpr.business.CategoryManager;
 import ba.unsa.etf.rpr.business.WindowManager;
-import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
@@ -25,13 +27,16 @@ public class MainController {
     private List<Category> categories;
     private String username;
     private List<Book> filteredBooks;
-    private WindowManager wm = new WindowManager();
+    private final WindowManager wm = new WindowManager();
+    private final BookManager bookManager = new BookManager();
+    private final AuthorManager authorManager = new AuthorManager();
+    private final CategoryManager categoryManager = new CategoryManager();
 
     public MainController(String username) {
         try {
-            books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
-            authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
-            categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
+            books = FXCollections.observableArrayList(bookManager.getAll());
+            authors = FXCollections.observableArrayList(authorManager.getAll());
+            categories = FXCollections.observableArrayList(categoryManager.getAll());
         } catch(BookstoreException e) {
             System.out.println("Something's wrong with retrieving data from tables");
             throw new RuntimeException(e);

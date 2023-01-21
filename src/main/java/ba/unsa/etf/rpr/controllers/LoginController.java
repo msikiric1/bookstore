@@ -1,16 +1,16 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.UserManager;
 import ba.unsa.etf.rpr.business.WindowManager;
-import ba.unsa.etf.rpr.dao.UserDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
 /**
  *
  * @author Muaz Sikiric
@@ -18,11 +18,9 @@ import javafx.scene.control.TextField;
 public class LoginController {
     public TextField usernameField;
     public PasswordField passwordField;
-    public Button loginBtn;
     public Label errorMsgLabel;
-    private WindowManager wm = new WindowManager();
-
-    public LoginController() {}
+    private final WindowManager wm = new WindowManager();
+    private final UserManager userManager = new UserManager();
 
     @FXML
     public void initialize() {
@@ -51,7 +49,7 @@ public class LoginController {
     public void loginAction(ActionEvent actionEvent) throws BookstoreException {
         User user;
         try {
-            user = new UserDaoSQLImpl().getUser(usernameField.getText(), passwordField.getText());
+            user = userManager.getUser(usernameField.getText(), passwordField.getText());
         } catch(BookstoreException e) {
             errorMsgLabel.setText("The username or password is incorrect.");
             errorMsgLabel.setVisible(true);

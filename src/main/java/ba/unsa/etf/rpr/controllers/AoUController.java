@@ -1,19 +1,15 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.BookManager;
 import ba.unsa.etf.rpr.business.WindowManager;
-import ba.unsa.etf.rpr.dao.BookDao;
-import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +27,8 @@ public class AoUController {
     private List<Author> authors;
     private List<Category> categories;
     private Book book;
-    private WindowManager wm = new WindowManager();
+    private final WindowManager wm = new WindowManager();
+    private final BookManager bookManager = new BookManager();
 
     public AoUController(String addOrUpdate, List<Author> authors, List<Category> categories, Book book) {
         this.addOrUpdate = addOrUpdate;
@@ -83,9 +80,9 @@ public class AoUController {
         this.book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
         try {
             if(addOrUpdate.equalsIgnoreCase("add")) {
-                new BookDaoSQLImpl().add(book);
+                bookManager.add(book);
             } else if(addOrUpdate.equalsIgnoreCase("update")) {
-                new BookDaoSQLImpl().update(book);
+                bookManager.update(book);
             }
             wm.closeWindow(actionEvent);
         } catch(BookstoreException e) {

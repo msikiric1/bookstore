@@ -1,55 +1,50 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.AuthorManager;
+import ba.unsa.etf.rpr.business.BookManager;
+import ba.unsa.etf.rpr.business.CategoryManager;
 import ba.unsa.etf.rpr.business.WindowManager;
-import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
-import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import java.util.List;
 
-import java.io.IOException;
-
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-
+/**
+ *
+ * @author Muaz Sikiric
+ */
 public class AdminController {
     public TableView booksTable;
     public TableColumn booksColId;
     public TableColumn booksColTitle;
     public TableColumn booksColPublished;
     public TableColumn booksColPrice;
-    public Button logoutBtn;
-    public Button closeBtn;
-    public Button viewCategoriesBtn;
-    public Button viewAuthorsBtn;
     public Label usernameLabel;
     public Label infoLabel;
-    private ObservableList<Book> books;
-    private ObservableList<Author> authors;
-    private ObservableList<Category> categories;
+    private List<Book> books;
+    private List<Author> authors;
+    private List<Category> categories;
     private String username;
-    private WindowManager wm = new WindowManager();
+    private final WindowManager wm = new WindowManager();
+    private final BookManager bookManager = new BookManager();
+    private final AuthorManager authorManager = new AuthorManager();
+    private final CategoryManager categoryManager = new CategoryManager();
 
-    public AdminController(ObservableList<Book> books, ObservableList<Author> authors, ObservableList<Category> categories, String username) {
+    public AdminController(List<Book> books, List<Author> authors, List<Category> categories, String username) {
         if(books == null || authors == null || categories == null) {
             try {
-                this.books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
-                this.authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
-                this.categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
+                this.books = FXCollections.observableArrayList(bookManager.getAll());
+                this.authors = FXCollections.observableArrayList(authorManager.getAll());
+                this.categories = FXCollections.observableArrayList(categoryManager.getAll());
             } catch(BookstoreException e) {
                 System.out.println("Something's wrong with retrieving data from tables");
                 throw new RuntimeException(e);
@@ -59,7 +54,6 @@ public class AdminController {
             this.authors = authors;
             this.categories = categories;
         }
-
         this.username = username;
     }
 
@@ -75,7 +69,7 @@ public class AdminController {
         booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));
         booksColPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        booksTable.setItems(books);
+        booksTable.setItems(FXCollections.observableArrayList(books));
     }
 
 
@@ -84,7 +78,7 @@ public class AdminController {
     }
 
     public void closeAction(ActionEvent actionEvent) {
-        wm.closeWindow();
+        wm.closeWindow(actionEvent);
     }
 
     public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
@@ -129,7 +123,7 @@ public class AdminController {
         Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
         if(selectedBook != null) {
             try {
-                new BookDaoSQLImpl().delete(selectedBook.getId());
+                bookManager.delete(selectedBook.getId());
                 books.remove(selectedBook);
                 booksTable.refresh();
                 infoLabel.setText("Info: Deleted a book successfully.");

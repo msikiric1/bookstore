@@ -15,7 +15,7 @@ public class DetailsController {
     public Label priceLabel;
     public Label categoryLabel;
     private Book book;
-    private WindowManager wm = new WindowManager();
+    private final WindowManager wm = new WindowManager();
 
     public DetailsController(Book book) {
         this.book = book;

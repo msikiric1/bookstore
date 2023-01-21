@@ -43,7 +43,7 @@ public class AuthorCategoryController {
     private List<Author> authors;
     private List<Category> categories;
     private String username;
-    private WindowManager wm = new WindowManager();
+    private final WindowManager wm = new WindowManager();
 
     public AuthorCategoryController(List<Author> authors, List<Category> categories, List<Book> books, String username) {
         this.authors = authors;

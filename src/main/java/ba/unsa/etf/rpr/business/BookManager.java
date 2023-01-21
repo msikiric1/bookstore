@@ -11,6 +11,14 @@ public class BookManager {
         return DaoFactory.bookDao().getAll();
     }
 
+    public Book add(Book book) throws BookstoreException {
+        return DaoFactory.bookDao().add(book);
+    }
+
+    public Book update(Book book) throws BookstoreException {
+        return DaoFactory.bookDao().update(book);
+    }
+
     public void delete(int id) throws BookstoreException {
         DaoFactory.bookDao().delete(id);
     }

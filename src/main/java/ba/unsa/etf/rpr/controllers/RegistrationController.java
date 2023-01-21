@@ -1,7 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.UserManager;
 import ba.unsa.etf.rpr.business.WindowManager;
-import ba.unsa.etf.rpr.dao.DaoFactory;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import ba.unsa.etf.rpr.exceptions.UserException;
@@ -16,9 +16,8 @@ public class RegistrationController {
     public PasswordField passwordField;
     public PasswordField confirmPasswordField;
     public Label errorMsgLabel;
-    private WindowManager wm = new WindowManager();
-
-    public RegistrationController() {}
+    private final WindowManager wm = new WindowManager();
+    private final UserManager userManager = new UserManager();
 
     public void initialize() {
         Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
@@ -66,7 +65,7 @@ public class RegistrationController {
                 throw new UserException("Password needs to be at least 8 characters.");
             if(!passwordField.getText().equals(confirmPasswordField.getText()))
                 throw new UserException("Passwords do not match.");
-            DaoFactory.userDao().add(user);
+            userManager.add(user);
         } catch (UserException | BookstoreException e) {
             if(e instanceof UserException)
                 errorMsgLabel.setText(e.getMessage());

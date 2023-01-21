@@ -44,9 +44,9 @@ public class AdminController {
 
     public AdminController(String username) {
         try {
-            books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
-            authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
-            categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
+            this.books = FXCollections.observableArrayList(DaoFactory.bookDao().getAll());
+            this.authors = FXCollections.observableArrayList(DaoFactory.authorDao().getAll());
+            this.categories = FXCollections.observableArrayList(DaoFactory.categoryDao().getAll());
         } catch(BookstoreException e) {
             System.out.println("Something's wrong with retrieving data from tables");
             throw new RuntimeException(e);
@@ -78,14 +78,9 @@ public class AdminController {
         stage.close();
     }
 
-    public void viewCategoriesAction(ActionEvent actionEvent) throws BookstoreException {
-        CategoryController categoryController = new CategoryController(books, authors, categories, username);
-        changeWindow("categories", "Categories", categoryController, actionEvent);
-    }
-
-    public void viewAuthorsAction(ActionEvent actionEvent) throws BookstoreException {
-        AuthorController authorController = new AuthorController(books, authors, categories, username);
-        changeWindow("authors", "Authors", authorController, actionEvent);
+    public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
+        AuthorCategoryController acController = new AuthorCategoryController(authors, categories, books, username);
+        changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
     }
 
     public void addAction(ActionEvent actionEvent) throws BookstoreException {

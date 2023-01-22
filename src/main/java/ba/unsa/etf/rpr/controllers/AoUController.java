@@ -55,10 +55,10 @@ public class AoUController {
         } else if(addOrUpdate.equalsIgnoreCase("update")) {
             if(book != null) {
                 titleField.setText(book.getTitle());
-                authorCbox.getSelectionModel().select(book.getAuthor());
+                authorCbox.getSelectionModel().select(book.getAuthor().getName());
                 publishedPicker.setValue(book.getPublished());
                 priceSpinner.getValueFactory().setValue(book.getPrice());
-                categoryCbox.getSelectionModel().select(book.getCategory());
+                categoryCbox.getSelectionModel().select(book.getCategory().getName());
             } else {
                 System.out.println("Trying to update a book that was not selected.");
             }
@@ -74,10 +74,16 @@ public class AoUController {
             return;
         }
         this.book.setTitle(titleField.getText());
-        this.book.setAuthor((Author) authorCbox.getSelectionModel().getSelectedItem());
+        Author selectedAuthor = authors.stream().filter(author -> {
+            return author.getName().equals(authorCbox.getSelectionModel().getSelectedItem());
+        }).findAny().orElse(null);
+        this.book.setAuthor(selectedAuthor);
         this.book.setPublished(publishedPicker.getValue());
         this.book.setPrice((Double) priceSpinner.getValue());
-        this.book.setCategory((Category) categoryCbox.getSelectionModel().getSelectedItem());
+        Category selectedCategory = categories.stream().filter(category -> {
+            return category.getName().equals(categoryCbox.getSelectionModel().getSelectedItem());
+        }).findAny().orElse(null);
+        this.book.setCategory(selectedCategory);
         try {
             if(addOrUpdate.equalsIgnoreCase("add")) {
                 bookManager.add(book);

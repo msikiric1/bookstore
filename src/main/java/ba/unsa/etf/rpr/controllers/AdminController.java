@@ -69,7 +69,7 @@ public class AdminController {
         booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));
         booksColPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        booksTable.setItems(FXCollections.observableArrayList(books));
+        booksTable.setItems(FXCollections.observableList(books));
     }
 
 

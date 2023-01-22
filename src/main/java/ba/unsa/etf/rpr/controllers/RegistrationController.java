@@ -59,12 +59,7 @@ public class RegistrationController {
         user.setUsername(usernameField.getText());
         user.setPassword(passwordField.getText());
         try {
-            if(usernameField.getText().length() < 6)
-                throw new UserException("Username needs to be at least 6 characters.");
-            if(passwordField.getText().length() < 8)
-                throw new UserException("Password needs to be at least 8 characters.");
-            if(!passwordField.getText().equals(confirmPasswordField.getText()))
-                throw new UserException("Passwords do not match.");
+            userManager.validate(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             userManager.add(user);
         } catch (UserException | BookstoreException e) {
             if(e instanceof UserException)

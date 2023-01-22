@@ -6,4 +6,5 @@ Login credentials for a user with admin role are:
 > password: admin
 
 Database schema:
-![Database schema](images/db_schema.png)
+
+<img src="./images/db_schema.png" alt="Database schema"  width="600">

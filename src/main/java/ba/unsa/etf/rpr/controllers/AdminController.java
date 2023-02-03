@@ -23,6 +23,7 @@ import java.util.List;
  * @author Muaz Sikiric
  */
 public class AdminController {
+    // components
     public TableView booksTable;
     public TableColumn booksColId;
     public TableColumn booksColTitle;
@@ -30,29 +31,44 @@ public class AdminController {
     public TableColumn booksColPrice;
     public Label usernameLabel;
     public Label infoLabel;
-    private List<Book> books;
-    private List<Author> authors;
-    private List<Category> categories;
-    private String username;
+
+    // managers
     private final WindowManager wm = new WindowManager();
     private final BookManager bookManager = new BookManager();
     private final AuthorManager authorManager = new AuthorManager();
     private final CategoryManager categoryManager = new CategoryManager();
 
+    private List<Book> books;
+    private List<Author> authors;
+    private List<Category> categories;
+    private String username;
+
+    /**
+     * Constructor
+     * @param books list of books retrieved from the database
+     * @param authors list of authors retrieved from the database
+     * @param categories list of categories retrieved from the database
+     * @param username admin username
+     */
     public AdminController(List<Book> books, List<Author> authors, List<Category> categories, String username) {
-        if(books == null || authors == null || categories == null) {
-            try {
-                this.books = FXCollections.observableArrayList(bookManager.getAll());
-                this.authors = FXCollections.observableArrayList(authorManager.getAll());
-                this.categories = FXCollections.observableArrayList(categoryManager.getAll());
-            } catch(BookstoreException e) {
-                System.out.println("Something's wrong with retrieving data from tables");
-                throw new RuntimeException(e);
-            }
-        } else {
-            this.books = books;
-            this.authors = authors;
-            this.categories = categories;
+        this.books = books;
+        this.authors = authors;
+        this.categories = categories;
+        this.username = username;
+    }
+
+    /**
+     * Constructor
+     * @param username admin username
+     */
+    public AdminController(String username) {
+        try {
+            this.books = FXCollections.observableArrayList(bookManager.getAll());
+            this.authors = FXCollections.observableArrayList(authorManager.getAll());
+            this.categories = FXCollections.observableArrayList(categoryManager.getAll());
+        } catch(BookstoreException e) {
+            System.out.println("Something's wrong with retrieving data from tables");
+            throw new RuntimeException(e);
         }
         this.username = username;
     }
@@ -60,11 +76,6 @@ public class AdminController {
     @FXML
     public void initialize() {
         usernameLabel.setText("Hello, " + username + "!");
-        booksColId.setResizable(false);
-        booksColTitle.setResizable(false);
-        booksColPublished.setResizable(false);
-        booksColPrice.setResizable(false);
-
         booksColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         booksColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         booksColPublished.setCellValueFactory(new PropertyValueFactory<>("published"));
@@ -73,14 +84,26 @@ public class AdminController {
     }
 
 
+    /**
+     * Event handler for the logout button
+     * @param actionEvent
+     */
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
         wm.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
+    /**
+     * Event handler for the close button
+     * @param actionEvent
+     */
     public void closeAction(ActionEvent actionEvent) {
         wm.closeWindow(actionEvent);
     }
 
+    /**
+     * Event handler for the view-authors-and-categories button
+     * @param actionEvent
+     */
     public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
         AuthorCategoryController acController = new AuthorCategoryController(authors, categories, books, username);
         wm.changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);

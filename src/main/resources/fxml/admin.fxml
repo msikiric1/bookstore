@@ -21,7 +21,7 @@
                 <TableColumn fx:id="booksColId" prefWidth="34.0" resizable="false" text="Id" />
                 <TableColumn fx:id="booksColTitle" maxWidth="1.7976931348623157E308" minWidth="188.0" prefWidth="240.0" resizable="false" text="Title" />
                   <TableColumn fx:id="booksColPublished" minWidth="0.0" prefWidth="155.33331298828125" resizable="false" text="Published" />
-                  <TableColumn fx:id="booksColPrice" minWidth="14.0" prefWidth="58.66668701171875" text="Price" />
+                  <TableColumn fx:id="booksColPrice" minWidth="9.99993896484375" prefWidth="63.33332316080731" resizable="false" text="Price" />
               </columns>
             </TableView>
             <Label fx:id="infoLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #add5a5; -fx-background-radius: 3px;" text="Info:" textFill="WHITE">
@@ -29,12 +29,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
                <padding>
-                  <Insets left="3.0" right="3.0" />
+                  <Insets bottom="3.0" left="5.0" right="5.0" top="3.0" />
                </padding>
             </Label>
          </children>
          <padding>
-            <Insets bottom="5.0" left="10.0" top="10.0" />
+            <Insets bottom="5.0" left="5.0" top="5.0" />
          </padding>
       </VBox>
    </center>
@@ -52,14 +52,14 @@
             <Pane HBox.hgrow="ALWAYS" />
             <Label fx:id="usernameLabel" alignment="CENTER" text="Hello, " textFill="WHITE">
                <font>
-                  <Font size="14.0" />
+                  <Font name="System Bold" size="13.0" />
                </font></Label>
-            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Log out" textFill="WHITE">
+            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" style="-fx-background-color: #6aa15f; -fx-border-width: 0;" text="Log out" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
-            <Separator orientation="VERTICAL" style="-fx-border-width: 0;" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Close" textFill="WHITE">
+            <Separator id="separator" orientation="VERTICAL" style="-fx-border-width: 0;" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" style="-fx-background-color: #6aa15f; -fx-border-width: 0;" text="Close" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
@@ -75,7 +75,7 @@
    <right>
       <VBox prefWidth="100.0" spacing="5.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Operations:" textFill="#618958">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Operations:" textFill="#6aa15f">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
@@ -92,15 +92,11 @@
                   <Font name="System Bold" size="12.0" />
                </font></Button>
             <Pane VBox.vgrow="ALWAYS" />
-            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" textFill="#618958">
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="View:" textFill="#6aa15f">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
-            <Button fx:id="viewCategoriesBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCategoriesAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Categories" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font></Button>
-            <Button fx:id="viewAuthorsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewAuthorsAction" style="-fx-background-color: #6e9c65; -fx-border-width: 0;" text="Authors" textFill="WHITE">
+            <Button fx:id="viewACBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewACAction" style="-fx-background-color: #52b69a; -fx-border-width: 0;" text="Authors &amp; Categories" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
@@ -109,7 +105,7 @@
             <Insets />
          </BorderPane.margin>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </VBox>
    </right>

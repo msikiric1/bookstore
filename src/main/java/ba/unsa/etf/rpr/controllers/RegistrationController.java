@@ -12,54 +12,46 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class RegistrationController {
+    // components
     public TextField usernameField;
     public PasswordField passwordField;
     public PasswordField confirmPasswordField;
     public Label errorMsgLabel;
+
+    // managers
     private final WindowManager wm = new WindowManager();
     private final UserManager userManager = new UserManager();
 
     public void initialize() {
         Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
-        errorMsgLabel.setVisible(false);
+
         usernameField.textProperty().addListener((observableValue, o, n) -> {
-            if(n.trim().isEmpty()) {
-                usernameField.getStyleClass().removeAll("default");
-                usernameField.getStyleClass().add("invalid");
-            } else {
-                usernameField.getStyleClass().removeAll("invalid");
-                usernameField.getStyleClass().add("default");
-            }
+            if(n.trim().isEmpty()) setInvalidStyles(usernameField);
+            else removeInvalidStyles(usernameField);
         });
 
         passwordField.textProperty().addListener((observableValue, o, n) -> {
-            if(n.trim().isEmpty()) {
-                passwordField.getStyleClass().removeAll("default");
-                passwordField.getStyleClass().add("invalid");
-            } else {
-                passwordField.getStyleClass().removeAll("invalid");
-                passwordField.getStyleClass().add("default");
-            }
+            if(n.trim().isEmpty()) setInvalidStyles(passwordField);
+            else removeInvalidStyles(passwordField);
         });
 
         confirmPasswordField.textProperty().addListener((observableValue, o, n) -> {
-            if(n.trim().isEmpty() || !n.equals(passwordField.getText())) {
-                confirmPasswordField.getStyleClass().removeAll("default");
-                confirmPasswordField.getStyleClass().add("invalid");
-            } else {
-                confirmPasswordField.getStyleClass().removeAll("invalid");
-                confirmPasswordField.getStyleClass().add("default");
-            }
+            if(n.trim().isEmpty() || !n.equals(passwordField.getText())) setInvalidStyles(confirmPasswordField);
+            else removeInvalidStyles(confirmPasswordField);
         });
-
     }
 
+    /**
+     * Event handler for the register button
+     * @param actionEvent
+     * @throws BookstoreException
+     */
     public void registerAction(ActionEvent actionEvent) throws BookstoreException {
         User user = new User();
         user.setUsername(usernameField.getText());
         user.setPassword(passwordField.getText());
         try {
-            userManager.validate(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
+            userManager.validateRegistration(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             userManager.add(user);
         } catch (UserException | BookstoreException e) {
             if(e instanceof UserException)
@@ -74,11 +66,38 @@ public class RegistrationController {
         wm.changeWindow("main", "Main", new MainController(usernameField.getText()), actionEvent);
     }
 
+    /**
+     * Event handler for the close button
+     * @param actionEvent
+     */
     public void closeAction(ActionEvent actionEvent) {
         wm.closeWindow(actionEvent);
     }
 
+    /**
+     * Event handler for the go-to-login button
+     * @param actionEvent
+     * @throws BookstoreException
+     */
     public void goToLoginAction(ActionEvent actionEvent) throws BookstoreException {
         wm.changeWindow("login", "Login", new LoginController(), actionEvent);
+    }
+
+    /**
+     * Helper method for styling invalid text field
+     * @param textField text/password field that needs to be styled
+     */
+    private void setInvalidStyles(TextField textField) {
+        textField.getStyleClass().removeAll("default");
+        textField.getStyleClass().add("invalid");
+    }
+
+    /**
+     * Helper method for removing invalid styles from text field
+     * @param textField text/password field to remove the styles from
+     */
+    private void removeInvalidStyles(TextField textField) {
+        textField.getStyleClass().removeAll("invalid");
+        textField.getStyleClass().add("default");
     }
 }

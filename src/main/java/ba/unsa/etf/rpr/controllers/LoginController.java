@@ -73,7 +73,7 @@ public class LoginController {
     }
 
     /**
-     * Event handler for the registration button
+     * Event handler for the go-to-registration button
      * @param actionEvent
      * @throws BookstoreException
      */

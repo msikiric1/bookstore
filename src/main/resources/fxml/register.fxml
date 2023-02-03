@@ -75,7 +75,7 @@
                      </font>
                   </Label>
                   <PasswordField fx:id="confirmPasswordField" styleClass="default" />
-                  <Label fx:id="errorMsgLabel" prefWidth="229.0" style="-fx-background-color: #ade1a3; -fx-border-color: #ade1a3; -fx-border-radius: 3px; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" wrapText="true">
+                  <Label fx:id="errorMsgLabel" prefWidth="229.0" style="-fx-background-color: #ade1a3; -fx-border-color: #ade1a3; -fx-border-radius: 3px; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" visible="false" wrapText="true">
                      <font>
                         <Font name="System Bold" size="11.0" />
                      </font>

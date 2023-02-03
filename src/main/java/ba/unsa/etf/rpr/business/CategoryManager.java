@@ -6,12 +6,32 @@ import ba.unsa.etf.rpr.exceptions.BookstoreException;
 
 import java.util.List;
 
+/**
+ * Business logic layer for categories
+ * @author Muaz Sikiric
+ */
 public class CategoryManager {
+    public Category add(Category category) throws BookstoreException {
+        return DaoFactory.categoryDao().add(category);
+    }
     public List<Category> getAll() throws BookstoreException {
         return DaoFactory.categoryDao().getAll();
     }
 
+    public Category getById(int id) throws BookstoreException {
+        return DaoFactory.categoryDao().getById(id);
+    }
+
+    public Category update(Category category) throws BookstoreException {
+        return DaoFactory.categoryDao().update(category);
+    }
+
     public void delete(int id) throws BookstoreException {
         DaoFactory.categoryDao().delete(id);
+    }
+
+    public void validate(String name) throws BookstoreException {
+        if(name == null || name.length() < 5)
+            throw new BookstoreException("Category name needs to be at least 5 characters.");
     }
 }

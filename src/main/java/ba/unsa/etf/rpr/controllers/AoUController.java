@@ -48,7 +48,7 @@ public class AoUController {
         if(!operation.equalsIgnoreCase("add") && !operation.equalsIgnoreCase("update"))
             throw new BookstoreException("Invalid operation.");
 
-        this.operation = operation;
+        this.operation = operation.toLowerCase();
         this.authors = authors;
         this.categories = categories;
         this.book = book;
@@ -61,9 +61,6 @@ public class AoUController {
     @FXML
     public void initialize() {
         pageLabel.setText(operation + " a book");
-        authorCbox.setItems(FXCollections.observableList(authors));
-        categoryCbox.setItems(FXCollections.observableList(categories));
-
         showBook(book);
     }
 
@@ -85,10 +82,8 @@ public class AoUController {
                 categoryCbox.getSelectionModel().getSelectedItem());
 
         try {
-            if(operation.equalsIgnoreCase("add"))
-                bookManager.add(book);
-            else if(operation.equalsIgnoreCase("update"))
-                bookManager.update(book);
+            if(operation.equals("add")) bookManager.add(book);
+            else bookManager.update(book);
 
             wm.closeWindow(actionEvent);
         } catch(BookstoreException e) {
@@ -101,10 +96,16 @@ public class AoUController {
      * Event handler for the cancel button
      * @param actionEvent
      */
-    public void cancelAction(ActionEvent actionEvent) {
-        wm.closeWindow(actionEvent);
-    }
+    public void cancelAction(ActionEvent actionEvent) { wm.closeWindow(actionEvent); }
 
+    /**
+     * Sets the private book attribute
+     * @param title book title
+     * @param author book author
+     * @param published book publish date
+     * @param price book price
+     * @param category book category
+     */
     private void setBook(String title, Author author, LocalDate published, Double price, Category category) {
         book = new Book();
         book.setTitle(title);
@@ -114,6 +115,10 @@ public class AoUController {
         book.setCategory(category);
     }
 
+    /**
+     * Displays the selected book details or sets default values on the aou book window
+     * @param book book that will be displayed
+     */
     private void showBook(Book book) {
         if(book == null) {
             authorCbox.getSelectionModel().selectFirst();

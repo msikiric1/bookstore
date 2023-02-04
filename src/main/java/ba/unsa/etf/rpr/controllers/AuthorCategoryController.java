@@ -1,5 +1,7 @@
 package ba.unsa.etf.rpr.controllers;
 
+import ba.unsa.etf.rpr.business.AuthorManager;
+import ba.unsa.etf.rpr.business.CategoryManager;
 import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
@@ -22,24 +24,26 @@ public class AuthorCategoryController {
     public TextArea authorAddressArea;
     public TextField authorPhoneField;
     public TableView<Author> authorsTable;
-    public TableColumn authorsColId;
-    public TableColumn authorsColName;
-    public TableColumn authorsColAddress;
-    public TableColumn authorsColPhone;
+    public TableColumn<Author, Integer> authorsColId;
+    public TableColumn<Author, String> authorsColName;
+    public TableColumn<Author, String> authorsColAddress;
+    public TableColumn<Author, String> authorsColPhone;
     public TextField categoryNameField;
     public TableView<Category> categoriesTable;
-    public TableColumn categoriesColId;
-    public TableColumn categoriesColName;
+    public TableColumn<Category, Integer> categoriesColId;
+    public TableColumn<Category, String> categoriesColName;
     public Label infoLabel;
     public Label usernameLabel;
 
     // managers
     private final WindowManager wm = new WindowManager();
+    private final AuthorManager authorManager = new AuthorManager();
+    private final CategoryManager categoryManager = new CategoryManager();
 
-    private List<Book> books;
-    private List<Author> authors;
-    private List<Category> categories;
-    private String username;
+    private final List<Book> books;
+    private final List<Author> authors;
+    private final List<Category> categories;
+    private final String username;
 
 
     /**
@@ -74,22 +78,97 @@ public class AuthorCategoryController {
     }
 
     public void addAuthorAction(ActionEvent actionEvent) {
-
+        Author newAuthor = setAuthor(authorNameField.getText(), authorAddressArea.getText(), authorPhoneField.getText());
+        try {
+            authorManager.validate(newAuthor.getName(), newAuthor.getAddress(), newAuthor.getPhone());
+            authorManager.add(newAuthor);
+            authors.add(newAuthor);
+            authorsTable.refresh();
+        } catch (BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     public void updateAuthorAction(ActionEvent actionEvent) {
+        Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
+        if(selectedAuthor == null) {
+            infoLabel.setText("You need to select an author that you want to update.");
+            return;
+        }
+
+        Author updatedAuthor = setAuthor(authorNameField.getText(), authorAddressArea.getText(), authorPhoneField.getText());
+        try {
+            authorManager.validate(selectedAuthor.getName(), selectedAuthor.getAddress(), selectedAuthor.getPhone());
+            authorManager.update(selectedAuthor);
+            authors.set(authors.indexOf(selectedAuthor), updatedAuthor);
+            authorsTable.refresh();
+        } catch (BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     public void deleteAuthorAction(ActionEvent actionEvent) {
+        Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
+        if(selectedAuthor == null) {
+            infoLabel.setText("You need to select an author that you want to delete.");
+            return;
+        }
+
+        try {
+            authorManager.delete(selectedAuthor.getId());
+            authors.remove(selectedAuthor);
+            authorsTable.refresh();
+            infoLabel.setText("Deleted an author successfully.");
+        } catch(BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     public void addCategoryAction(ActionEvent actionEvent) {
+        Category newCategory = setCategory(categoryNameField.getText());
+        try {
+            categoryManager.validate(newCategory.getName());
+            categoryManager.add(newCategory);
+            categories.add(newCategory);
+            categoriesTable.refresh();
+        } catch(BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     public void updateCategoryAction(ActionEvent actionEvent) {
+        Category selectedCategory = categoriesTable.getSelectionModel().getSelectedItem();
+        if(selectedCategory == null) {
+            infoLabel.setText("You need to select a category that you want to update.");
+            return;
+        }
+
+        Category updatedCategory = setCategory(categoryNameField.getText());
+        try {
+            categoryManager.validate(selectedCategory.getName());
+            categoryManager.update(selectedCategory);
+            categories.set(categories.indexOf(selectedCategory), updatedCategory);
+            categoriesTable.refresh();
+        } catch (BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     public void deleteCategoryAction(ActionEvent actionEvent) {
+        Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
+        if(selectedAuthor == null) {
+            infoLabel.setText("You need to select an author that you want to delete.");
+            return;
+        }
+
+        try {
+            authorManager.delete(selectedAuthor.getId());
+            authors.remove(selectedAuthor);
+            authorsTable.refresh();
+            infoLabel.setText("Deleted an author successfully.");
+        } catch(BookstoreException e) {
+            infoLabel.setText(e.getMessage());
+        }
     }
 
     /**
@@ -125,5 +204,19 @@ public class AuthorCategoryController {
 
     private void showCategory(Category category) {
         categoryNameField.setText(category.getName());
+    }
+
+    private Author setAuthor(String name, String address, String phone) {
+        Author author = new Author();
+        author.setName(name);
+        author.setAddress(address);
+        author.setPhone(phone);
+        return author;
+    }
+
+    private Category setCategory(String name) {
+        Category category = new Category();
+        category.setName(name);
+        return category;
     }
 }

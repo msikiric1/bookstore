@@ -80,7 +80,7 @@
                   <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Spinner fx:id="priceSpinner" amountToStepBy="0.1" editable="true" max="50.0" maxWidth="1.7976931348623157E308" min="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <ComboBox fx:id="categoryCbox" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="errorMsgLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ade1a3; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <Label fx:id="errorMsgLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ade1a3; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" visible="false" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="5">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
@@ -95,7 +95,7 @@
             </GridPane>
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
                <children>
-                <Button fx:id="submitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" style="-fx-background-color: #52b69a; -fx-border-width: 0;" text="Add/Update" textFill="WHITE">
+                <Button fx:id="submitBtn" defaultButton="true" mnemonicParsing="false" onAction="#submitAction" style="-fx-background-color: #52b69a; -fx-border-width: 0;" text="Submit" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Button>

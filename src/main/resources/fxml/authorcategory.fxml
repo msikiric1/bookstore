@@ -46,7 +46,11 @@
                                           <TextField fx:id="authorNameField" minWidth="150.0" promptText="Author name" style="-fx-background-color: white;" />
                                           <TextArea fx:id="authorAddressArea" prefHeight="35.0" prefWidth="150.0" promptText="Author address" style="-fx-background-color: white;" wrapText="true" />
                                           <TextField fx:id="authorPhoneField" minWidth="100.0" promptText="Author phone number" style="-fx-background-color: white;" />
-                                          <Label text="Operations:" />
+                                          <Label text="Operations:" textFill="#6aa15f">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
                                           <Button fx:id="addAuthorBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addAuthorAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Add" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
@@ -93,6 +97,11 @@
                                              </font>
                                           </Label>
                                           <TextField fx:id="categoryNameField" minWidth="150.0" promptText="Category name" style="-fx-background-color: white;" />
+                                          <Label text="Operations:" textFill="#6aa15f">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
                                           <Button fx:id="addCategoryBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addCategoryAction" style="-fx-background-color: #8ac37e; -fx-border-width: 0;" text="Add" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="12.0" />

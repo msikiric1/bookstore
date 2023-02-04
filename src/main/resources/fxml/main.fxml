@@ -22,9 +22,15 @@
                   <Font name="System Bold" size="18.0" />
                </font></Label>
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" text="Log out" />
+            <Button fx:id="logoutBtn" mnemonicParsing="false" onAction="#logoutAction" style="-fx-background-color: #6e9c65;" text="Log out" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
             <Separator orientation="VERTICAL" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#closeAction" style="-fx-background-color: #6e9c65;" text="Close" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font></Button>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -65,9 +71,17 @@
       </VBox>
    </right>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" style="-fx-background-color: #ccecc6;" BorderPane.alignment="CENTER">
          <children>
             <ListView fx:id="booksListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-background-radius: 3px;" />
+            <Label fx:id="infoLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #add5a5; -fx-background-radius: 3px;" text="Info:" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="3.0" right="3.0" />
+               </padding>
+            </Label>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" top="5.0" />

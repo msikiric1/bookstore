@@ -82,7 +82,7 @@
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Separator prefWidth="200.0" style="-fx-background-color: #ccecc6;">
+                        <Separator id="separator" prefWidth="200.0" style="-fx-background-color: #ccecc6;">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
@@ -116,17 +116,6 @@
                     </VBox.margin>
                 </ImageView>
                 <Pane prefHeight="200.0" prefWidth="200.0" />
-                <Label alignment="CENTER" text="Made with ♡ by Muaz Sikirić" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="13.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets bottom="15.0" />
-                    </VBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-                </Label>
             </children>
         </VBox>
     </children>

@@ -77,7 +77,7 @@
                   </Label>
                   <TextField fx:id="titleField" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" />
                   <ComboBox fx:id="authorCbox" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="publishedPicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Spinner fx:id="priceSpinner" amountToStepBy="0.1" editable="true" max="50.0" maxWidth="1.7976931348623157E308" min="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <ComboBox fx:id="categoryCbox" maxWidth="1.7976931348623157E308" prefWidth="150.0" styleClass="default" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Label fx:id="errorMsgLabel" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ade1a3; -fx-background-radius: 3px;" text="Error message" textFill="WHITE" visible="false" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="5">

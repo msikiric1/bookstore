@@ -6,7 +6,6 @@ import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -25,16 +24,15 @@ public class AoUController {
     public DatePicker publishedPicker;
     public ComboBox<Author> authorCbox;
     public ComboBox<Category> categoryCbox;
-    public Button submitBtn;
     public Label errorMsgLabel;
 
     // managers
-    private final WindowManager wm = new WindowManager();
+    private final WindowManager windowManager = new WindowManager();
     private final BookManager bookManager = new BookManager();
 
-    private String operation;
-    private List<Author> authors;
-    private List<Category> categories;
+    private final String operation;
+    private final List<Author> authors;
+    private final List<Category> categories;
     private Book book;
 
     /**
@@ -69,26 +67,19 @@ public class AoUController {
      * @param actionEvent
      */
     public void submitAction(ActionEvent actionEvent) {
-        try {
-            bookManager.validate(titleField.getText(), publishedPicker.getValue());
-        } catch (BookstoreException e) {
-            errorMsgLabel.setVisible(true);
-            errorMsgLabel.setText(e.getMessage());
-            return;
-        }
-
         setBook(titleField.getText(), authorCbox.getSelectionModel().getSelectedItem(),
                 publishedPicker.getValue(), priceSpinner.getValue(),
                 categoryCbox.getSelectionModel().getSelectedItem());
 
         try {
+            bookManager.validate(book);
             if(operation.equals("add")) bookManager.add(book);
             else bookManager.update(book);
 
-            wm.closeWindow(actionEvent);
+            windowManager.closeWindow(actionEvent);
         } catch(BookstoreException e) {
             errorMsgLabel.setVisible(true);
-            errorMsgLabel.setText("There was an error while adding/updating a book.");
+            errorMsgLabel.setText(e.getMessage());
         }
     }
 
@@ -96,7 +87,7 @@ public class AoUController {
      * Event handler for the cancel button
      * @param actionEvent
      */
-    public void cancelAction(ActionEvent actionEvent) { wm.closeWindow(actionEvent); }
+    public void cancelAction(ActionEvent actionEvent) { windowManager.closeWindow(actionEvent);     }
 
     /**
      * Sets the private book attribute

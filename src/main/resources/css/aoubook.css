@@ -2,6 +2,34 @@
     -fx-background-color: white;
 }
 
-.spinner {
+.date-picker .text-field {
     -fx-background-color: white;
+    -fx-border-color: white;
+    -fx-border-radius: 3px;
+}
+
+.date-picker .arrow-button {
+	-fx-background-color: #8ac37e;
+	-fx-background-radius: 3px;
+	-fx-border-color: #8ac37e;
+	-fx-border-radius: 3px;
+}
+
+.date-picker .arrow-button .arrow {
+	-fx-background-color: white;
+}
+
+.spinner .text-field {
+    -fx-background-color: white;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+	-fx-background-color:  #8ac37e;
+	-fx-background-radius: 3px;
+}
+
+.spinner .increment-arrow-button .increment-arrow,
+.spinner .decrement-arrow-button .decrement-arrow {
+	-fx-background-color: white;
 }

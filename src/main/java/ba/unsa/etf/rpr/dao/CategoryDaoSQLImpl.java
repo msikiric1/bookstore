@@ -15,7 +15,7 @@ public class CategoryDaoSQLImpl extends AbstractDao<Category> implements Categor
     /**
      * Constructor used for connecting to the database
      */
-    public CategoryDaoSQLImpl() {
+    private CategoryDaoSQLImpl() {
         super("categories");
     }
 
@@ -26,7 +26,8 @@ public class CategoryDaoSQLImpl extends AbstractDao<Category> implements Categor
     }
 
     public static void removeInstance() {
-        instance = null;
+        if(instance != null)
+            instance = null;
     }
 
     @Override

@@ -22,7 +22,7 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
      */
     public AbstractDao(String table) {
         this.table = table;
-        if(AbstractDao.connection == null) {
+        if(connection == null) {
             Properties prop = new Properties();
             try {
                 prop.load(ClassLoader.getSystemResource("config.properties").openStream());
@@ -38,8 +38,18 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return AbstractDao.connection;
+    }
+
+    public static void closeConnection() throws BookstoreException {
+        if(connection == null) return;
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new BookstoreException(e.getMessage(), e);
+        }
     }
 
     public String getTable() {

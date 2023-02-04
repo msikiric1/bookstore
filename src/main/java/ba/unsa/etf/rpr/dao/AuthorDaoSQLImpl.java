@@ -18,7 +18,7 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     /**
      * Constructor used for connecting to the database
      */
-    public AuthorDaoSQLImpl() {
+    private AuthorDaoSQLImpl() {
         super("authors");
     }
 
@@ -29,7 +29,8 @@ public class AuthorDaoSQLImpl extends AbstractDao<Author> implements AuthorDao {
     }
 
     public static void removeInstance() {
-        instance = null;
+        if(instance != null)
+            instance = null;
     }
 
     @Override

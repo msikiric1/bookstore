@@ -20,7 +20,7 @@ public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
     /**
      * Constructor used for connecting to the database
      */
-    public UserDaoSQLImpl() { super("users"); }
+    private UserDaoSQLImpl() { super("users"); }
 
     public static UserDaoSQLImpl getInstance() {
         if(instance == null)
@@ -29,7 +29,8 @@ public class UserDaoSQLImpl extends AbstractDao<User> implements UserDao {
     }
 
     public static void removeInstance() {
-        instance = null;
+        if(instance != null)
+            instance = null;
     }
 
     @Override

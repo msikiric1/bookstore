@@ -20,7 +20,7 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
     /**
      * Constructor that is used for connection to the database
      */
-    public BookDaoSQLImpl() {
+    private BookDaoSQLImpl() {
         super("books");
     }
 
@@ -31,7 +31,8 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
     }
 
     public static void removeInstance() {
-        instance = null;
+        if(instance != null)
+            instance = null;
     }
 
     @Override
@@ -40,10 +41,10 @@ public class BookDaoSQLImpl extends AbstractDao<Book> implements BookDao {
         try {
             book.setId(rs.getInt("id"));
             book.setTitle(rs.getString("title"));
-            book.setAuthor(new AuthorDaoSQLImpl().getById(rs.getInt("author_id")));
+            book.setAuthor(DaoFactory.authorDao().getById(rs.getInt("author_id")));
             book.setPublished(rs.getDate("published").toLocalDate());
             book.setPrice(rs.getDouble("price"));
-            book.setCategory(new CategoryDaoSQLImpl().getById(rs.getInt("category_id")));
+            book.setCategory(DaoFactory.categoryDao().getById(rs.getInt("category_id")));
             return book;
         } catch(SQLException e) {
             throw new BookstoreException(e.getMessage(), e);

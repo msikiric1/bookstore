@@ -34,14 +34,13 @@ public class BookManager {
 
     /**
      * Validates title and publish date of the book
-     * @param title book title (min. 4 characters)
-     * @param published publish date (needs to be <= current date)
+     * @param book book
      * @throws BookstoreException
      */
-    public void validate(String title, LocalDate published) throws BookstoreException {
-        if(title.length() < 4)
-            throw new BookstoreException("Title needs to be at least 4 characters.");
-        if(LocalDate.now().isBefore(published))
+    public void validate(Book book) throws BookstoreException {
+        if(book.getTitle().length() < 4)
+            throw new BookstoreException("Title needs to have at least 4 characters.");
+        if(LocalDate.now().isBefore(book.getPublished()))
             throw new BookstoreException("Publish date can not be in the future.");
     }
 }

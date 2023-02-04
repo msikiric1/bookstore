@@ -32,11 +32,11 @@ public class CategoryManager {
 
     /**
      * Validates the length of the category name
-     * @param name category name (min. 5 characters)
+     * @param category book category
      * @throws BookstoreException
      */
-    public void validate(String name) throws BookstoreException {
-        if(name == null || name.length() < 5)
+    public void validate(Category category) throws BookstoreException {
+        if(category.getName() == null || category.getName().length() < 5)
             throw new BookstoreException("Category name needs to be at least 5 characters.");
     }
 }

@@ -31,14 +31,14 @@ public class AuthorManager {
         DaoFactory.authorDao().delete(id);
     }
 
-    public void validate(String name, String address, String phone) throws BookstoreException {
-        if(name == null || name.length() < 3)
+    public void validate(Author author) throws BookstoreException {
+        if(author.getName() == null || author.getName().length() < 3)
             throw new BookstoreException("Author name needs to be at least 3 characters.");
-        if(address == null || address.length() < 12)
+        if(author.getAddress() == null || author.getAddress().length() < 12)
             throw new BookstoreException("Author address needs to be at least 12 characters.");
-        if(phone == null || !phone.matches("[0-9]+"))
+        if(author.getPhone() == null || !author.getPhone().matches("[0-9]+"))
             throw new BookstoreException("Author phone number should only contain numbers.");
-        if(phone.length() < 10)
-            throw new BookstoreException("Author phone number needs to have at least 10 numbers.");
+        if(author.getPhone().length() < 7 || author.getPhone().length() > 15)
+            throw new BookstoreException("Author phone number needs to have 7-15 digits.");
     }
 }

@@ -33,7 +33,7 @@ public class BookManager {
     }
 
     /**
-     * Validates title and publish date
+     * Validates title and publish date of the book
      * @param title book title (min. 4 characters)
      * @param published publish date (needs to be <= current date)
      * @throws BookstoreException

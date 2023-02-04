@@ -6,45 +6,49 @@ import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-
+/**
+ * Controller for the authors and categories admin page
+ * @author Muaz Sikiric
+ */
 public class AuthorCategoryController {
-    public TextField nameField;
-    public TextField addressField;
-    public TextField phoneField;
-    public TableView authorsTable;
+    // components
+    public TextField authorNameField;
+    public TextArea authorAddressArea;
+    public TextField authorPhoneField;
+    public TableView<Author> authorsTable;
     public TableColumn authorsColId;
     public TableColumn authorsColName;
     public TableColumn authorsColAddress;
     public TableColumn authorsColPhone;
-    public TableView categoriesTable;
+    public TextField categoryNameField;
+    public TableView<Category> categoriesTable;
     public TableColumn categoriesColId;
     public TableColumn categoriesColName;
     public Label infoLabel;
     public Label usernameLabel;
-    public RadioButton authorsRadioBtn;
-    public RadioButton categoriesRadioBtn;
+
+    // managers
+    private final WindowManager wm = new WindowManager();
+
     private List<Book> books;
     private List<Author> authors;
     private List<Category> categories;
     private String username;
-    private final WindowManager wm = new WindowManager();
 
+
+    /**
+     * Constructor
+     * @param authors list of authors retrieved from the database
+     * @param categories list of categories retrieved from the database
+     * @param books list of books retrieved from the database
+     * @param username admin username
+     */
     public AuthorCategoryController(List<Author> authors, List<Category> categories, List<Book> books, String username) {
         this.authors = authors;
         this.categories = categories;
@@ -55,13 +59,6 @@ public class AuthorCategoryController {
     @FXML
     public void initialize() {
         usernameLabel.setText("Hello, " + username + "!");
-        authorsColId.setResizable(false);
-        authorsColName.setResizable(false);
-        authorsColAddress.setResizable(false);
-        authorsColPhone.setResizable(false);
-        categoriesColId.setResizable(false);
-        categoriesColName.setResizable(false);
-
         authorsColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         authorsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         authorsColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -72,62 +69,61 @@ public class AuthorCategoryController {
         categoriesColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoriesTable.setItems(FXCollections.observableArrayList(categories));
 
-        ToggleGroup type = new ToggleGroup();
-        authorsRadioBtn.setToggleGroup(type);
-        categoriesRadioBtn.setToggleGroup(type);
-        authorsRadioBtn.setSelected(true);
-
-        RadioButton selectedType = (RadioButton) type.getSelectedToggle();
-        if(selectedType.getText().equalsIgnoreCase("authors")) {
-            authorsTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
-                Author author = (Author) n;
-                nameField.setText(author.getName());
-                addressField.setText(author.getAddress());
-                phoneField.setText(author.getPhone());
-            });
-        } else {
-            categoriesTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
-                Category category = (Category) n;
-                nameField.setText(category.getName());
-                addressField.setText("");
-                phoneField.setText("");
-            });
-        }
-
-        type.selectedToggleProperty().addListener((observable, o, n) -> {
-            RadioButton selectedRadioBtn = (RadioButton) type.getSelectedToggle();
-
-            if(selectedRadioBtn.getText().equalsIgnoreCase("authors")) {
-                nameField.setPromptText("Author name");
-                addressField.setVisible(true);
-                phoneField.setVisible(true);
-            } else {
-                nameField.setPromptText("Category name");
-                addressField.setVisible(false);
-                phoneField.setVisible(false);
-            }
-        });
+        authorsTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> showAuthor(n));
+        categoriesTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> showCategory(n));
     }
 
-    public void addAction(ActionEvent actionEvent) {
+    public void addAuthorAction(ActionEvent actionEvent) {
+
     }
 
-    public void updateAction(ActionEvent actionEvent) {
+    public void updateAuthorAction(ActionEvent actionEvent) {
     }
 
-    public void deleteAction(ActionEvent actionEvent) {
+    public void deleteAuthorAction(ActionEvent actionEvent) {
     }
 
+    public void addCategoryAction(ActionEvent actionEvent) {
+    }
+
+    public void updateCategoryAction(ActionEvent actionEvent) {
+    }
+
+    public void deleteCategoryAction(ActionEvent actionEvent) {
+    }
+
+    /**
+     * Event handler for the view-books button
+     * @param actionEvent
+     */
     public void viewBooksAction(ActionEvent actionEvent) throws BookstoreException {
         AdminController adminController = new AdminController(books, authors, categories, username);
         wm.changeWindow("admin", "Admin", adminController, actionEvent);
     }
 
+    /**
+     * Event handler for the logout button
+     * @param actionEvent
+     */
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
         wm.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
+    /**
+     * Event handler for the close button
+     * @param actionEvent
+     */
     public void closeAction(ActionEvent actionEvent) {
         wm.closeWindow(actionEvent);
+    }
+
+    private void showAuthor(Author author) {
+        authorNameField.setText(author.getName());
+        authorAddressArea.setText(author.getAddress());
+        authorPhoneField.setText(author.getPhone());
+    }
+
+    private void showCategory(Category category) {
+        categoryNameField.setText(category.getName());
     }
 }

@@ -1,0 +1,109 @@
+.table-view {
+    -fx-background-color: #add5a5;
+    -fx-background-radius: 3px;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .corner {
+    -fx-background-color: #8ac37e;
+}
+
+.table-view .column-header {
+    -fx-background-color:  #8ac37e;
+    -fx-background-radius: 3px 3px 0 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill:  white;
+}
+
+.table-row-cell: odd{
+    -fx-background-color: #ccecc6;
+}
+.table-row-cell: even{
+    -fx-background-color: #b9dbb2;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  #8ac37e;
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  #8ac37e;
+}
+
+#separator *.line {
+    -fx-border-width: 1px;
+    -fx-border-color: #75b06a;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width:90px;
+}
+
+.tab {
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+
+.tab-pane .tab {
+    -fx-background-color:  #8ac37e;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #6aa15f;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+}
+
+.text-area .content {
+	-fx-background-color: white;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+}
+
+.text-area:focused .content {
+	-fx-background-color: white;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+}

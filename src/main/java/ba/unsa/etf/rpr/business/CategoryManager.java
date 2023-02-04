@@ -30,6 +30,11 @@ public class CategoryManager {
         DaoFactory.categoryDao().delete(id);
     }
 
+    /**
+     * Validates the length of the category name
+     * @param name category name (min. 5 characters)
+     * @throws BookstoreException
+     */
     public void validate(String name) throws BookstoreException {
         if(name == null || name.length() < 5)
             throw new BookstoreException("Category name needs to be at least 5 characters.");

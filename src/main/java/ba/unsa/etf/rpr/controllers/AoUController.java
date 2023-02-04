@@ -12,103 +12,119 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Controller for the add/update a book page
+ * @author Muaz Sikiric
+ */
 public class AoUController {
+    // components
     public Label pageLabel;
-    public Spinner priceSpinner;
+    public Spinner<Double> priceSpinner;
     public TextField titleField;
     public DatePicker publishedPicker;
-    public ComboBox authorCbox;
-    public ComboBox categoryCbox;
+    public ComboBox<Author> authorCbox;
+    public ComboBox<Category> categoryCbox;
     public Button submitBtn;
     public Label errorMsgLabel;
-    private String addOrUpdate;
-    private List<Author> authors;
-    private List<Category> categories;
-    private Book book;
+
+    // managers
     private final WindowManager wm = new WindowManager();
     private final BookManager bookManager = new BookManager();
 
-    public AoUController(String addOrUpdate, List<Author> authors, List<Category> categories, Book book) {
-        this.addOrUpdate = addOrUpdate;
+    private String operation;
+    private List<Author> authors;
+    private List<Category> categories;
+    private Book book;
+
+    /**
+     * Constructor
+     * @param operation string that can represent "add" or "update" operation
+     * @param authors list of authors retrieved from the database
+     * @param categories list of categories retrieved from the database
+     * @param book book to add/update
+     */
+    public AoUController(String operation, List<Author> authors, List<Category> categories, Book book) throws BookstoreException {
+        if(!operation.equalsIgnoreCase("add") && !operation.equalsIgnoreCase("update"))
+            throw new BookstoreException("Invalid operation.");
+
+        this.operation = operation;
         this.authors = authors;
         this.categories = categories;
         this.book = book;
     }
 
-    @FXML
-    public void initialize() {
-        errorMsgLabel.setVisible(false);
-        pageLabel.setText(addOrUpdate + " a book");
-        authorCbox.getItems().addAll(authors.stream().map(author -> {
-            return author.getName().trim();
-        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        categoryCbox.getItems().addAll(categories.stream().map(category -> {
-            return category.getName().trim();
-        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
-        submitBtn.setText(addOrUpdate);
-        if(addOrUpdate.equalsIgnoreCase("add")) {
-            publishedPicker.setValue(LocalDate.now());
-            authorCbox.getSelectionModel().selectFirst();
-            categoryCbox.getSelectionModel().selectFirst();
-        } else if(addOrUpdate.equalsIgnoreCase("update")) {
-            if(book != null) {
-                titleField.setText(book.getTitle());
-                authorCbox.getSelectionModel().select(book.getAuthor().getName());
-                publishedPicker.setValue(book.getPublished());
-                priceSpinner.getValueFactory().setValue(book.getPrice());
-                categoryCbox.getSelectionModel().select(book.getCategory().getName());
-            } else {
-                System.out.println("Trying to update a book that was not selected.");
-            }
-        }
+    public Book getBook() {
+        return book;
     }
 
+    @FXML
+    public void initialize() {
+        pageLabel.setText(operation + " a book");
+        authorCbox.setItems(FXCollections.observableList(authors));
+        categoryCbox.setItems(FXCollections.observableList(categories));
+
+        showBook(book);
+    }
+
+    /**
+     * Event handler for the submit button
+     * @param actionEvent
+     */
     public void submitAction(ActionEvent actionEvent) {
         try {
-            validate(titleField, publishedPicker);
+            bookManager.validate(titleField.getText(), publishedPicker.getValue());
         } catch (BookstoreException e) {
             errorMsgLabel.setVisible(true);
             errorMsgLabel.setText(e.getMessage());
             return;
         }
-        this.book.setTitle(titleField.getText());
-        Author selectedAuthor = authors.stream().filter(author -> {
-            return author.getName().equals(authorCbox.getSelectionModel().getSelectedItem());
-        }).findAny().orElse(null);
-        this.book.setAuthor(selectedAuthor);
-        this.book.setPublished(publishedPicker.getValue());
-        this.book.setPrice((Double) priceSpinner.getValue());
-        Category selectedCategory = categories.stream().filter(category -> {
-            return category.getName().equals(categoryCbox.getSelectionModel().getSelectedItem());
-        }).findAny().orElse(null);
-        this.book.setCategory(selectedCategory);
+
+        setBook(titleField.getText(), authorCbox.getSelectionModel().getSelectedItem(),
+                publishedPicker.getValue(), priceSpinner.getValue(),
+                categoryCbox.getSelectionModel().getSelectedItem());
+
         try {
-            if(addOrUpdate.equalsIgnoreCase("add")) {
+            if(operation.equalsIgnoreCase("add"))
                 bookManager.add(book);
-            } else if(addOrUpdate.equalsIgnoreCase("update")) {
+            else if(operation.equalsIgnoreCase("update"))
                 bookManager.update(book);
-            }
+
             wm.closeWindow(actionEvent);
         } catch(BookstoreException e) {
+            errorMsgLabel.setVisible(true);
             errorMsgLabel.setText("There was an error while adding/updating a book.");
-            return;
         }
     }
 
+    /**
+     * Event handler for the cancel button
+     * @param actionEvent
+     */
     public void cancelAction(ActionEvent actionEvent) {
         wm.closeWindow(actionEvent);
     }
 
-    private void validate(TextField titleField, DatePicker publishedPicker) throws BookstoreException {
-        if(titleField.getText().length() < 10)
-            throw new BookstoreException("Title should be at least 10 characters.");
-        if(LocalDate.now().isBefore(publishedPicker.getValue()))
-            throw new BookstoreException("Publish date can not be in the future.");
+    private void setBook(String title, Author author, LocalDate published, Double price, Category category) {
+        book = new Book();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setPublished(published);
+        book.setPrice(price);
+        book.setCategory(category);
     }
 
-    public Book getBook() {
-        return book;
+    private void showBook(Book book) {
+        if(book == null) {
+            authorCbox.getSelectionModel().selectFirst();
+            publishedPicker.setValue(LocalDate.now());
+            categoryCbox.getSelectionModel().selectFirst();
+        } else {
+            titleField.setText(book.getTitle());
+            authorCbox.getSelectionModel().select(book.getAuthor());
+            publishedPicker.setValue(book.getPublished());
+            priceSpinner.getValueFactory().setValue(book.getPrice());
+            categoryCbox.getSelectionModel().select(book.getCategory());
+        }
     }
 }

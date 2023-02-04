@@ -36,6 +36,13 @@ public class UserManager {
         DaoFactory.userDao().delete(id);
     }
 
+    /**
+     * Validates username and password of a new user
+     * @param username username (min. 6 characters)
+     * @param password password (min. 8 characters)
+     * @param confirmPassword repeated password for confirmation (needs to match the first password)
+     * @throws UserException
+     */
     public void validateRegistration(String username, String password, String confirmPassword) throws UserException {
         if(username == null || username.length() < 6)
             throw new UserException("Username needs to be at least 6 characters.");

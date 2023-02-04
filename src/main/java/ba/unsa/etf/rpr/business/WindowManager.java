@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -15,7 +13,7 @@ import java.io.IOException;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 /**
- *
+ * Manages opening, closing and changing the application windows
  * @author Muaz Sikiric
  */
 public class WindowManager {
@@ -40,20 +38,20 @@ public class WindowManager {
      * @param actionEvent an event representing some type of action
      * @throws BookstoreException exception is thrown if a file with given name does not exist
      */
-    public Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) {
+    public Stage openWindow(String fxmlFileName, String title, Object controller, ActionEvent actionEvent) throws BookstoreException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFileName + ".fxml"));
         loader.setController(controller);
         Stage newStage = new Stage();
         try {
             newStage.setScene(new Scene(loader.load(), USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
+            newStage.setTitle("Bookstore | " + title);
+            newStage.setResizable(false);
+            newStage.show();
+            return newStage;
         } catch (IOException e) {
-            new Alert(Alert.AlertType.NONE, e.getMessage(), ButtonType.OK).show();
+            throw new BookstoreException(e.getMessage(), e);
         }
-        newStage.getIcons().add(new Image("/images/bookstore_icon.png"));
-        newStage.setTitle("Bookstore | " + title);
-        newStage.setResizable(false);
-        newStage.show();
-        return newStage;
     }
 
     /**

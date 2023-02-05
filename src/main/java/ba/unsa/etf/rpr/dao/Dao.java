@@ -10,34 +10,34 @@ import java.util.List;
  */
 public interface Dao<T> {
     /**
-     * Returns entity from database based on it's ID
+     * Returns entity from the database based on it's ID
      * @param id primary key of an entity
-     * @return entity from database
+     * @return entity
      */
     T getById(int id) throws BookstoreException;
 
     /**
-     * Adds an entity to database
+     * Adds an entity to the database
      * @param item item to add
      */
     T add(T item) throws BookstoreException;
 
     /**
-     * Updates an entity in database based on it's ID
+     * Updates an entity in the database based on it's ID
      * @param item primary key of an entity
-     * @return updated entity from database
+     * @return updated entity
      */
     T update(T item) throws BookstoreException;
 
     /**
-     * Deletes and entity from database base on it's ID
+     * Deletes an entity from the database base on it's ID
      * @param id primary key of an entity
      */
     void delete(int id) throws BookstoreException;
 
     /**
-     * Returns all entities from database
-     * @return List of all entities from database
+     * Returns all entities from the database
+     * @return list of all entities
      */
     List<T> getAll() throws BookstoreException;
 }

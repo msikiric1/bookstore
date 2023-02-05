@@ -16,39 +16,78 @@ public class UserManager {
         return DaoFactory.userDao().getUser(username, password);
     }
 
+    /**
+     * Adds a user to the database
+     * @param user user to add
+     * @return added user
+     */
     public User add(User user) throws BookstoreException {
         return DaoFactory.userDao().add(user);
     }
 
+    /**
+     * Returns a user from the database based on it's ID
+     * @param id primary key of a user
+     * @return user
+     */
     public User getById(int id) throws BookstoreException {
         return DaoFactory.userDao().getById(id);
     }
 
+    /**
+     * Returns all users from the database
+     * @return list of all users
+     */
     public List<User> getAll() throws BookstoreException {
         return DaoFactory.userDao().getAll();
     }
 
+    /**
+     * Updates a user in the database based on it's ID
+     * @param user user to update
+     * @return updated user
+     */
     public User update(User user) throws BookstoreException {
         return DaoFactory.userDao().update(user);
     }
 
+    /**
+     * Deletes a user from the database base on it's ID
+     * @param id primary key of a user
+     */
     public void delete(int id) throws BookstoreException {
         DaoFactory.userDao().delete(id);
     }
 
     /**
-     * Validates username and password of a new user
-     * @param username username (min. 6 characters)
-     * @param password password (min. 8 characters)
-     * @param confirmPassword repeated password for confirmation (needs to match the first password)
+     * Checks if the user registration details satisfy given constraints
+     * @param username username
+     * @param password password
+     * @param confirmPassword confirm password
      * @throws UserException
      */
     public void validateRegistration(String username, String password, String confirmPassword) throws UserException {
-        if(username == null || username.length() < 6)
-            throw new UserException("Username needs to be at least 6 characters.");
-        if(password == null || password.length() < 8)
-            throw new UserException("Password needs to be at least 8 characters.");
+        validateLogin(username, password);
+
         if(!password.equals(confirmPassword))
             throw new UserException("Passwords do not match.");
+    }
+
+    /**
+     * Checks if the user login details satisfy given constraints
+     * @param username username
+     * @param password password
+     * @throws UserException
+     */
+    public void validateLogin(String username, String password) throws UserException {
+        final int minUsernameLength = 6;
+        final int minPasswordLength = 8;
+
+        if(username.length() < minUsernameLength)
+            throw new UserException("Username needs to be at least " + minUsernameLength + " characters.");
+        if(password.length() < minPasswordLength)
+            throw new UserException("Password needs to be at least " + minPasswordLength + " characters.");
+        if(!password.matches("^(?=.*\\d)(?=.*[A-Z]).{8,}$"))
+            throw new UserException("Password needs to contain at least one uppercase letter and one number.");
     }
 }

@@ -4,6 +4,7 @@ import ba.unsa.etf.rpr.business.UserManager;
 import ba.unsa.etf.rpr.business.WindowManager;
 import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import ba.unsa.etf.rpr.exceptions.UserException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,12 +30,12 @@ public class LoginController {
     public void initialize() {
         Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
 
-        usernameField.textProperty().addListener((observableValue, o, n) -> {
+        usernameField.textProperty().addListener((observable, o, n) -> {
             if(n.trim().isEmpty()) setInvalidStyles(usernameField);
             else removeInvalidStyles(usernameField);
         });
 
-        passwordField.textProperty().addListener((observableValue, o, n) -> {
+        passwordField.textProperty().addListener((observable, o, n) -> {
             if(n.trim().isEmpty()) setInvalidStyles(passwordField);
             else removeInvalidStyles(passwordField);
         });
@@ -48,19 +49,21 @@ public class LoginController {
     public void loginAction(ActionEvent actionEvent) throws BookstoreException {
         User user;
         try {
+            userManager.validateLogin(usernameField.getText(), passwordField.getText());
             user = userManager.getUser(usernameField.getText(), passwordField.getText());
-        } catch(BookstoreException e) {
-            errorMsgLabel.setText("The username or password is incorrect.");
+        } catch(UserException | BookstoreException e) {
+            if(e instanceof UserException) errorMsgLabel.setText(e.getMessage());
+            else errorMsgLabel.setText("The username or password is incorrect.");
             errorMsgLabel.setVisible(true);
             return;
         }
 
         if(user.isAdmin()) {
             System.out.println("admin");
-            windowManager.changeWindow("admin", "Admin", new AdminController(usernameField.getText()), actionEvent);
+            windowManager.changeWindow("admin", "Admin", new AdminController(user.getUsername()), actionEvent);
         } else {
             System.out.println("user");
-            windowManager.changeWindow("main", "Main", new MainController(usernameField.getText()), actionEvent);
+            windowManager.changeWindow("main", "Main", new MainController(user.getUsername()), actionEvent);
         }
     }
 
@@ -82,8 +85,8 @@ public class LoginController {
     }
 
     /**
-     * Helper method for styling invalid text field
-     * @param textField text/password field that needs to be styled
+     * Applies "invalid" styles to text field
+     * @param textField invalid text/password field
      */
     private void setInvalidStyles(TextField textField) {
         textField.getStyleClass().removeAll("default");
@@ -91,8 +94,8 @@ public class LoginController {
     }
 
     /**
-     * Helper method for removing invalid styles from text field
-     * @param textField text/password field to remove the styles from
+     * Removes "invalid" styles from text field
+     * @param textField valid text/password field
      */
     private void removeInvalidStyles(TextField textField) {
         textField.getStyleClass().removeAll("invalid");

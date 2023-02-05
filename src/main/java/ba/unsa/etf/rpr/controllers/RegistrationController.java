@@ -11,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller for the registration page
+ * @author Muaz Sikiric
+ */
 public class RegistrationController {
     // components
     public TextField usernameField;
@@ -19,23 +23,23 @@ public class RegistrationController {
     public Label errorMsgLabel;
 
     // managers
-    private final WindowManager wm = new WindowManager();
+    private final WindowManager windowManager = new WindowManager();
     private final UserManager userManager = new UserManager();
 
     public void initialize() {
         Platform.runLater(() -> usernameField.requestFocus()); // needed to set focus on username field
 
-        usernameField.textProperty().addListener((observableValue, o, n) -> {
+        usernameField.textProperty().addListener((observable, o, n) -> {
             if(n.trim().isEmpty()) setInvalidStyles(usernameField);
             else removeInvalidStyles(usernameField);
         });
 
-        passwordField.textProperty().addListener((observableValue, o, n) -> {
+        passwordField.textProperty().addListener((observable, o, n) -> {
             if(n.trim().isEmpty()) setInvalidStyles(passwordField);
             else removeInvalidStyles(passwordField);
         });
 
-        confirmPasswordField.textProperty().addListener((observableValue, o, n) -> {
+        confirmPasswordField.textProperty().addListener((observable, o, n) -> {
             if(n.trim().isEmpty() || !n.equals(passwordField.getText())) setInvalidStyles(confirmPasswordField);
             else removeInvalidStyles(confirmPasswordField);
         });
@@ -52,18 +56,15 @@ public class RegistrationController {
         user.setPassword(passwordField.getText());
         try {
             userManager.validateRegistration(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
-            userManager.add(user);
+            user = userManager.add(user);
         } catch (UserException | BookstoreException e) {
-            if(e instanceof UserException)
-                errorMsgLabel.setText(e.getMessage());
-            else
-                errorMsgLabel.setText("User already exists.");
-
+            if(e instanceof UserException) errorMsgLabel.setText(e.getMessage());
+            else errorMsgLabel.setText("User already exists.");
             errorMsgLabel.setVisible(true);
             return;
         }
 
-        wm.changeWindow("main", "Main", new MainController(usernameField.getText()), actionEvent);
+        windowManager.changeWindow("main", "Main", new MainController(user.getUsername()), actionEvent);
     }
 
     /**
@@ -71,7 +72,7 @@ public class RegistrationController {
      * @param actionEvent
      */
     public void closeAction(ActionEvent actionEvent) {
-        wm.closeWindow(actionEvent);
+        windowManager.closeWindow(actionEvent);
     }
 
     /**
@@ -80,12 +81,12 @@ public class RegistrationController {
      * @throws BookstoreException
      */
     public void goToLoginAction(ActionEvent actionEvent) throws BookstoreException {
-        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
+        windowManager.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     /**
-     * Helper method for styling invalid text field
-     * @param textField text/password field that needs to be styled
+     * Applies "invalid" styles to text field
+     * @param textField invalid text/password field
      */
     private void setInvalidStyles(TextField textField) {
         textField.getStyleClass().removeAll("default");
@@ -93,8 +94,8 @@ public class RegistrationController {
     }
 
     /**
-     * Helper method for removing invalid styles from text field
-     * @param textField text/password field to remove the styles from
+     * Removes "invalid" styles from text field
+     * @param textField valid text/password field
      */
     private void removeInvalidStyles(TextField textField) {
         textField.getStyleClass().removeAll("invalid");

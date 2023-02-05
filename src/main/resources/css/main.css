@@ -1,0 +1,19 @@
+.list-view {
+    -fx-background-color: #add5a5;
+    -fx-background-radius: 3px;
+    -fx-border-color: #add5a5;
+    -fx-border-radius: 3px;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #b9dbb2;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: #ccecc6;
+}
+
+#separator *.line {
+    -fx-border-width: 1px;
+    -fx-border-color: #75b06a;
+}

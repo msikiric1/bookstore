@@ -15,28 +15,38 @@ import javafx.scene.control.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the main user page
+ * @author Muaz Sikiric
+ */
 public class MainController {
+
+    // components
     public Label usernameLabel;
     public TextField searchField;
     public ListView<Book> booksListView;
-    public ComboBox categoryCbox;
-    public ComboBox authorCbox;
+    public ComboBox<Category> categoryCbox;
+    public ComboBox<Author> authorCbox;
     public Label infoLabel;
-    private List<Book> books;
-    private List<Author> authors;
-    private List<Category> categories;
-    private String username;
-    private List<Book> filteredBooks;
-    private final WindowManager wm = new WindowManager();
-    private final BookManager bookManager = new BookManager();
-    private final AuthorManager authorManager = new AuthorManager();
-    private final CategoryManager categoryManager = new CategoryManager();
 
+    // managers
+    private final WindowManager windowManager = new WindowManager();
+
+    private final List<Book> books;
+    private final List<Author> authors;
+    private final List<Category> categories;
+    private final String username;
+    private List<Book> filteredBooks;
+
+    /**
+     * Constructor
+     * @param username username
+     */
     public MainController(String username) {
         try {
-            books = FXCollections.observableArrayList(bookManager.getAll());
-            authors = FXCollections.observableArrayList(authorManager.getAll());
-            categories = FXCollections.observableArrayList(categoryManager.getAll());
+            books = FXCollections.observableList(new BookManager().getAll());
+            authors = FXCollections.observableList(new AuthorManager().getAll());
+            categories = FXCollections.observableList(new CategoryManager().getAll());
         } catch(BookstoreException e) {
             System.out.println("Something's wrong with retrieving data from tables");
             throw new RuntimeException(e);
@@ -48,42 +58,39 @@ public class MainController {
     @FXML
     public void initialize() {
         usernameLabel.setText("Hello, " + username + "!");
-        booksListView.setItems(FXCollections.observableArrayList(filteredBooks));
-        authorCbox.getItems().add("");
-        authorCbox.getItems().addAll(authors.stream().map(author -> {
-            return author.getName().trim();
-        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        booksListView.setItems(FXCollections.observableList(filteredBooks));
+        authorCbox.getItems().add(null);
+        authorCbox.getItems().addAll(authors);
         authorCbox.getSelectionModel().selectFirst();
-        categoryCbox.getItems().add("");
-        categoryCbox.getItems().addAll(categories.stream().map(category -> {
-            return category.getName().trim();
-        }).collect(Collectors.toCollection(FXCollections::observableArrayList)));
+        categoryCbox.getItems().add(null);
+        categoryCbox.getItems().addAll(categories);
         categoryCbox.getSelectionModel().selectFirst();
 
-        searchField.textProperty().addListener((observable, o, n) -> {
-            searchBooks();
-            refresh(filteredBooks);
-        });
-
-        categoryCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
-            searchBooks();
-            refresh(filteredBooks);
-        });
-
-        authorCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> {
-            searchBooks();
-            refresh(filteredBooks);
-        });
+        searchField.textProperty().addListener((observable, o, n) -> refreshBooks());
+        categoryCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> refreshBooks());
+        authorCbox.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> refreshBooks());
     }
 
+    /**
+     * Event handler for the logout button
+     * @param actionEvent
+     */
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
+        windowManager.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
+    /**
+     * Event handler for the close button
+     * @param actionEvent
+     */
     public void closeAction(ActionEvent actionEvent) {
-        wm.closeWindow(actionEvent);
+        windowManager.closeWindow(actionEvent);
     }
 
+    /**
+     * Event handler for the book-details button
+     * @param actionEvent
+     */
     public void detailsAction(ActionEvent actionEvent) throws BookstoreException {
         Book selectedBook = filteredBooks.stream().filter(book -> {
             if(booksListView.getSelectionModel().getSelectedItem() == null) return false;
@@ -91,9 +98,14 @@ public class MainController {
         }).findAny().orElse(null);
 
         if (selectedBook != null)
-            wm.openWindow("details", "Book details", new DetailsController(selectedBook), actionEvent);
+            windowManager.openWindow("details", "Book details", new DetailsController(selectedBook), actionEvent);
         else
-            infoLabel.setText("Info: You need to select a book that you want to view.");
+            infoLabel.setText("You need to select a book that you want to view.");
+    }
+
+    private void refreshBooks() {
+        searchBooks();
+        booksListView.setItems(FXCollections.observableList(filteredBooks));
     }
 
     private void searchBooks() {
@@ -103,13 +115,9 @@ public class MainController {
         String searchAuthor = authorCbox.getSelectionModel().getSelectedItem() != null ?
                 authorCbox.getSelectionModel().getSelectedItem().toString() : "";
         this.filteredBooks = books.stream().filter(book -> {
-           return book.getTitle().toLowerCase().contains(searchString) &&
-                   book.getCategory().getName().contains(searchCategory) &&
-                   book.getAuthor().getName().contains(searchAuthor);
+            return book.getTitle().toLowerCase().contains(searchString) &&
+                    book.getCategory().getName().contains(searchCategory) &&
+                    book.getAuthor().getName().contains(searchAuthor);
         }).collect(Collectors.toCollection(FXCollections::observableArrayList));
-    }
-
-    private void refresh(List<Book> books) {
-        booksListView.setItems(FXCollections.observableArrayList(books));
     }
 }

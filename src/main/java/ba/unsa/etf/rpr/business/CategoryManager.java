@@ -11,32 +11,58 @@ import java.util.List;
  * @author Muaz Sikiric
  */
 public class CategoryManager {
+    /**
+     * Adds a category to the database
+     * @param category category to add
+     * @return added category
+     */
     public Category add(Category category) throws BookstoreException {
         return DaoFactory.categoryDao().add(category);
     }
+
+    /**
+     * Returns all categories from the database
+     * @return list of all categories
+     */
     public List<Category> getAll() throws BookstoreException {
         return DaoFactory.categoryDao().getAll();
     }
 
+    /**
+     * Returns a category from the database based on it's ID
+     * @param id primary key of a category
+     * @return category
+     */
     public Category getById(int id) throws BookstoreException {
         return DaoFactory.categoryDao().getById(id);
     }
 
+    /**
+     * Updates a category in the database based on it's ID
+     * @param category category to update
+     * @return updated category
+     */
     public Category update(Category category) throws BookstoreException {
         return DaoFactory.categoryDao().update(category);
     }
 
+    /**
+     * Deletes a category from the database base on it's ID
+     * @param id primary key of a category
+     */
     public void delete(int id) throws BookstoreException {
         DaoFactory.categoryDao().delete(id);
     }
 
     /**
-     * Validates the length of the category name
-     * @param category book category
+     * Checks if the category satisfies given constraints
+     * @param category category
      * @throws BookstoreException
      */
     public void validate(Category category) throws BookstoreException {
-        if(category.getName() == null || category.getName().length() < 5)
-            throw new BookstoreException("Category name needs to be at least 5 characters.");
+        final int minNameLength = 5;
+
+        if(category.getName().length() < minNameLength)
+            throw new BookstoreException("Name needs to be at least " + minNameLength + " characters.");
     }
 }

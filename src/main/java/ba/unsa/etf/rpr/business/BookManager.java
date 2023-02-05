@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class BookManager {
     /**
-     * Returns all book from the database
-     * @return list of books
+     * Returns all books from the database
+     * @return list of all books
      */
     public List<Book> getAll() throws BookstoreException {
         return DaoFactory.bookDao().getAll();
@@ -32,6 +32,7 @@ public class BookManager {
     /**
      * Adds a book to the database
      * @param book book to add
+     * @return added book
      */
     public Book add(Book book) throws BookstoreException {
         return DaoFactory.bookDao().add(book);
@@ -39,7 +40,7 @@ public class BookManager {
 
     /**
      * Updates a book in the database based on it's ID
-     * @param book primary key of a book
+     * @param book book to update
      * @return updated book
      */
     public Book update(Book book) throws BookstoreException {
@@ -60,11 +61,15 @@ public class BookManager {
      * @throws BookstoreException
      */
     public void validate(Book book) throws BookstoreException {
-        if(book.getTitle().length() < 4)
-            throw new BookstoreException("Title needs to have at least 4 characters.");
+        final int minTitleLength = 4;
+        final int minPrice = 5;
+        final int maxPrice = 50;
+
+        if(book.getTitle().length() < minTitleLength)
+            throw new BookstoreException("Title needs to have at least " + minTitleLength + " characters.");
         if(LocalDate.now().isBefore(book.getPublished()))
             throw new BookstoreException("Publish date can not be in the future.");
-        if(book.getPrice() < 5 || book.getPrice() > 50)
-            throw new BookstoreException("Price needs to be between $5 and $50 (inclusive).");
+        if(book.getPrice() < minPrice || book.getPrice() > maxPrice)
+            throw new BookstoreException("Price needs to be between $" + minPrice + " and $" + maxPrice + " (inclusive).");
     }
 }

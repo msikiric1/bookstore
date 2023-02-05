@@ -11,34 +11,67 @@ import java.util.List;
  * @author Muaz Sikiric
  */
 public class AuthorManager {
+    /**
+     * Adds an author to the database
+     * @param author author to add
+     * @return added author
+     */
     public Author add(Author author) throws BookstoreException {
         return DaoFactory.authorDao().add(author);
     }
 
+    /**
+     * Returns all authors from the database
+     * @return list of all authors
+     */
     public List<Author> getAll() throws BookstoreException {
         return DaoFactory.authorDao().getAll();
     }
 
+    /**
+     * Returns an author from the database based on it's ID
+     * @param id primary key of an author
+     * @return author
+     */
     public Author getById(int id) throws BookstoreException {
         return DaoFactory.authorDao().getById(id);
     }
 
+    /**
+     * Updates an author in the database based on it's ID
+     * @param author author to update
+     * @return updated author
+     */
     public Author update(Author author) throws BookstoreException {
         return DaoFactory.authorDao().update(author);
     }
 
+    /**
+     * Deletes an author from the database base on it's ID
+     * @param id primary key of an author
+     */
     public void delete(int id) throws BookstoreException {
         DaoFactory.authorDao().delete(id);
     }
 
+    /**
+     * Checks if the author satisfies given constraints
+     * @param author author
+     * @throws BookstoreException
+     */
     public void validate(Author author) throws BookstoreException {
-        if(author.getName() == null || author.getName().length() < 3)
-            throw new BookstoreException("Author name needs to be at least 3 characters.");
-        if(author.getAddress() == null || author.getAddress().length() < 12)
-            throw new BookstoreException("Author address needs to be at least 12 characters.");
-        if(author.getPhone() == null || !author.getPhone().matches("[0-9]+"))
-            throw new BookstoreException("Author phone number should only contain numbers.");
-        if(author.getPhone().length() < 7 || author.getPhone().length() > 15)
-            throw new BookstoreException("Author phone number needs to have 7-15 digits.");
+        final int minNameLength = 3;
+        final int minAddressLength = 12;
+        final int minPhoneLength = 7;
+        final int maxPhoneLength = 15;
+
+        if(author.getName().length() < minNameLength)
+            throw new BookstoreException("Name needs to be at least " + minNameLength + " characters.");
+        if(author.getAddress().length() < minAddressLength)
+            throw new BookstoreException("Address needs to be at least " + minAddressLength + " characters.");
+        if(author.getPhone().length() < minPhoneLength || author.getPhone().length() > maxPhoneLength)
+            throw new BookstoreException("Phone number needs to be between " + minPhoneLength + " and " + maxPhoneLength + " digits (inclusive).");
+        if(!author.getPhone().matches("[0-9]+"))
+            throw new BookstoreException("Phone number should only contain numbers.");
     }
 }

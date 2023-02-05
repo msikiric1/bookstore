@@ -18,13 +18,14 @@ public interface Dao<T> {
 
     /**
      * Adds an entity to the database
-     * @param item item to add
+     * @param item entity to add
+     * @return added entity
      */
     T add(T item) throws BookstoreException;
 
     /**
      * Updates an entity in the database based on it's ID
-     * @param item primary key of an entity
+     * @param item entity to update
      * @return updated entity
      */
     T update(T item) throws BookstoreException;

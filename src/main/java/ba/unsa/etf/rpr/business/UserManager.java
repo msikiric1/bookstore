@@ -5,6 +5,15 @@ import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import ba.unsa.etf.rpr.exceptions.UserException;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.List;
 
 /**
@@ -89,5 +98,20 @@ public class UserManager {
             throw new UserException("Password needs to be at least " + minPasswordLength + " characters.");
         if(!password.matches("^(?=.*\\d)(?=.*[A-Z]).{8,}$"))
             throw new UserException("Password needs to contain at least one uppercase letter and one number.");
+    }
+
+    /**
+     * Hashes the given password
+     * @param password password to hash
+     * @return hashed password
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    public String hashPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        String salt = "maven";
+        md.update(salt.getBytes());
+        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        return new BigInteger(1, hashedPassword).toString(16);
     }
 }

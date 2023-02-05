@@ -11,6 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * Controller for the registration page
  * @author Muaz Sikiric
@@ -52,9 +55,10 @@ public class RegistrationController {
      */
     public void registerAction(ActionEvent actionEvent) throws BookstoreException {
         User user = new User();
-        user.setUsername(usernameField.getText());
-        user.setPassword(passwordField.getText());
         try {
+            user.setUsername(usernameField.getText());
+            user.setPassword(userManager.hashPassword(passwordField.getText()));
+
             userManager.validateRegistration(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
             user = userManager.add(user);
         } catch (UserException | BookstoreException e) {
@@ -62,6 +66,8 @@ public class RegistrationController {
             else errorMsgLabel.setText("User already exists.");
             errorMsgLabel.setVisible(true);
             return;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
 
         windowManager.changeWindow("main", "Main", new MainController(user.getUsername()), actionEvent);

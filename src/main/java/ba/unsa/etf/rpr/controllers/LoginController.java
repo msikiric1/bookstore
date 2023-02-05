@@ -12,6 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * Controller for the login page
  * @author Muaz Sikiric
@@ -50,12 +53,14 @@ public class LoginController {
         User user;
         try {
             userManager.validateLogin(usernameField.getText(), passwordField.getText());
-            user = userManager.getUser(usernameField.getText(), passwordField.getText());
+            user = userManager.getUser(usernameField.getText(), userManager.hashPassword(passwordField.getText()));
         } catch(UserException | BookstoreException e) {
             if(e instanceof UserException) errorMsgLabel.setText(e.getMessage());
             else errorMsgLabel.setText("The username or password is incorrect.");
             errorMsgLabel.setVisible(true);
             return;
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
         }
 
         if(user.isAdmin()) {

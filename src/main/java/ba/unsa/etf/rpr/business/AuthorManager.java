@@ -17,6 +17,7 @@ public class AuthorManager {
      * @return added author
      */
     public Author add(Author author) throws BookstoreException {
+        validate(author);
         return DaoFactory.authorDao().add(author);
     }
 
@@ -43,6 +44,7 @@ public class AuthorManager {
      * @return updated author
      */
     public Author update(Author author) throws BookstoreException {
+        validate(author);
         return DaoFactory.authorDao().update(author);
     }
 

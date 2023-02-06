@@ -17,6 +17,7 @@ public class CategoryManager {
      * @return added category
      */
     public Category add(Category category) throws BookstoreException {
+        validate(category);
         return DaoFactory.categoryDao().add(category);
     }
 
@@ -43,6 +44,7 @@ public class CategoryManager {
      * @return updated category
      */
     public Category update(Category category) throws BookstoreException {
+        validate(category);
         return DaoFactory.categoryDao().update(category);
     }
 

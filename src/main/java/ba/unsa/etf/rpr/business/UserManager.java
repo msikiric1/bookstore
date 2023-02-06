@@ -5,15 +5,11 @@ import ba.unsa.etf.rpr.domain.User;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import ba.unsa.etf.rpr.exceptions.UserException;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.List;
 
 /**

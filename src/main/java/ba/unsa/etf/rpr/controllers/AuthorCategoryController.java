@@ -36,7 +36,7 @@ public class AuthorCategoryController {
     public Label usernameLabel;
 
     // managers
-    private final WindowManager wm = new WindowManager();
+    private final WindowManager windowManager = new WindowManager();
     private final AuthorManager authorManager = new AuthorManager();
     private final CategoryManager categoryManager = new CategoryManager();
 
@@ -67,28 +67,38 @@ public class AuthorCategoryController {
         authorsColName.setCellValueFactory(new PropertyValueFactory<>("name"));
         authorsColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         authorsColPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        authorsTable.setItems(FXCollections.observableArrayList(authors));
+        authorsTable.setItems(FXCollections.observableList(authors));
 
         categoriesColId.setCellValueFactory(new PropertyValueFactory<>("id"));
         categoriesColName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        categoriesTable.setItems(FXCollections.observableArrayList(categories));
+        categoriesTable.setItems(FXCollections.observableList(categories));
 
         authorsTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> showAuthor(n));
         categoriesTable.getSelectionModel().selectedItemProperty().addListener((observable, o, n) -> showCategory(n));
     }
 
+    /**
+     * Event handler for the add-author button
+     * @param actionEvent
+     */
     public void addAuthorAction(ActionEvent actionEvent) {
         Author newAuthor = setAuthor(authorNameField.getText(), authorAddressArea.getText(), authorPhoneField.getText());
         try {
-            authorManager.validate(newAuthor.getName(), newAuthor.getAddress(), newAuthor.getPhone());
             authorManager.add(newAuthor);
             authors.add(newAuthor);
-            authorsTable.refresh();
+            refreshAuthors();
+            infoLabel.setText("Added an author successfully.");
         } catch (BookstoreException e) {
+            if(e.getMessage().contains("UNIQUE"))
+                infoLabel.setText("Phone number needs to be unique.");
             infoLabel.setText(e.getMessage());
         }
     }
 
+    /**
+     * Event handler for the update-author button
+     * @param actionEvent
+     */
     public void updateAuthorAction(ActionEvent actionEvent) {
         Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
         if(selectedAuthor == null) {
@@ -98,15 +108,22 @@ public class AuthorCategoryController {
 
         Author updatedAuthor = setAuthor(authorNameField.getText(), authorAddressArea.getText(), authorPhoneField.getText());
         try {
-            authorManager.validate(selectedAuthor.getName(), selectedAuthor.getAddress(), selectedAuthor.getPhone());
-            authorManager.update(selectedAuthor);
+            authorManager.update(updatedAuthor);
+            updatedAuthor.setId(selectedAuthor.getId());
             authors.set(authors.indexOf(selectedAuthor), updatedAuthor);
-            authorsTable.refresh();
+            refreshAuthors();
+            infoLabel.setText("Updated an author successfully.");
         } catch (BookstoreException e) {
+            if(e.getMessage().contains("UNIQUE"))
+                infoLabel.setText("Phone number needs to be unique.");
             infoLabel.setText(e.getMessage());
         }
     }
 
+    /**
+     * Event handler for the delete-author button
+     * @param actionEvent
+     */
     public void deleteAuthorAction(ActionEvent actionEvent) {
         Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
         if(selectedAuthor == null) {
@@ -117,25 +134,33 @@ public class AuthorCategoryController {
         try {
             authorManager.delete(selectedAuthor.getId());
             authors.remove(selectedAuthor);
-            authorsTable.refresh();
+            refreshAuthors();
             infoLabel.setText("Deleted an author successfully.");
         } catch(BookstoreException e) {
             infoLabel.setText(e.getMessage());
         }
     }
 
+    /**
+     * Event handler for the add-category button
+     * @param actionEvent
+     */
     public void addCategoryAction(ActionEvent actionEvent) {
         Category newCategory = setCategory(categoryNameField.getText());
         try {
-            categoryManager.validate(newCategory.getName());
             categoryManager.add(newCategory);
             categories.add(newCategory);
-            categoriesTable.refresh();
+            refreshCategories();
+            infoLabel.setText("Added a category successfully.");
         } catch(BookstoreException e) {
             infoLabel.setText(e.getMessage());
         }
     }
 
+    /**
+     * Event handler for the update-category button
+     * @param actionEvent
+     */
     public void updateCategoryAction(ActionEvent actionEvent) {
         Category selectedCategory = categoriesTable.getSelectionModel().getSelectedItem();
         if(selectedCategory == null) {
@@ -145,27 +170,32 @@ public class AuthorCategoryController {
 
         Category updatedCategory = setCategory(categoryNameField.getText());
         try {
-            categoryManager.validate(selectedCategory.getName());
-            categoryManager.update(selectedCategory);
+            categoryManager.update(updatedCategory);
+            updatedCategory.setId(selectedCategory.getId());
             categories.set(categories.indexOf(selectedCategory), updatedCategory);
-            categoriesTable.refresh();
+            refreshCategories();
+            infoLabel.setText("Updated a category successfully.");
         } catch (BookstoreException e) {
             infoLabel.setText(e.getMessage());
         }
     }
 
+    /**
+     * Event handler for the delete-category button
+     * @param actionEvent
+     */
     public void deleteCategoryAction(ActionEvent actionEvent) {
-        Author selectedAuthor = authorsTable.getSelectionModel().getSelectedItem();
-        if(selectedAuthor == null) {
-            infoLabel.setText("You need to select an author that you want to delete.");
+        Category selectedCategory = categoriesTable.getSelectionModel().getSelectedItem();
+        if(selectedCategory == null) {
+            infoLabel.setText("You need to select a category that you want to delete.");
             return;
         }
 
         try {
-            authorManager.delete(selectedAuthor.getId());
-            authors.remove(selectedAuthor);
-            authorsTable.refresh();
-            infoLabel.setText("Deleted an author successfully.");
+            categoryManager.delete(selectedCategory.getId());
+            categories.remove(selectedCategory);
+            refreshCategories();
+            infoLabel.setText("Deleted a category successfully.");
         } catch(BookstoreException e) {
             infoLabel.setText(e.getMessage());
         }
@@ -177,7 +207,7 @@ public class AuthorCategoryController {
      */
     public void viewBooksAction(ActionEvent actionEvent) throws BookstoreException {
         AdminController adminController = new AdminController(books, authors, categories, username);
-        wm.changeWindow("admin", "Admin", adminController, actionEvent);
+        windowManager.changeWindow("admin", "Admin", adminController, actionEvent);
     }
 
     /**
@@ -185,7 +215,7 @@ public class AuthorCategoryController {
      * @param actionEvent
      */
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
+        windowManager.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     /**
@@ -193,10 +223,14 @@ public class AuthorCategoryController {
      * @param actionEvent
      */
     public void closeAction(ActionEvent actionEvent) {
-        wm.closeWindow(actionEvent);
+        windowManager.closeWindow(actionEvent);
     }
 
     private void showAuthor(Author author) {
+        if(author == null) {
+            infoLabel.setText("You need to select an author that you want to update.");
+            return;
+        }
         authorNameField.setText(author.getName());
         authorAddressArea.setText(author.getAddress());
         authorPhoneField.setText(author.getPhone());
@@ -218,5 +252,17 @@ public class AuthorCategoryController {
         Category category = new Category();
         category.setName(name);
         return category;
+    }
+
+    private void refreshAuthors() {
+        authorsTable.setItems(FXCollections.observableList(authors));
+        authorNameField.setText("");
+        authorAddressArea.setText("");
+        authorPhoneField.setText("");
+    }
+
+    private void refreshCategories() {
+        categoriesTable.setItems(FXCollections.observableList(categories));
+        categoryNameField.setText("");
     }
 }

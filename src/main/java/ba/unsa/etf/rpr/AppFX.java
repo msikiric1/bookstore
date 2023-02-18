@@ -1,6 +1,5 @@
 package ba.unsa.etf.rpr;
 
-import ba.unsa.etf.rpr.controllers.HomeController;
 import ba.unsa.etf.rpr.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +9,10 @@ import javafx.stage.Stage;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
+/**
+ * GUI (graphical user interface)
+ * @author Muaz Sikiric
+ */
 public class AppFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {

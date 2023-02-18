@@ -22,34 +22,30 @@ public abstract class AbstractDao<T extends Identifiable> implements Dao<T> {
      */
     public AbstractDao(String table) {
         this.table = table;
-        if(connection == null) {
-            Properties prop = new Properties();
-            try {
-                prop.load(ClassLoader.getSystemResource("config.properties").openStream());
-                String url = prop.getProperty("db.url");
-                String username = prop.getProperty("db.username");
-                String password = prop.getProperty("db.password");
-                AbstractDao.connection = DriverManager.getConnection(url, username, password);
-            } catch (IOException | SQLException e) {
-                System.out.println("Greska prilikom povezivanja na bazu podataka:");
-                System.out.println(e.getMessage());
-                System.exit(0);
-            }
+        Properties prop = new Properties();
+        try {
+            prop.load(ClassLoader.getSystemResource("config.properties").openStream());
+            String url = prop.getProperty("db.url");
+            String username = prop.getProperty("db.username");
+            String password = prop.getProperty("db.password");
+            AbstractDao.connection = DriverManager.getConnection(url, username, password);
+        } catch (IOException | SQLException e) {
+            System.out.println("Greska prilikom povezivanja na bazu podataka:");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        } finally {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }));
         }
     }
 
     public static Connection getConnection() {
         return AbstractDao.connection;
-    }
-
-    public static void closeConnection() throws BookstoreException {
-        if(connection == null) return;
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new BookstoreException(e.getMessage(), e);
-        }
     }
 
     public String getTable() {

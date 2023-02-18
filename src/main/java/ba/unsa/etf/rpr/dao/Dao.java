@@ -31,7 +31,7 @@ public interface Dao<T> {
     T update(T item) throws BookstoreException;
 
     /**
-     * Deletes an entity from the database base on it's ID
+     * Deletes an entity from the database based on it's ID
      * @param id primary key of an entity
      */
     void delete(int id) throws BookstoreException;

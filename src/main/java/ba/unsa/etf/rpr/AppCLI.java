@@ -3,7 +3,10 @@ package ba.unsa.etf.rpr;
 import ba.unsa.etf.rpr.business.AuthorManager;
 import ba.unsa.etf.rpr.business.BookManager;
 import ba.unsa.etf.rpr.business.CategoryManager;
+import ba.unsa.etf.rpr.domain.Author;
+import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
+import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
 import org.apache.commons.cli.*;
 
@@ -23,6 +26,11 @@ public class AppCLI {
     private static final Option addBook = new Option("ab", "add-book", false, "Adds a new book");
     private static final Option updateBook = new Option("ub", "update-book", true, "Updates a book");
     private static final Option deleteBook = new Option("db", "delete-book", true, "Deletes a book");
+    private static final Option getAuthor = new Option("ga", "get-author", true, "Outputs an author");
+    private static final Option getAuthors = new Option("gas", "get-authors", false, "Outputs all authors");
+    private static final Option addAuthor = new Option("aa", "add-author", false, "Adds a new author");
+    private static final Option updateAuthor = new Option("ua", "update-author", true, "Updates an author");
+    private static final Option deleteAuthor = new Option("da", "delete-author", true, "Deletes an author");
 
     // managers
     private static final BookManager bookManager = new BookManager();
@@ -42,7 +50,7 @@ public class AppCLI {
                 showAllBooks();
             } else if (commandLine.hasOption("get-book")) {
                 int bookId = Integer.parseInt(commandLine.getOptionValue("get-book"));
-                System.out.println(bookManager.getById(bookId));
+                showBook(bookManager.getById(bookId));
             } else if (commandLine.hasOption("add-book")) {
                 Book book = inputBookDetails(null);
                 bookManager.add(book);
@@ -56,6 +64,42 @@ public class AppCLI {
                 int bookId = Integer.parseInt(commandLine.getOptionValue("delete-book"));
                 bookManager.delete(bookId);
                 System.out.println("Deleted a book successfully.");
+            } else if (commandLine.hasOption("get-authors")) {
+                showAllAuthors();
+            } else if (commandLine.hasOption("get-author")) {
+                int authorId = Integer.parseInt(commandLine.getOptionValue("get-author"));
+                showAuthor(authorManager.getById(authorId));
+            } else if (commandLine.hasOption("add-author")) {
+                Author author = inputAuthorDetails(null);
+                authorManager.add(author);
+                System.out.println("Added a new author successfully.");
+            } else if (commandLine.hasOption("update-author")) {
+                int authorId = Integer.parseInt(commandLine.getOptionValue("update-author"));
+                Author author = inputAuthorDetails(authorManager.getById(authorId));
+                authorManager.update(author);
+                System.out.println("Updated an author successfully.");
+            } else if (commandLine.hasOption("delete-author")) {
+                int authorId = Integer.parseInt(commandLine.getOptionValue("delete-author"));
+                authorManager.delete(authorId);
+                System.out.println("Deleted an author successfully.");
+            } else if (commandLine.hasOption("get-categories")) {
+                showAllCategories();
+            } else if (commandLine.hasOption("get-category")) {
+                int categoryId = Integer.parseInt(commandLine.getOptionValue("get-category"));
+                showCategory(categoryManager.getById(categoryId));
+            } else if (commandLine.hasOption("add-category")) {
+                Category category = inputCategoryDetails(null);
+                categoryManager.add(category);
+                System.out.println("Added a new category successfully.");
+            } else if (commandLine.hasOption("update-category")) {
+                int categoryId = Integer.parseInt(commandLine.getOptionValue("update-category"));
+                Category category = inputCategoryDetails(categoryManager.getById(categoryId));
+                categoryManager.update(category);
+                System.out.println("Updated a category successfully.");
+            } else if (commandLine.hasOption("delete-category")) {
+                int categoryId = Integer.parseInt(commandLine.getOptionValue("delete-category"));
+                categoryManager.delete(categoryId);
+                System.out.println("Deleted a category successfully.");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -83,6 +127,44 @@ public class AppCLI {
         return new Options().addOption(getBook).addOption(getBooks)
                 .addOption(addBook).addOption(updateBook)
                 .addOption(deleteBook);
+    }
+
+    private static Category inputCategoryDetails(Category defaultCategory) {
+        Category category = defaultCategory == null ? new Category() : defaultCategory;
+        Scanner in = new Scanner(System.in);
+
+        try {
+            System.out.print("Category name: ");
+            category.setName(in.nextLine());
+
+            categoryManager.validate(category);
+        } catch(Exception e) {
+            System.out.println(e.getMessage() + " Try again!");
+            return inputCategoryDetails(defaultCategory);
+        }
+        return category;
+    }
+
+    private static Author inputAuthorDetails(Author defaultAuthor) {
+        Author author = defaultAuthor == null ? new Author() : defaultAuthor;
+        Scanner in = new Scanner(System.in);
+
+        try {
+            System.out.print("Author name: ");
+            author.setName(in.nextLine());
+
+            System.out.print("Author address: ");
+            author.setAddress(in.nextLine());
+
+            System.out.print("Author phone: ");
+            author.setPhone(in.nextLine());
+
+            authorManager.validate(author);
+        } catch(Exception e) {
+            System.out.println(e.getMessage() + " Try again!");
+            return inputAuthorDetails(defaultAuthor);
+        }
+        return author;
     }
 
     /**
@@ -131,6 +213,14 @@ public class AppCLI {
         });
     }
 
+
+    private static void showCategory(Category category) {
+        System.out.println("Category details: ");
+        System.out.println(" - id: " + category.getId());
+        System.out.println(" - name: " + category.getName());
+    }
+
+
     /**
      * Prints out all authors
      * @throws BookstoreException
@@ -142,6 +232,14 @@ public class AppCLI {
         });
     }
 
+    private static void showAuthor(Author author) {
+        System.out.println("Author details: ");
+        System.out.println("- id: " + author.getId());
+        System.out.println(" - name: " + author.getName());
+        System.out.println(" - address: " + author.getAddress());
+        System.out.println(" - phone: " + author.getPhone());
+    }
+
     /**
      * Prints out all books
      * @throws BookstoreException
@@ -151,5 +249,15 @@ public class AppCLI {
         bookManager.getAll().forEach(book -> {
             System.out.println(" - " + book.getTitle() + " by " + book.getAuthor().getName() + " in '" + book.getCategory().getName() + "' category (id = " + book.getId() + ")");
         });
+    }
+
+    private static void showBook(Book book) {
+        System.out.println("Book details: ");
+        System.out.println(" - id: " + book.getId());
+        System.out.println(" - title: " + book.getTitle());
+        System.out.println(" - author: " + book.getAuthor().getName());
+        System.out.println(" - publish date: " + book.getPublished().toString());
+        System.out.println(" - price: " + book.getPrice());
+        System.out.println(" - category: " + book.getCategory().getName());
     }
 }

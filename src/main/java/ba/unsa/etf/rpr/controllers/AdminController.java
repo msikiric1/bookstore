@@ -16,32 +16,32 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
- *
+ * Controller for the books admin page
  * @author Muaz Sikiric
  */
 public class AdminController {
     // components
-    public TableView booksTable;
-    public TableColumn booksColId;
-    public TableColumn booksColTitle;
-    public TableColumn booksColPublished;
-    public TableColumn booksColPrice;
+    public TableView<Book> booksTable;
+    public TableColumn<Book, Integer> booksColId;
+    public TableColumn<Book, String> booksColTitle;
+    public TableColumn<Book, LocalDate> booksColPublished;
+    public TableColumn<Book, Double> booksColPrice;
     public Label usernameLabel;
     public Label infoLabel;
 
     // managers
-    private final WindowManager wm = new WindowManager();
+    private final WindowManager windowManager = new WindowManager();
     private final BookManager bookManager = new BookManager();
-    private final AuthorManager authorManager = new AuthorManager();
-    private final CategoryManager categoryManager = new CategoryManager();
 
-    private List<Book> books;
-    private List<Author> authors;
-    private List<Category> categories;
-    private String username;
+    private final List<Book> books;
+    private final List<Author> authors;
+    private final List<Category> categories;
+    private final String username;
 
     /**
      * Constructor
@@ -63,11 +63,11 @@ public class AdminController {
      */
     public AdminController(String username) {
         try {
-            this.books = FXCollections.observableArrayList(bookManager.getAll());
-            this.authors = FXCollections.observableArrayList(authorManager.getAll());
-            this.categories = FXCollections.observableArrayList(categoryManager.getAll());
+            this.books = FXCollections.observableList(bookManager.getAll());
+            this.authors = FXCollections.observableList(new AuthorManager().getAll());
+            this.categories = FXCollections.observableList(new CategoryManager().getAll());
         } catch(BookstoreException e) {
-            System.out.println("Something's wrong with retrieving data from tables");
+            System.out.println("Something's wrong with retrieving data from tables.");
             throw new RuntimeException(e);
         }
         this.username = username;
@@ -89,7 +89,7 @@ public class AdminController {
      * @param actionEvent
      */
     public void logoutAction(ActionEvent actionEvent) throws BookstoreException {
-        wm.changeWindow("login", "Login", new LoginController(), actionEvent);
+        windowManager.changeWindow("login", "Login", new LoginController(), actionEvent);
     }
 
     /**
@@ -97,7 +97,7 @@ public class AdminController {
      * @param actionEvent
      */
     public void closeAction(ActionEvent actionEvent) {
-        wm.closeWindow(actionEvent);
+        windowManager.closeWindow(actionEvent);
     }
 
     /**
@@ -106,55 +106,67 @@ public class AdminController {
      */
     public void viewACAction(ActionEvent actionEvent) throws BookstoreException {
         AuthorCategoryController acController = new AuthorCategoryController(authors, categories, books, username);
-        wm.changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
+        windowManager.changeWindow("authorcategory", "Authors & Categories", acController, actionEvent);
     }
 
+    /**
+     * Event handler for the add-book button
+     * @param actionEvent
+     */
     public void addAction(ActionEvent actionEvent) throws BookstoreException {
-        AoUController aouController = new AoUController("Add", authors, categories, new Book());
-        Stage newStage = wm.openWindow("aoubook", "Add", aouController, actionEvent);
+        AoUController aouController = new AoUController("Add", authors, categories, null);
+        Stage newStage = windowManager.openWindow("aoubook", "Add", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book newBook = aouController.getBook();
-            if(newBook != null) {
-                books.add(newBook);
-                booksTable.refresh();
-                infoLabel.setText("Info: Added a new book successfully.");
-            }
+            books.add(newBook);
+            booksTable.refresh();
+            infoLabel.setText("Added a new book successfully.");
         });
     }
 
+    /**
+     * Event handler for the update-book button
+     * @param actionEvent
+     * @throws BookstoreException
+     */
     public void updateAction(ActionEvent actionEvent) throws BookstoreException {
-        Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
+        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
         if(selectedBook == null) {
-            infoLabel.setText("Info: You need to select a book that you want to update.");
+            infoLabel.setText("You need to select a book that you want to update.");
             return;
         }
+
         AoUController aouController = new AoUController("Update", authors, categories, selectedBook);
-        Stage newStage = wm.openWindow("aoubook", "Add", aouController, actionEvent);
+        Stage newStage = windowManager.openWindow("aoubook", "Update", aouController, actionEvent);
 
         newStage.setOnHiding(event -> {
             Book updatedBook = aouController.getBook();
-            if(updatedBook != null) {
-                books.set(books.indexOf(selectedBook), updatedBook);
-                booksTable.refresh();
-                infoLabel.setText("Info: Updated a new book successfully.");
-            }
+            updatedBook.setId(selectedBook.getId());
+            books.set(books.indexOf(selectedBook), updatedBook);
+            booksTable.refresh();
+            infoLabel.setText("Updated a new book successfully.");
         });
     }
 
+    /**
+     * Event handler for the delete-book button
+     * @param actionEvent
+     */
     public void deleteAction(ActionEvent actionEvent) {
-        Book selectedBook = (Book) booksTable.getSelectionModel().getSelectedItem();
-        if(selectedBook != null) {
-            try {
-                bookManager.delete(selectedBook.getId());
-                books.remove(selectedBook);
-                booksTable.refresh();
-                infoLabel.setText("Info: Deleted a book successfully.");
-            } catch (BookstoreException e) {
-                System.out.println("Error while deleting the book."); // change
-            }
-        } else {
-            infoLabel.setText("Info: You need to select a book that you want to delete.");
+        Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
+        if(selectedBook == null) {
+            infoLabel.setText("You need to select a book that you want to delete.");
+            return;
+        }
+
+        try {
+            bookManager.delete(selectedBook.getId());
+            books.remove(selectedBook);
+            booksTable.refresh();
+            infoLabel.setText("Deleted a book successfully.");
+        } catch (BookstoreException e) {
+            infoLabel.setText(e.getMessage());
         }
     }
 }

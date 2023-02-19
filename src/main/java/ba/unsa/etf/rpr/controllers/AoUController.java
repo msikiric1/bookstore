@@ -6,6 +6,7 @@ import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -52,10 +53,6 @@ public class AoUController {
         this.book = book;
     }
 
-    public Book getBook() {
-        return book;
-    }
-
     @FXML
     public void initialize() {
         pageLabel.setText(operation + " a book");
@@ -74,7 +71,10 @@ public class AoUController {
         try {
             bookManager.validate(book);
             if(operation.equals("add")) bookManager.add(book);
-            else bookManager.update(book);
+            else {
+                book.setId(book.getId());
+                bookManager.update(book);
+            }
 
             windowManager.closeWindow(actionEvent);
         } catch(BookstoreException e) {
@@ -98,7 +98,7 @@ public class AoUController {
      * @param category book category
      */
     private void setBook(String title, Author author, LocalDate published, Double price, Category category) {
-        book = new Book();
+        if(book == null) book = new Book();
         book.setTitle(title);
         book.setAuthor(author);
         book.setPublished(published);
@@ -107,10 +107,21 @@ public class AoUController {
     }
 
     /**
+     * Gets the private book attribute
+     * @return book
+     */
+    public Book getBook() {
+        return book;
+    }
+
+    /**
      * Displays the selected book details or sets default values on the aou book window
      * @param book book that will be displayed
      */
     private void showBook(Book book) {
+        authorCbox.setItems(FXCollections.observableList(authors));
+        categoryCbox.setItems(FXCollections.observableList(categories));
+
         if(book == null) {
             authorCbox.getSelectionModel().selectFirst();
             publishedPicker.setValue(LocalDate.now());

@@ -4,7 +4,6 @@ import ba.unsa.etf.rpr.business.AuthorManager;
 import ba.unsa.etf.rpr.business.BookManager;
 import ba.unsa.etf.rpr.business.CategoryManager;
 import ba.unsa.etf.rpr.domain.Author;
-import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
 import ba.unsa.etf.rpr.exceptions.BookstoreException;
@@ -31,6 +30,12 @@ public class AppCLI {
     private static final Option addAuthor = new Option("aa", "add-author", false, "Adds a new author");
     private static final Option updateAuthor = new Option("ua", "update-author", true, "Updates an author");
     private static final Option deleteAuthor = new Option("da", "delete-author", true, "Deletes an author");
+    private static final Option getCategory = new Option("gc", "get-category", true, "Outputs a category");
+    private static final Option getCategories = new Option("gcs", "get-categories", false, "Outputs all categories");
+    private static final Option addCategory = new Option("ac", "add-category", false, "Adds a new category");
+    private static final Option updateCategory = new Option("uc", "update-category", true, "Updates a category");
+    private static final Option deleteCategory = new Option("dc", "delete-category", true, "Deletes a category");
+
 
     // managers
     private static final BookManager bookManager = new BookManager();
@@ -100,10 +105,11 @@ public class AppCLI {
                 int categoryId = Integer.parseInt(commandLine.getOptionValue("delete-category"));
                 categoryManager.delete(categoryId);
                 System.out.println("Deleted a category successfully.");
+            } else {
+                printHelp();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            printHelp();
             System.exit(-1);
         }
     }
@@ -114,8 +120,8 @@ public class AppCLI {
     private static void printHelp() {
         HelpFormatter helpFormatter = new HelpFormatter();
         PrintWriter printWriter = new PrintWriter(System.out);
-        helpFormatter.printUsage(printWriter, 150, "java -jar bookstore-cli-jar-with-dependencies.jar [option] [arg]");
-        helpFormatter.printOptions(printWriter, 150, addOptions(), 2, 5);
+        helpFormatter.printUsage(printWriter, 100, "java -jar bookstore-cli-jar-with-dependencies.jar [option] [arg]");
+        helpFormatter.printOptions(printWriter, 100, addOptions(), 2, 5);
         printWriter.close();
     }
 
@@ -124,14 +130,21 @@ public class AppCLI {
      * @return all options
      */
     private static Options addOptions() {
-        return new Options().addOption(getBook).addOption(getBooks)
-                .addOption(addBook).addOption(updateBook)
-                .addOption(deleteBook);
+        return new Options().addOption(getBook).addOption(getBooks).addOption(addBook)
+                .addOption(updateBook).addOption(deleteBook).addOption(getAuthor)
+                .addOption(getAuthors).addOption(addAuthor).addOption(updateAuthor)
+                .addOption(deleteAuthor).addOption(getCategory).addOption(getCategories)
+                .addOption(addCategory).addOption(updateCategory).addOption(deleteCategory);
     }
 
     private static Category inputCategoryDetails(Category defaultCategory) {
-        Category category = defaultCategory == null ? new Category() : defaultCategory;
+        Category category = new Category();
         Scanner in = new Scanner(System.in);
+
+        if(defaultCategory != null) {
+            category.setId(defaultCategory.getId());
+            System.out.println("(Old category details: " + defaultCategory.getName() + ")");
+        }
 
         try {
             System.out.print("Category name: ");
@@ -139,15 +152,20 @@ public class AppCLI {
 
             categoryManager.validate(category);
         } catch(Exception e) {
-            System.out.println(e.getMessage() + " Try again!");
+            System.out.println(e.getMessage() + "\nTry again.");
             return inputCategoryDetails(defaultCategory);
         }
         return category;
     }
 
     private static Author inputAuthorDetails(Author defaultAuthor) {
-        Author author = defaultAuthor == null ? new Author() : defaultAuthor;
+        Author author = new Author();
         Scanner in = new Scanner(System.in);
+
+        if(defaultAuthor != null) {
+            author.setId(defaultAuthor.getId());
+            System.out.println("(Old author details: " + defaultAuthor.getName() + ", " + defaultAuthor.getAddress() + ", " + defaultAuthor.getPhone() + ")");
+        }
 
         try {
             System.out.print("Author name: ");
@@ -161,7 +179,7 @@ public class AppCLI {
 
             authorManager.validate(author);
         } catch(Exception e) {
-            System.out.println(e.getMessage() + " Try again!");
+            System.out.println(e.getMessage() + "\nTry again.");
             return inputAuthorDetails(defaultAuthor);
         }
         return author;
@@ -173,8 +191,14 @@ public class AppCLI {
      * @throws BookstoreException
      */
     private static Book inputBookDetails(Book defaultBook) {
-        Book book = defaultBook == null ? new Book() : defaultBook;
+        Book book = new Book();
         Scanner in = new Scanner(System.in).useLocale(Locale.US);
+
+        if(defaultBook != null) {
+            book.setId(defaultBook.getId());
+            System.out.println("(Old book details: " + defaultBook.getTitle() + ", " + defaultBook.getAuthor().getName() + ", "
+                    + defaultBook.getPublished() + ", $" + defaultBook.getPrice() + ", " + defaultBook.getCategory().getName() + ")");
+        }
 
         try {
             System.out.print("Book title: ");
@@ -196,7 +220,7 @@ public class AppCLI {
 
             bookManager.validate(book);
         } catch(Exception e) {
-            System.out.println(e.getMessage() + " Try again!");
+            System.out.println(e.getMessage() + "\nTry again.");
             return inputBookDetails(defaultBook);
         }
         return book;
@@ -207,15 +231,15 @@ public class AppCLI {
      * @throws BookstoreException
      */
     private static void showAllCategories() throws BookstoreException {
-        System.out.println("All categories: ");
+        System.out.println("All categories:");
         categoryManager.getAll().forEach(category -> {
-            System.out.println(" - " + category.getName() + " (id = " + category.getId() + ")");
+            System.out.println(" - " + category.getName() + " (id: " + category.getId() + ")");
         });
     }
 
 
     private static void showCategory(Category category) {
-        System.out.println("Category details: ");
+        System.out.println("Category details:");
         System.out.println(" - id: " + category.getId());
         System.out.println(" - name: " + category.getName());
     }
@@ -226,15 +250,15 @@ public class AppCLI {
      * @throws BookstoreException
      */
     private static void showAllAuthors() throws BookstoreException {
-        System.out.println("All authors: ");
+        System.out.println("All authors:");
         authorManager.getAll().forEach(author -> {
-            System.out.println(" - " + author.getName() + " (id = " + author.getId() + ")");
+            System.out.println(" - " + author.getName() + " (id: " + author.getId() + ")");
         });
     }
 
     private static void showAuthor(Author author) {
-        System.out.println("Author details: ");
-        System.out.println("- id: " + author.getId());
+        System.out.println("Author details:");
+        System.out.println(" - id: " + author.getId());
         System.out.println(" - name: " + author.getName());
         System.out.println(" - address: " + author.getAddress());
         System.out.println(" - phone: " + author.getPhone());
@@ -245,14 +269,14 @@ public class AppCLI {
      * @throws BookstoreException
      */
     private static void showAllBooks() throws BookstoreException {
-        System.out.println("All books: ");
+        System.out.println("All books:");
         bookManager.getAll().forEach(book -> {
-            System.out.println(" - " + book.getTitle() + " by " + book.getAuthor().getName() + " in '" + book.getCategory().getName() + "' category (id = " + book.getId() + ")");
+            System.out.println(" - " + book.getTitle() + " by " + book.getAuthor().getName() + " in '" + book.getCategory().getName() + "' (id: " + book.getId() + ")");
         });
     }
 
     private static void showBook(Book book) {
-        System.out.println("Book details: ");
+        System.out.println("Book details:");
         System.out.println(" - id: " + book.getId());
         System.out.println(" - title: " + book.getTitle());
         System.out.println(" - author: " + book.getAuthor().getName());

@@ -17,18 +17,22 @@ import java.util.List;
  */
 public class CategoryManagerTest {
     private final CategoryManager categoryManager = Mockito.mock(CategoryManager.class);
-    private List<Category> categories = new ArrayList<>();
+    private final List<Category> categories = new ArrayList<>();
 
     @BeforeEach
-    public void setup() throws BookstoreException {
-        categories.addAll(Arrays.asList(newCategory(1, "Category 1"), newCategory(2, "Category 2"), newCategory(3, "Category 3")));
-        Mockito.doCallRealMethod().when(categoryManager).validate(Mockito.any());
-        Mockito.when(categoryManager.getAll()).thenReturn(categories);
+    public void setup() {
+        categories.addAll(Arrays.asList(
+                newCategory(1, "Category 1"),
+                newCategory(2, "Category 2"),
+                newCategory(3, "Category 3")
+        ));
     }
 
     @Test
-    public void checkCategoryValidity() {
+    public void checkCategoryValidity() throws BookstoreException {
         Category category = newCategory(1, "Test category");
+        Mockito.doCallRealMethod().when(categoryManager).validate(Mockito.any());
+
         Assertions.assertDoesNotThrow(() -> categoryManager.validate(category));
 
         category.setName("abc");
@@ -38,6 +42,8 @@ public class CategoryManagerTest {
 
     @Test
     public void getAllTest() throws BookstoreException {
+        Mockito.when(categoryManager.getAll()).thenReturn(categories);
+
         Assertions.assertEquals(categories, categoryManager.getAll());
         Assertions.assertNotEquals(new ArrayList<>(), categoryManager.getAll());
     }
@@ -47,7 +53,7 @@ public class CategoryManagerTest {
         Mockito.doAnswer(answer -> {
             return categories
                     .stream()
-                    .filter(element -> element == categories.get((Integer) answer.getArguments()[0] - 1))
+                    .filter(element -> element == categories.get((Integer) answer.getArgument(0) - 1))
                     .findFirst()
                     .orElse(null);
         }).when(categoryManager).getById(Mockito.anyInt());

@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+/**
+ * Class used for testing UserManager class
+ * @author Muaz Sikiric
+ */
 public class UserManagerTest {
     private final UserManager userManager = Mockito.mock(UserManager.class);
     private User admin;

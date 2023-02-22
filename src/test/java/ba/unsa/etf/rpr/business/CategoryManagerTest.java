@@ -30,8 +30,8 @@ public class CategoryManagerTest {
 
     @Test
     public void checkCategoryValidity() throws BookstoreException {
-        Category category = newCategory(1, "Test category");
         Mockito.doCallRealMethod().when(categoryManager).validate(Mockito.any());
+        Category category = newCategory(1, "Test category");
 
         Assertions.assertDoesNotThrow(() -> categoryManager.validate(category));
 
@@ -66,7 +66,7 @@ public class CategoryManagerTest {
     public void deleteTest() throws BookstoreException {
         Mockito.doAnswer(answer -> {
             // removes element from categories array
-            return categories.remove((Integer) answer.getArguments()[0] - 1);
+            return categories.remove((Integer) answer.getArgument(0) - 1);
         }).when(categoryManager).delete(Mockito.anyInt());
 
         categoryManager.delete(1);
@@ -74,7 +74,7 @@ public class CategoryManagerTest {
     }
 
     /**
-     * Creates new category with given parameters
+     * Creates a new category with given parameters
      * @return new category
      */
     private Category newCategory(int id, String name) {

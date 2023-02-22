@@ -68,7 +68,7 @@ public class UserManagerTest {
     }
 
     /**
-     * Creates new user with given parameters
+     * Creates a new user with given parameters
      * @return new user
      */
     private User newUser(String username, String password, boolean isAdmin) {

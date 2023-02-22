@@ -47,8 +47,7 @@ public class AuthorManagerTest {
             return answer.getArgument(0);
         }).when(authorManager).add(Mockito.any());
 
-        List<Author> previousAuthors = new ArrayList<>();
-        previousAuthors.addAll(authors);
+        List<Author> previousAuthors = new ArrayList<>(authors);
         Author addedAuthor = authorManager.add(newAuthor(4, "Author 4", "Address 4", "444444444"));
 
         previousAuthors.add(addedAuthor);
@@ -63,7 +62,7 @@ public class AuthorManagerTest {
     }
 
     /**
-     * Creates new author with given parameters
+     * Creates a new author with given parameters
      * @return new author
      */
     private Author newAuthor(int id, String name, String address, String phone) {

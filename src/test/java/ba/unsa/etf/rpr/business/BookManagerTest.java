@@ -1,6 +1,5 @@
 package ba.unsa.etf.rpr.business;
 
-import ba.unsa.etf.rpr.dao.BookDaoSQLImpl;
 import ba.unsa.etf.rpr.domain.Author;
 import ba.unsa.etf.rpr.domain.Book;
 import ba.unsa.etf.rpr.domain.Category;
@@ -20,35 +19,29 @@ import java.util.List;
  * @author Muaz Sikiric
  */
 public class BookManagerTest {
-    private BookManager bookManager;
-    private BookDaoSQLImpl bookDaoSQLMock = Mockito.mock(BookDaoSQLImpl.class);
-    private List<Book> books = new ArrayList<>();
+    private final BookManager bookManager = Mockito.mock(BookManager.class);
+    private final List<Book> books = new ArrayList<>();
+    private Book book;
+    private Author author;
+    private Category category;
 
     @BeforeEach
-    public void setup() {
-        bookManager = Mockito.mock(BookManager.class);
-        Author author = createAuthor(20, "Test author", "Unknown place", "123456789");
-        Category category = createCategory(10, "Test category");
-        Book book = createBook(100, "Test book 1", author, LocalDate.now(), 9.99, category);
+    public void setup() throws BookstoreException {
+        book = newBook(100, "Test book 1", author, LocalDate.now(), 9.99, category);
+        author = newAuthor(20, "Test author 1", "Test address 1", "123456789");
+        category = newCategory(10, "Test category 1");
 
         books.addAll(Arrays.asList(
                 book,
-                createBook(101, "Test book 2", author, LocalDate.now().minusMonths(20), 5.99, category)
+                newBook(101, "Test book 2", author, LocalDate.now().minusMonths(20), 5.99, category),
+                newBook(102, "Test book 3", newAuthor(21, "Test author 2", "Test address 2", "987654321"), LocalDate.now().minusMonths(100), 23.99, newCategory(11, "Test Category 2"))
         ));
     }
 
     @Test
-    public void addBookTest() {
-
-    }
-
-    @Test
     public void checkBookValidity() throws BookstoreException {
-        Book book = new Book();
-        book.setTitle("Test book");
-        book.setPublished(LocalDate.parse("2018-03-17"));
-        book.setPrice(9.99);
-        Mockito.doCallRealMethod().when(bookManager).validate(book);
+        Mockito.doCallRealMethod().when(bookManager).validate(Mockito.any());
+        Book book = newBook(1, "Test book", author, LocalDate.parse("2018-03-17"), 9.99, category);
 
         Assertions.assertDoesNotThrow(() -> bookManager.validate(book));
 
@@ -65,7 +58,47 @@ public class BookManagerTest {
         Assertions.assertEquals(e.getMessage(), "Title needs to have at least 4 characters.");
     }
 
-    private Book createBook(int id, String title, Author author, LocalDate published, Double price, Category category) {
+    @Test
+    public void addTest() throws BookstoreException {
+        Mockito.doAnswer(answer -> {
+            books.add(answer.getArgument(0));
+            return answer.getArgument(0);
+        }).when(bookManager).add(Mockito.any());
+
+        List<Book> previousBooks = new ArrayList<>(books);
+        Book addedBook = bookManager.add(book);
+
+        previousBooks.add(addedBook);
+        Assertions.assertEquals(books, previousBooks);
+    }
+
+    @Test
+    public void getAllTest() throws BookstoreException {
+        Mockito.when(bookManager.getAll()).thenReturn(books);
+
+        Assertions.assertEquals(books, bookManager.getAll());
+    }
+
+    @Test
+    public void updateTest() throws BookstoreException {
+        Mockito.doAnswer(answer -> {
+            Book previousBook = books.stream().filter(book -> {
+                return book.getId() == ((Book) answer.getArgument(0)).getId();
+            }).findFirst().orElse(null);
+            books.set(books.indexOf(previousBook), answer.getArgument(0));
+            return answer.getArgument(0);
+        }).when(bookManager).update(Mockito.any());
+
+        Book updatedBook = bookManager.update(book);
+
+        Assertions.assertEquals(book, updatedBook);
+    }
+
+    /**
+     * Creates a new book with given parameters
+     * @return new book
+     */
+    private Book newBook(int id, String title, Author author, LocalDate published, Double price, Category category) {
         Book book = new Book();
         book.setId(id);
         book.setTitle(title);
@@ -76,7 +109,11 @@ public class BookManagerTest {
         return book;
     }
 
-    private Author createAuthor(int id, String name, String address, String phone) {
+    /**
+     * Creates a new author with given parameters
+     * @return new author
+     */
+    private Author newAuthor(int id, String name, String address, String phone) {
         Author author = new Author();
         author.setId(id);
         author.setName(name);
@@ -85,7 +122,11 @@ public class BookManagerTest {
         return author;
     }
 
-    private Category createCategory(int id, String name) {
+    /**
+     * Creates a new category with given parameters
+     * @return new category
+     */
+    private Category newCategory(int id, String name) {
         Category category = new Category();
         category.setId(id);
         category.setName(name);

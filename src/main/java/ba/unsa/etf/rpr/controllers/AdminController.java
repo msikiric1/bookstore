@@ -119,6 +119,7 @@ public class AdminController {
 
         newStage.setOnHiding(event -> {
             Book newBook = aouController.getBook();
+            if(newBook == null) return;
             books.add(newBook);
             booksTable.refresh();
             infoLabel.setText("Added a new book successfully.");
@@ -142,6 +143,7 @@ public class AdminController {
 
         newStage.setOnHiding(event -> {
             Book updatedBook = aouController.getBook();
+            if(updatedBook == null) return;
             updatedBook.setId(selectedBook.getId());
             books.set(books.indexOf(selectedBook), updatedBook);
             booksTable.refresh();

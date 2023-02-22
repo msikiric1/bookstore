@@ -47,7 +47,7 @@
                                              </VBox.margin>
                                           </Label>
                                           <TextField fx:id="authorNameField" minWidth="150.0" promptText="Author name" style="-fx-background-color: white;" />
-                                          <TextArea fx:id="authorAddressArea" prefHeight="35.0" prefWidth="150.0" promptText="Author address" style="-fx-background-color: white;" wrapText="true" />
+                                          <TextArea fx:id="authorAddressArea" prefHeight="45.0" prefWidth="150.0" promptText="Author address" style="-fx-background-color: white;" wrapText="true" />
                                           <TextField fx:id="authorPhoneField" promptText="Author phone number" style="-fx-background-color: white;" />
                                           <Pane VBox.vgrow="ALWAYS" />
                                           <Label text="Operations:" textFill="WHITE">

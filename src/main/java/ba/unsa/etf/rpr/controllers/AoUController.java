@@ -35,6 +35,7 @@ public class AoUController {
     private final List<Author> authors;
     private final List<Category> categories;
     private Book book;
+    private int bookId;
 
     /**
      * Constructor
@@ -47,16 +48,18 @@ public class AoUController {
         if(!operation.equalsIgnoreCase("add") && !operation.equalsIgnoreCase("update"))
             throw new BookstoreException("Invalid operation.");
 
-        this.operation = operation.toLowerCase();
+        this.operation = operation;
         this.authors = authors;
         this.categories = categories;
         this.book = book;
+        if(book != null) bookId = book.getId();
     }
 
     @FXML
     public void initialize() {
         pageLabel.setText(operation + " a book");
         showBook(book);
+        book = null;
     }
 
     /**
@@ -70,9 +73,10 @@ public class AoUController {
 
         try {
             bookManager.validate(book);
-            if(operation.equals("add")) bookManager.add(book);
-            else {
-                book.setId(book.getId());
+            if (operation.equalsIgnoreCase("add"))
+                bookManager.add(book);
+            else if (operation.equalsIgnoreCase("update")) {
+                book.setId(bookId);
                 bookManager.update(book);
             }
 
@@ -87,7 +91,7 @@ public class AoUController {
      * Event handler for the cancel button
      * @param actionEvent
      */
-    public void cancelAction(ActionEvent actionEvent) { windowManager.closeWindow(actionEvent);     }
+    public void cancelAction(ActionEvent actionEvent) { book = null; windowManager.closeWindow(actionEvent);     }
 
     /**
      * Sets the private book attribute

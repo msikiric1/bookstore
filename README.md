@@ -1,5 +1,6 @@
 # Bookstore
 
+## Overview
 The project implements different types of operations with books, authors and book categories. There are two types of user roles: ordinary and administrator.
 Ordinary users can view all the available books and their details, while admins can view all books, authors and categories,
 and also do all the CRUD operations with them. There is also a simple login and registration system via which ordinary users can be 
@@ -8,6 +9,7 @@ created or accessed. Users with admin role cannot be created through the app, so
 >
 > password: Password123 
 
+## Usage
 The GUI implementation of the app can be used by running the following commands:
 ```shell
 mvn clean install
@@ -27,4 +29,6 @@ mvn clean javadoc:aggregate
 
 Database schema used in the project:
 
-<center><img src="./images/db_schema.png" alt="Database schema"   width="400"></center>
+<p align="center">
+    <img src="./images/db_schema.png" alt="Database schema" width="400">
+</p>
